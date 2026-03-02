@@ -1,27 +1,29 @@
 ---
 name: commit-helper
-description: staged 변경사항 기준 커밋 메시지 자동 생성. "커밋", "commit", "커밋 메시지" 입력 시 사용.
+description: staged 변경사항 기준 커밋 메시지 자동 생성. 프리픽스(type)만 영어, 제목/Body는 한글로 작성.
 user-invocable: true
 disable-model-invocation: false
 allowed-tools: Bash(git log:*), Bash(git diff:*), Bash(git status:*)
 metadata:
-
-  version: 1.1.0
+  version: 1.0.1
   category: development
   priority: medium
 ---
 
-# Commit Message Generator
+# 커밋 메시지 생성기
 
 staged 변경사항을 분석하여 프로젝트 컨벤션에 맞는 커밋 메시지 자동 생성
 
 ## 기본 원칙
 
 - 반드시 `git diff --staged` 기준
-- 타입 프리픽스는 **무조건 영어** (`feat`, `fix`, `chore` 등)
+- 타입 프리픽스(type)는 **무조건 영어** (`feat`, `fix`, `chore` 등)
+- 커밋 이름(요약)과 Body는 **한글**로 작성
+- scope는 가능하면 한글 단어 사용, 애매하면 생략
 - 요약 50자 이내
 - 동사 현재형 (추가, 수정, 개선)
 - 결과 중심 작성
+- 코드 식별자/파일 경로/API 이름 등은 원문(영문) 유지 가능
 
 ## 실행 플로우
 
@@ -39,11 +41,11 @@ git log --oneline --format="%s" -20
 
 **감지 결과 적용:**
 
-| 감지 결과 | 적용 방식 |
-|-----------|-----------|
-| scope 없는 패턴 다수 | scope 생략 우선 |
-| Body 없는 패턴 다수 | 간결 옵션 권장 |
-| 커밋 이력 없음 | Conventional Commits 기본 적용 |
+| 감지 결과            | 적용 방식                      |
+| -------------------- | ------------------------------ |
+| scope 없는 패턴 다수 | scope 생략 우선                |
+| Body 없는 패턴 다수  | 간결 옵션 권장                 |
+| 커밋 이력 없음       | Conventional Commits 기본 적용 |
 
 타입 프리픽스는 이력과 무관하게 항상 영어 사용.
 
@@ -57,7 +59,7 @@ git diff --staged
 **체크 포인트:**
 
 - 변경 파일 수
-- 변경 영역 (apps/, packages/, services/)
+- 변경 영역 (기능/버그/문서/테스트/설정)
 - rename/move 포함 여부
 - 설정 파일 변경 여부
 
@@ -81,32 +83,24 @@ git diff --staged
 
 ### 4. Scope 추론
 
-**모노레포 (apps/, packages/, services/ 등 워크스페이스 구조):**
+scope는 "어디가 바뀌었는지"를 나타내는 **짧은 한글 명사**를 사용.
+
+**추론 규칙:**
+
+1. 변경 파일의 상위 폴더/모듈명에서 핵심 의미를 추출
+2. 길거나 모호하면 더 짧은 일반어로 변환
+3. 여러 영역 변경 시 영향이 가장 큰 영역 하나만 선택
+4. 적절한 scope가 없으면 scope 생략
+
+**예시:**
 
 ```
-apps/web/...            → (web)
-apps/admin/...          → (admin)
-services/auth/...       → (auth)
-services/trade-executor/... → (trade-executor)
-packages/ui/...         → (ui)
-packages/risk-engine/...    → (risk-engine)
-packages/utils/...      → (utils)
+src/<feature>/...           → (<기능명>)
+src/components/...          → (컴포넌트)
+docs/...                    → (문서)
+infra/...                   → (인프라)
+tests/...                   → (테스트)
 ```
-
-폴더 이름 전체가 아닌 **패키지명 핵심 부분**만 사용:
-- `packages/shared-components` → `(shared-components)` 또는 `(components)`
-- `services/notification-service` → `(notification)` 또는 `(notification-service)`
-- `apps/mobile-app` → `(mobile)` 또는 `(mobile-app)`
-
-**단일 레포 (모노레포 아닌 경우):**
-
-```
-src/components/... → (component) 또는 scope 생략
-src/api/users/...  → (users) 또는 (api)
-src/auth/...       → (auth)
-```
-
-단일 레포에서는 scope가 없어도 무방하며, 변경 범위가 명확할 때만 사용.
 
 **여러 영역 변경 시:**
 
@@ -120,10 +114,10 @@ src/auth/...       → (auth)
 - ✅ 파일 5개 이상, 또는 여러 영역에 걸친 변경
 - ✅ rename/move 포함
 - ✅ 설정/의존성 변경
-- ✅ 리스크 영역 (거래, 인증, DB)
+- ✅ 핵심 로직(권한/데이터/외부연동) 변경
 - ✅ 변경 이유 설명 필요
 
-### 6. Breaking Change
+### 6. 브레이킹 체인지
 
 다음 시 `BREAKING CHANGE` 명시:
 
@@ -133,7 +127,7 @@ src/auth/...       → (auth)
 
 ## 출력 형식
 
-### Option 1: 기본 (권장)
+### 옵션 1: 기본 (권장)
 
 ```
 {type}({scope}): {요약}
@@ -142,13 +136,15 @@ src/auth/...       → (auth)
 - 변경사항 2
 ```
 
-### Option 2: 간결
+scope를 생략하면 `{type}: {요약}` 형식 사용.
+
+### 옵션 2: 간결
 
 ```
 {type}({scope}): {요약}
 ```
 
-### Option 3: 상세
+### 옵션 3: 상세
 
 ```
 {type}({scope}): {요약}
@@ -163,7 +159,7 @@ src/auth/...       → (auth)
 ### staged 없음
 
 ```
-❌ No staged changes. Use `git add` first.
+❌ staged 변경사항이 없습니다. 먼저 `git add`를 실행하세요.
 ```
 
 ### lockfile만
@@ -188,48 +184,49 @@ refactor: {before} → {after} 리네임
 
 **사용 예시:**
 
-모노레포 (scope 있는 경우):
+scope 있는 경우:
+
 ```
 사용자: "커밋 메시지 만들어줘"
 
-Claude: (컨벤션 감지 → 영어/scope 사용 패턴 확인)
+에이전트: (컨벤션 감지 → 프리픽스 영어 유지, 제목/Body 한글 작성)
 
 ## 🎯 권장 커밋 메시지
 
-### Option 1: 기본 (권장)
-feat(web): 사용자 대시보드 추가
+### 옵션 1: 기본 (권장)
+feat(검색): 목록 필터 옵션 추가
 
-- 실시간 차트 컴포넌트 구현
-- API 연동 완료
+- 필터 조건별 결과 정렬 로직 추가
+- 선택된 필터 상태를 화면에 표시
 
-### Option 2: 간결
-feat(web): 사용자 대시보드 추가
+### 옵션 2: 간결
+feat(검색): 목록 필터 옵션 추가
 
-### Option 3: 상세
-feat(web): 사용자 대시보드 추가
+### 옵션 3: 상세
+feat(검색): 목록 필터 옵션 추가
 
-- 실시간 차트 컴포넌트 구현 (Recharts)
-- REST API 연동 (/api/user/dashboard)
-- 반응형 레이아웃 (Tailwind)
-- 로딩 상태 관리 (React Query)
+- 필터 조건 조합 처리 로직 추가
+- 필터 초기화 시 기본 정렬 복원
+- 필터 변경 시 목록 재조회 타이밍 정리
 
 변경 이유: 사용자 요청사항 반영
 ```
 
 단일 레포 (scope 생략):
+
 ```
 사용자: "커밋 메시지 만들어줘"
 
-Claude: (컨벤션 감지 → scope 없는 패턴 확인)
+에이전트: (컨벤션 감지 → scope 없는 패턴 확인)
 
 ## 🎯 권장 커밋 메시지
 
-### Option 1: 기본 (권장)
-feat: 로그인 폼 유효성 검사 추가
+### 옵션 1: 기본 (권장)
+fix: 날짜 형식 검증 오류 수정
 
-- 이메일 형식 검증
-- 비밀번호 최소 길이 적용
+- 잘못된 날짜 입력 시 예외 처리 추가
+- 검증 실패 메시지 문구 정리
 
-### Option 2: 간결
-feat: 로그인 폼 유효성 검사 추가
+### 옵션 2: 간결
+fix: 날짜 형식 검증 오류 수정
 ```
