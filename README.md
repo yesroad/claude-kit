@@ -61,7 +61,7 @@ cd ai-rules-kit
 ./install.sh --all /path/to/your-project
 ```
 
-설치 시 `src/` 전체가 각 툴의 폴더로 복사됩니다. OpenCode, Codex는 `AGENTS.md`가 함께 생성되어 어떤 파일을 언제 참조할지 안내합니다.
+설치 시 툴별로 필요한 파일만 복사됩니다. OpenCode, Codex는 `AGENTS.md`가 함께 생성되어 어떤 파일을 언제 참조할지 안내합니다.
 
 ---
 
@@ -102,9 +102,33 @@ src/
 │   ├── multi-agent/        # 멀티 에이전트 협업 패턴
 │   └── workflow-patterns/  # 복잡도별 작업 단계
 │
-└── hooks/                  # Claude Code 이벤트 훅
-    └── notification/       # 작업 완료 시 macOS 알림
+├── hooks/                  # 이벤트 훅 (Claude, Cursor, Codex용)
+│   └── notify.sh           # macOS 알림 (terminal-notifier)
+│
+└── plugins/                # OpenCode 전용 플러그인
+    └── notify.js           # permission.asked 이벤트 알림
 ```
+
+---
+
+## 툴별 복사 매트릭스
+
+각 툴에 맞는 파일만 복사되며, 비호환 필드는 자동으로 변환됩니다.
+
+| 디렉토리        | Claude  | Cursor  | OpenCode |  Codex  |
+| --------------- | :-----: | :-----: | :------: | :-----: |
+| `hooks/`        |   ✅    |   ✅    |    ❌    |   ✅    |
+| `plugins/`      |   ❌    |   ❌    |    ✅    |   ❌    |
+| `agents/`       | ✅ 원본 | ✅ 원본 | ✅ 변환  | ✅ 변환 |
+| `rules/`        |   ✅    |   ✅    |    ✅    |   ✅    |
+| `skills/`       |   ✅    |   ✅    |    ✅    |   ✅    |
+| `commands/`     |   ✅    |   ✅    |    ✅    |   ✅    |
+| `settings.json` |   ✅    |   ❌    |    ❌    |   ❌    |
+
+> **agents/ 변환 내용**
+>
+> - OpenCode: `tools:`, `model:`, `@../` 라인 제거 (파싱 에러 방지)
+> - Codex: `tools:`, `model:` 라인 제거
 
 ---
 

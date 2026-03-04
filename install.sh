@@ -204,6 +204,14 @@ create_agents_md() {
   echo -e "  ${GREEN}✓${NC} $(basename "$out") 생성"
 }
 
+# agents/*.md에서 OpenCode/Codex 비호환 필드 제거
+strip_agent_fields() {
+  local dir="$1"
+  find "$dir/agents" -name "*.md" 2>/dev/null | while read -r f; do
+    sed -i '' '/^tools: /d; /^model: /d; /^@\.\./d' "$f"
+  done
+}
+
 # ────────────────────────────────────────
 # installers
 # ────────────────────────────────────────
@@ -217,17 +225,67 @@ install_claude() {
 
   rsync -a \
     --exclude='settings.local.json' \
+    --exclude='plugins' \
     --exclude='.DS_Store' \
     "$SRC_DIR/" "$target/.claude/" > /dev/null
 
   echo -e "  ${GREEN}✓${NC} .claude/ 복사 완료"
+
+  local settings="$target/.claude/settings.local.json"
+  if [[ -f "$settings" ]]; then
+    echo -e "  ${YELLOW}경고: settings.local.json 이미 존재. 훅 설정 스킵 (/setup-notifier로 수동 병합)${NC}"
+  else
+    cat > "$settings" << 'EOF'
+{
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "NOTIFIER_TITLE='Claude Code' bash ./.claude/hooks/notify.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+EOF
+    echo -e "  ${GREEN}✓${NC} settings.local.json 훅 설정 완료"
+  fi
 }
 
 install_cursor() {
   local target="$1"
   echo -e "${BLUE}▶ Cursor${NC}"
 
-  copy_dir "$SRC_DIR" "$target/.cursor" "src/"
+  mkdir -p "$target/.cursor"
+  rsync -a \
+    --exclude='plugins' \
+    --exclude='settings.json' \
+    --exclude='settings.local.json' \
+    --exclude='.DS_Store' \
+    "$SRC_DIR/" "$target/.cursor/" > /dev/null
+  rm -f "$target/.cursor/settings.json" "$target/.cursor/settings.local.json"
+  echo -e "  ${GREEN}✓${NC} ${DIM}src/${NC} (plugins/, settings 제외)"
+
+  local hooks_file="$target/.cursor/hooks.json"
+  if [[ -f "$hooks_file" ]]; then
+    echo -e "  ${YELLOW}경고: .cursor/hooks.json 이미 존재. 훅 설정 스킵${NC}"
+  else
+    cat > "$hooks_file" << 'EOF'
+{
+  "preToolUse": [
+    {
+      "command": "NOTIFIER_TITLE='Cursor' bash ./.cursor/hooks/notify.sh",
+      "timeout": 5
+    }
+  ]
+}
+EOF
+    echo -e "  ${GREEN}✓${NC} .cursor/hooks.json 훅 설정 완료"
+  fi
 
   echo -e "  ${GREEN}✓${NC} Cursor 복사 완료"
 }
@@ -236,7 +294,18 @@ install_opencode() {
   local target="$1"
   echo -e "${BLUE}▶ OpenCode${NC}"
 
-  copy_dir "$SRC_DIR" "$target/.opencode" "src/"
+  mkdir -p "$target/.opencode"
+  rsync -a \
+    --exclude='hooks' \
+    --exclude='settings.json' \
+    --exclude='settings.local.json' \
+    --exclude='.DS_Store' \
+    "$SRC_DIR/" "$target/.opencode/" > /dev/null
+  rm -f "$target/.opencode/settings.json" "$target/.opencode/settings.local.json"
+  echo -e "  ${GREEN}✓${NC} ${DIM}src/${NC} (hooks/, settings 제외)"
+
+  strip_agent_fields "$target/.opencode"
+  echo -e "  ${GREEN}✓${NC} agents/ 필드 변환 (tools/model/@ 제거)"
 
   create_agents_md "$target" "$target/.opencode/AGENTS.md" ".opencode"
   echo -e "  ${GREEN}✓${NC} OpenCode 복사 완료"
@@ -246,7 +315,18 @@ install_codex() {
   local target="$1"
   echo -e "${BLUE}▶ Codex${NC}"
 
-  copy_dir "$SRC_DIR" "$target/.codex" "src/"
+  mkdir -p "$target/.codex"
+  rsync -a \
+    --exclude='plugins' \
+    --exclude='settings.json' \
+    --exclude='settings.local.json' \
+    --exclude='.DS_Store' \
+    "$SRC_DIR/" "$target/.codex/" > /dev/null
+  rm -f "$target/.codex/settings.json" "$target/.codex/settings.local.json"
+  echo -e "  ${GREEN}✓${NC} ${DIM}src/${NC} (plugins/, settings 제외)"
+
+  strip_agent_fields "$target/.codex"
+  echo -e "  ${GREEN}✓${NC} agents/ 필드 변환 (tools/model 제거)"
 
   create_agents_md "$target" "$target/.codex/AGENTS.md" ".codex"
 
