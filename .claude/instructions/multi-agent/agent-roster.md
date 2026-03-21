@@ -95,8 +95,8 @@ Task(
 **실행 명령**:
 
 ```bash
-yarn lint --fix
-yarn format
+{패키지매니저} lint --fix
+{패키지매니저} format
 ```
 
 ---
@@ -219,6 +219,8 @@ Task(
 | **test-generator** | "테스트 작성", "커버리지" | explore |
 | **pr-review-responder** | "리뷰 반영", PR 번호 | explore → implementation-executor |
 | **migration-helper** | "업그레이드", "마이그레이션" | explore → Plan → implementation-executor |
+| **web-design** | "UI 만들어", "디자인", "랜딩페이지", "대시보드" | explore → implementation-executor |
+| **next-project-structure** | "도메인 추가", "폴더 구조", "스캐폴딩", "서비스 클래스" | explore → implementation-executor |
 
 ### 스킬 연결 흐름
 

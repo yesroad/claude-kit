@@ -74,7 +74,7 @@ function getOrders(params: any): any {
 
 ### 필수 5: TanStack Query 사용
 
-**서버 상태는 반드시 TanStack Query 사용**
+**React/Next.js 프로젝트에서 서버 상태를 다룰 경우, 반드시 TanStack Query 사용**
 
 ```typescript
 // ✅ 필수: useQuery/useMutation
@@ -105,14 +105,16 @@ import { Table } from './components'; // 4. 상대 경로
 
 ## 검증
 
-### 필수 7: lint/build 검증
+### 필수 7: lint/tsc 검증
 
 **코드 변경 후 반드시 검증**
 
 ```bash
 {패키지매니저} lint
-{패키지매니저} build
+{패키지매니저} tsc --noEmit
 ```
+
+> 빌드 결과물 자체를 검증해야 할 경우에만 `{패키지매니저} build` 추가 실행
 
 ### 필수 8: 정책 변경 시 테스트
 
@@ -148,11 +150,7 @@ Task(subagent_type="lint-fixer", model="haiku", ...)
 
 ### 필수 10: 모델 선택
 
-| 모델   | 사용 시점               |
-| ------ | ----------------------- |
-| haiku  | 탐색, 린트, 문서        |
-| sonnet | 구현, 수정, 분석 (기본) |
-| opus   | 아키텍처, 복잡한 분석   |
+**참조**: `@../multi-agent/coordination-guide.md` (단일 진실 공급원)
 
 ---
 
@@ -208,7 +206,7 @@ git add src/{수정한 파일 경로}
 
 **검증 시:**
 
-- [ ] lint/build 통과
+- [ ] lint/tsc --noEmit 통과
 - [ ] 정책 변경 시 테스트
 
 **Git:**

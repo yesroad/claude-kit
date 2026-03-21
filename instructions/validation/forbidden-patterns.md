@@ -189,7 +189,10 @@ const res = await api.get('/api/orders');
 
 ---
 
-## 스타일링
+## 스타일링 (Emotion 사용 시)
+
+> 아래 규칙은 **Emotion(`@emotion/styled`, `@emotion/react`)을 사용하는 프로젝트에 적용**한다.
+> TailwindCSS, CSS Modules 등 다른 스타일링 시스템을 사용하는 프로젝트에는 해당 시스템의 컨벤션을 따른다.
 
 | 금지              | 대안                       |
 | ----------------- | -------------------------- |
@@ -211,7 +214,7 @@ const Container = styled.div`
 <Typography css={{ marginTop: '4px' }}>
 ```
 
-### !important 대신 `&&` specificity 패턴
+### !important 대신 `&&` specificity 패턴 (Emotion)
 
 `&&`는 Emotion이 생성한 자기 자신의 클래스를 한번 더 참조하여 specificity를 높이는 기법이다.
 `!important`는 이후 override가 불가능해지므로 금지한다.
@@ -226,7 +229,7 @@ background-color: ${theme.colors.secondary} !important;
 }
 ```
 
-### transient props (`$` prefix)
+### transient props (`$` prefix) (Emotion styled-components)
 
 styled 컴포넌트에 전달하는 custom prop은 `$` prefix를 붙인다.
 `$` 없이 전달하면 DOM에 unknown attribute가 전달되어 React warning이 발생한다.
@@ -241,7 +244,7 @@ const Chip = styled.button<{ $isActive: boolean }>`...`;
 <Chip $isActive={true}>
 ```
 
-### inline style vs css prop 구분
+### inline style vs css prop 구분 (Emotion)
 
 | 구문                    | 판정    | 이유                                        |
 | ----------------------- | ------- | ------------------------------------------- |
