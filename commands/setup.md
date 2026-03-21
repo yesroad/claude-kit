@@ -1,9 +1,9 @@
 ---
 name: setup
-description: claude_kit을 현재 프로젝트에 설치합니다. 프로젝트 기술 스택을 입력받아 맞춤형 CLAUDE.md와 .claude/ 설정을 생성합니다.
+description: claude-kit을 현재 프로젝트에 설치합니다. 프로젝트 기술 스택을 입력받아 맞춤형 CLAUDE.md와 .claude/ 설정을 생성합니다.
 ---
 
-현재 프로젝트에 claude_kit을 설치합니다.
+현재 프로젝트에 claude-kit을 설치합니다.
 
 ## 1단계: 프로젝트 기술 스택 인터뷰
 
@@ -89,13 +89,13 @@ set -e
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-}"
 
 if [ -z "$PLUGIN_ROOT" ] || [ ! -d "$PLUGIN_ROOT" ]; then
-  PLUGIN_ROOT="$HOME/.claude/plugins/cache/claude_kit"
+  PLUGIN_ROOT="$HOME/.claude/plugins/cache/claude-kit"
 fi
 
 if [ ! -d "$PLUGIN_ROOT" ]; then
-  echo "GitHub에서 claude_kit을 가져옵니다..."
-  git clone --depth 1 https://github.com/yesroad/claude_kit.git /tmp/claude_kit_install
-  PLUGIN_ROOT="/tmp/claude_kit_install"
+  echo "GitHub에서 claude-kit을 가져옵니다..."
+  git clone --depth 1 https://github.com/yesroad/claude-kit.git /tmp/claude-kit_install
+  PLUGIN_ROOT="/tmp/claude-kit_install"
 fi
 
 mkdir -p .claude
@@ -155,7 +155,7 @@ else:
 PYEOF
 fi
 
-[ "$PLUGIN_ROOT" = "/tmp/claude_kit_install" ] && rm -rf /tmp/claude_kit_install
+[ "$PLUGIN_ROOT" = "/tmp/claude-kit_install" ] && rm -rf /tmp/claude-kit_install
 
 echo "✅ .claude/ 설치 완료"
 ```
@@ -192,7 +192,7 @@ echo "✅ .claude/ 설치 완료"
 
 ## 5단계: 알림 설정
 
-`/claude_kit:setup-notifier`를 실행합니다.
+`/claude-kit:setup-notifier`를 실행합니다.
 
 ## 6단계: CLAUDE.md 생성
 
@@ -246,9 +246,9 @@ agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아
 <quick_ref>
 | 상황 | 커맨드/스킬 |
 |------|------------|
-| 작업 시작 | /claude_kit:start |
-| 작업 완료+PR | /claude_kit:done |
-| 커밋 | /claude_kit:commit |
+| 작업 시작 | /claude-kit:start |
+| 작업 완료+PR | /claude-kit:done |
+| 커밋 | /claude-kit:commit |
 | UI 구현 | web-design 스킬 |
 | 컴포넌트 생성 | component-creator 스킬 |
 | 도메인 스캐폴딩 | next-project-structure 스킬 |
@@ -266,9 +266,9 @@ agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아
 <quick_ref>
 | 상황 | 커맨드/스킬 |
 |------|------------|
-| 작업 시작 | /claude_kit:start |
-| 작업 완료+PR | /claude_kit:done |
-| 커밋 | /claude_kit:commit |
+| 작업 시작 | /claude-kit:start |
+| 작업 완료+PR | /claude-kit:done |
+| 커밋 | /claude-kit:commit |
 | 컴포넌트 생성 | component-creator 스킬 |
 | 버그 수정 | bug-fix 스킬 |
 | 리팩토링 | refactor 스킬 |
@@ -284,9 +284,9 @@ agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아
 <quick_ref>
 | 상황 | 커맨드/스킬 |
 |------|------------|
-| 작업 시작 | /claude_kit:start |
-| 작업 완료+PR | /claude_kit:done |
-| 커밋 | /claude_kit:commit |
+| 작업 시작 | /claude-kit:start |
+| 작업 완료+PR | /claude-kit:done |
+| 커밋 | /claude-kit:commit |
 | 버그 수정 | bug-fix 스킬 |
 | 리팩토링 | refactor 스킬 |
 | 테스트 | test-generator 스킬 |

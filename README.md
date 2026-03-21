@@ -1,4 +1,4 @@
-# claude_kit
+# claude-kit
 
 Claude Code 확장 플러그인 — rules, agents, skills, commands를 포함한 AI 코딩 워크플로우 키트.
 
@@ -11,13 +11,13 @@ Claude Code 확장 플러그인 — rules, agents, skills, commands를 포함한
 Claude Code에서 `yesroad` 마켓플레이스를 추가합니다:
 
 ```
-/plugin marketplace add yesroad/claude_kit
+/plugin marketplace add yesroad/claude-kit
 ```
 
 ### 2. 플러그인 설치
 
 ```
-/plugin install claude_kit@yesroad
+/plugin install claude-kit@yesroad
 ```
 
 ### 3. 프로젝트 설정
@@ -62,12 +62,12 @@ brew install gh && gh auth login
 
 | 커맨드                       | 설명                                                  |
 | ---------------------------- | ----------------------------------------------------- |
-| `/claude_kit:setup`          | 기술 스택 인터뷰 → 맞춤형 `.claude/` + CLAUDE.md 생성 |
-| `/claude_kit:start`          | 작업 시작 — 분석 → 계획 → 확인                        |
-| `/claude_kit:done`           | 작업 완료 — 검증 → 커밋 → PR                          |
-| `/claude_kit:commit`         | staged 변경사항으로 커밋 메시지 생성 후 커밋          |
-| `/claude_kit:quality`        | 포맷 → 린트 → 타입 체크 자동 수정                     |
-| `/claude_kit:setup-notifier` | macOS 알림 초기 환경 설정 (최초 1회)                  |
+| `/claude-kit:setup`          | 기술 스택 인터뷰 → 맞춤형 `.claude/` + CLAUDE.md 생성 |
+| `/claude-kit:start`          | 작업 시작 — 분석 → 계획 → 확인                        |
+| `/claude-kit:done`           | 작업 완료 — 검증 → 커밋 → PR                          |
+| `/claude-kit:commit`         | staged 변경사항으로 커밋 메시지 생성 후 커밋          |
+| `/claude-kit:quality`        | 포맷 → 린트 → 타입 체크 자동 수정                     |
+| `/claude-kit:setup-notifier` | macOS 알림 초기 환경 설정 (최초 1회)                  |
 
 ---
 
@@ -95,7 +95,7 @@ brew install gh && gh auth login
 ## 디렉토리 구조
 
 ```
-claude_kit/
+claude-kit/
 ├── rules/core/                 # 코딩 규칙
 │   ├── thinking-model.md           # 통합 사고 모델 (READ→REACT→ANALYZE→...)
 │   ├── coding-standards.md         # TypeScript 표준, 에러 처리, React 패턴
@@ -156,7 +156,7 @@ claude_kit/
 
 ## MCP 서버 템플릿
 
-`/claude_kit:setup` Q6에서 선택한 서버만 `.mcp.json`에 추가됩니다.
+`/claude-kit:setup` Q6에서 선택한 서버만 `.mcp.json`에 추가됩니다.
 기존 `.mcp.json`이 있으면 없는 항목만 머지합니다.
 
 | 서버       | 용도                                 | API 키 필요 |
@@ -187,16 +187,16 @@ READ → REACT → ANALYZE → RESTRUCTURE → STRUCTURE → REFLECT
 ## 전형적인 개발 사이클
 
 ```
-/claude_kit:setup       → 최초 1회: 기술 스택 설정
-/claude_kit:start       → 작업 시작: 분석 + 계획
+/claude-kit:setup       → 최초 1회: 기술 스택 설정
+/claude-kit:start       → 작업 시작: 분석 + 계획
   ↓ 구현
 component-creator       → 컴포넌트/훅 생성
 bug-fix                 → 버그 분석 + 해결 옵션
 refactor                → 구조 개선
 test-generator          → 테스트 작성
   ↓
-/claude_kit:quality     → 포맷 → 린트 → 타입 체크
-/claude_kit:done        → 검증 → 커밋 → PR
+/claude-kit:quality     → 포맷 → 린트 → 타입 체크
+/claude-kit:done        → 검증 → 커밋 → PR
   ↓ 리뷰 후
 pr-review-responder     → 리뷰 코멘트 반영
 ```
