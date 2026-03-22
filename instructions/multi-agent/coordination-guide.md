@@ -339,8 +339,18 @@ Task(subagent_type='general-purpose', model='opus',
 
 **버그 수정 (복잡도별 모델 분기):**
 
+> 복잡도 판단 기준 (불확실하면 MEDIUM으로):
+>
+> | 복잡도 | 판단 기준 | 모델 |
+> |--------|-----------|------|
+> | **LOW** | 단일 파일, 원인이 한눈에 보임, 비즈니스 로직 없음 | haiku |
+> | **MEDIUM** | 2-5파일 연쇄, 타입/상태 영향, 기본값 | sonnet |
+> | **HIGH** | 비즈니스 로직(날짜·금액·상태 전이), 다중 모듈, 정책 관련 | opus |
+>
+> **기본값**: 판단 어려우면 **MEDIUM(sonnet)** — haiku 미달보다 sonnet 과잉이 안전
+
 ```
-// LOW 버그 (단일 파일, 명확한 원인): haiku
+// LOW 버그 (단일 파일, 명확한 원인, 비즈니스 로직 없음): haiku
 Task(subagent_type='general-purpose', model='haiku',
   prompt=`
   ## 역할: 버그 수정 담당 (단순)
