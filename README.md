@@ -6,15 +6,21 @@ Claude Code 확장 플러그인 — rules, agents, skills, commands를 포함한
 
 ## 설치
 
-### 1. 플러그인 설치
+### 1. 마켓플레이스 추가
 
 Claude Code에서 실행합니다:
 
 ```
-/plugins install yesroad/cc-kit
+/plugin marketplace add yesroad/cc-kit
 ```
 
-### 2. 프로젝트 설정
+### 2. 플러그인 설치
+
+```
+/plugin install cc-kit@yesroad-cc-kit
+```
+
+### 3. 프로젝트 설정
 
 설치 완료 후 Claude Code에서 실행합니다:
 
