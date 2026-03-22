@@ -8,5 +8,12 @@
   "homepage": "https://github.com/yesroad/claude-kit",
   "repository": "https://github.com/yesroad/claude-kit",
   "license": "MIT",
-  "keywords": ["workflow", "rules", "agents", "skills", "boilerplate"]
+  "keywords": ["workflow", "rules", "agents", "skills", "boilerplate"],
+  "agents": [
+    "agents/explore.md",
+    "agents/code-reviewer.md",
+    "agents/lint-fixer.md",
+    "agents/implementation-executor.md",
+    "agents/git-operator.md"
+  ]
 }
