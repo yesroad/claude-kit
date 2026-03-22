@@ -6,23 +6,31 @@ Claude Code 확장 플러그인 — rules, agents, skills, commands를 포함한
 
 ## 설치
 
-### 1. 마켓플레이스 등록
+### 1. 레포 클론
 
-Claude Code에서 `yesroad` 마켓플레이스를 추가합니다:
-
-```
-/plugin marketplace add yesroad/claude-kit
+```bash
+git clone https://github.com/yesroad/claude-kit
 ```
 
-### 2. 플러그인 설치
+### 2. 프로젝트에 복사
 
-```
-/plugin install claude-kit@yesroad
+적용할 프로젝트 루트에서 실행합니다:
+
+```bash
+CLAUDE_KIT=/path/to/claude-kit
+
+mkdir -p .claude
+cp -r $CLAUDE_KIT/rules      ./.claude/rules
+cp -r $CLAUDE_KIT/agents     ./.claude/agents
+cp -r $CLAUDE_KIT/skills     ./.claude/skills
+cp -r $CLAUDE_KIT/commands   ./.claude/commands
+cp -r $CLAUDE_KIT/hooks      ./.claude/hooks
+cp    $CLAUDE_KIT/.mcp.json  ./.mcp.json
 ```
 
 ### 3. 프로젝트 설정
 
-설정할 프로젝트에서 실행합니다:
+Claude Code에서 실행합니다:
 
 ```
 /setup
@@ -60,14 +68,14 @@ brew install gh && gh auth login
 
 ## 커맨드
 
-| 커맨드            | 설명                                                  |
-| ----------------- | ----------------------------------------------------- |
+| 커맨드            | 설명                                                   |
+| ----------------- | ------------------------------------------------------ |
 | `/setup`          | 기술 스택 인터뷰 → 맞춤형 `.claude/` + CLAUDE.md 생성 |
-| `/start`          | 작업 시작 — 분석 → 계획 → 확인                        |
-| `/done`           | 작업 완료 — 검증 → 커밋 → PR                          |
-| `/commit`         | staged 변경사항으로 커밋 메시지 생성 후 커밋          |
-| `/quality`        | 포맷 → 린트 → 타입 체크 자동 수정                     |
-| `/setup-notifier` | macOS 알림 초기 환경 설정 (최초 1회)                  |
+| `/start`          | 작업 시작 — 분석 → 계획 → 확인                         |
+| `/done`           | 작업 완료 — 검증 → 커밋 → PR                           |
+| `/commit`         | staged 변경사항으로 커밋 메시지 생성 후 커밋           |
+| `/quality`        | 포맷 → 린트 → 타입 체크 자동 수정                      |
+| `/setup-notifier` | macOS 알림 초기 환경 설정 (최초 1회)                   |
 
 ---
 
@@ -86,7 +94,7 @@ brew install gh && gh auth login
 | `migration-helper`       | "업그레이드", "마이그레이션"        | 라이브러리 버전 업그레이드 단계적 실행    | 항상                  |
 | `docs-creator`           | "문서 작성", "CLAUDE.md"            | AI 코딩 도구용 문서 작성                  | 항상                  |
 | `agents-generator`       | "루트 지시문 생성"                  | 프로젝트 분석 후 CLAUDE.md/AGENTS.md 생성 | 항상                  |
-| `component-creator`      | "컴포넌트 만들어", "페이지 추가"    | 프로젝트 패턴 기반 컴포넌트/훅 생성       | React / Next.js       |
+| `component-creator`      | "컴포넌트 만들어", "페이지 추가"    | 프로젝트 패턴 기반 컴포넌트/훅 생성      | React / Next.js       |
 | `next-project-structure` | "도메인 추가", "서비스 파일 만들어" | service + query 훅 + view 전체 스캐폴딩   | Next.js               |
 | `web-design`             | "UI 만들어", "화면 구현"            | shadcn/ui 기반 2025 트렌드 UI 구현        | Next.js + TailwindCSS |
 
