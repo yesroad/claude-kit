@@ -90,6 +90,8 @@ import { IconSearch } from 'some-icon-library/icons/IconSearch';
 
 ## Git/PR
 
+> **Git 커밋 규칙 상세**: `@../../agents/git-operator.md` 참조
+
 | 금지                  | 이유          |
 | --------------------- | ------------- |
 | 커밋 메시지에 AI 표시 | 불필요한 노출 |

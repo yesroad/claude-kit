@@ -55,6 +55,8 @@ export const orderKeys = {
 
 ```typescript
 // queries/order/index.ts
+'use client';
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { orderKeys } from './queryKeys';
 import { orderService } from '@/services/order';
@@ -79,6 +81,8 @@ export const useUpdateOrderMutation = () => {
   });
 };
 ```
+
+> **규칙**: 훅 파일 최상단에 `'use client'` 필수 (App Router 프로젝트)
 
 ---
 

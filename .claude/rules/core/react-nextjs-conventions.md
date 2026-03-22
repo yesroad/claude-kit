@@ -85,18 +85,9 @@ import { Container, Header } from './styled';
 
 ### 필수: 유사 구현 탐색
 
-새로운 기능을 구현하기 전에 반드시 기존 코드에서 유사 패턴을 찾는다:
+새로운 기능을 구현하기 전에 반드시 기존 코드에서 유사 패턴을 찾는다.
 
-```bash
-# 유사 컴포넌트 검색
-rg "ComponentName" src/
-
-# 유사 훅 검색
-rg "useHookName" src/
-
-# 유사 타입 검색
-rg "TypeName" src/
-```
+> **상세 탐색 방법**: `@thinking-model.md` READ 단계, `@policy-definitions.md` 정책 탐색 명령어 참조
 
 ### 타입 재사용
 
