@@ -242,3 +242,4 @@ Task(subagent_type="Plan", model="opus", prompt=`
 | `@../../rules/core/unit-test-conventions.md` | 정책 보호 테스트 |
 | `@../../skills/refactor/SKILL.md` | 점진적 변경 원칙 |
 | `../../references/typescript/ts-tooling-and-stack.md` | tsconfig, 도구 생태계, 스택 조합 |
+| `../../references/zod/zod-v4-ecosystem.md` | Zod v3→v4 Breaking Changes, 마이그레이션 포인트 |

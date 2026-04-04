@@ -295,3 +295,4 @@ export default function {Name}(props: {Name}Props) {
 | `references/pages-router.md` | Pages Router 전용 패턴 |
 | `references/boilerplate-templates.md` | 복사 즉시 사용 가능한 전체 보일러플레이트 |
 | `../component-creator/SKILL.md` | 단일 컴포넌트/훅 생성 |
+| `../../references/zod/zod-v4-project-patterns.md` | Zod 스키마 폴더 구조 및 파일 작성 패턴 |

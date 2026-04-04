@@ -1,13 +1,6 @@
 # TypeScript 에러 처리 패턴
 
-> 2026년 4월 기준
-
----
-
 ## 1. Result 타입 패턴 — try/catch 탈출
-
-`try/catch`의 문제는 에러가 타입에 보이지 않아 처리를 놓치기 쉽다는 점입니다.
-Rust에서 영감받은 Result 타입이 점점 표준이 되고 있습니다.
 
 ### 1.1 직접 구현
 
@@ -92,8 +85,6 @@ function handleError(error: AppError) {
 ---
 
 ## 3. never를 이용한 exhaustive 체크
-
-새 케이스를 추가했는데 처리하지 않으면 컴파일 에러가 납니다.
 
 ```typescript
 function assertNever(value: never): never {

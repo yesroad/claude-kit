@@ -1,9 +1,5 @@
 # TypeScript 네이밍 & 프로젝트 구조
 
-> 2026년 4월 기준
-
----
-
 ## 1. 네이밍 컨벤션
 
 ### 1.1 케이싱 규칙
@@ -37,8 +33,6 @@ function get_user_data() {}    // snake_case 금지
 ### 1.2 타입 네이밍 규칙
 
 **규칙 1: 복수형 금지 — 항상 단수로**
-
-유니온 타입은 "여러 가능성 중 하나"를 뜻하므로 단수가 맞습니다.
 
 ```typescript
 // ❌ 잘못된 예
@@ -75,8 +69,6 @@ type ApiResponse<TData, TError> =
   | { success: false; error: TError };
 ```
 
-> 팀 컨벤션에 따라 단순 `T`, `U` 방식도 통용됨.
-
 **규칙 4: I/T 접두사 붙이지 않기**
 
 ```typescript
@@ -111,8 +103,6 @@ src/
 ```
 
 ### 2.2 중규모 이상 (5명+): Feature-Based 구조
-
-기능(Feature) 단위로 묶어 응집도를 높이는 방식이 현재 가장 권장됩니다.
 
 ```
 src/
