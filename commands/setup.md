@@ -234,6 +234,51 @@ else:
 PYEOF
 fi
 
+# manifest.json 생성/갱신 (.claude/manifest.json에 cc-kit 키로 기록)
+PLUGIN_ROOT="$PLUGIN_ROOT" python3 - <<'PYEOF'
+import json, os
+from datetime import date
+from pathlib import Path
+
+plugin_root = os.environ["PLUGIN_ROOT"]
+
+# plugin.json에서 버전 읽기
+plugin_json_path = os.path.join(plugin_root, "plugin.json")
+version = "unknown"
+if os.path.exists(plugin_json_path):
+    with open(plugin_json_path) as f:
+        version = json.load(f).get("version", "unknown")
+
+# 설치된 파일 목록 수집
+managed_dirs = ["rules", "instructions", "agents", "skills", "commands", "hooks", "scripts"]
+files = []
+for d in managed_dirs:
+    dir_path = Path(".claude") / d
+    if dir_path.exists():
+        for p in sorted(dir_path.rglob("*")):
+            if p.is_file():
+                files.append(str(p.relative_to(".claude")))
+
+# 기존 manifest.json 로드 또는 빈 구조 생성
+manifest_path = ".claude/manifest.json"
+manifest = {}
+if os.path.exists(manifest_path):
+    with open(manifest_path) as f:
+        manifest = json.load(f)
+
+manifest["cc-kit"] = {
+    "version": version,
+    "installedAt": str(date.today()),
+    "files": files
+}
+
+with open(manifest_path, "w") as f:
+    json.dump(manifest, f, indent=2, ensure_ascii=False)
+    f.write("\n")
+
+print(f"📋 manifest.json 생성 완료 — {len(files)}개 파일 기록")
+PYEOF
+
 [ "$PLUGIN_ROOT" = "/tmp/cc-kit_install" ] && rm -rf /tmp/cc-kit_install
 
 # .mcp.json 보안 안내
