@@ -209,3 +209,4 @@ export interface {Name}Props { ... }  // interface (스펙에 따라)
 | `@../../rules/core/nextjs-app-router.md`        | App Router 규칙      |
 | `@../../rules/core/react-hooks-patterns.md`     | 훅 패턴              |
 | `@../../rules/core/coding-standards.md`         | TypeScript 표준      |
+| `../next-project-structure/SKILL.md`            | 도메인 전체 스캐폴딩 (service + query + view) |

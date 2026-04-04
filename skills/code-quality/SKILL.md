@@ -45,19 +45,7 @@ git diff --name-only HEAD
 
 ### 1. 패키지 매니저 감지
 
-```bash
-# lock 파일 기준으로 판단
-ls yarn.lock 2>/dev/null && echo "yarn"
-ls pnpm-lock.yaml 2>/dev/null && echo "pnpm"
-ls package-lock.json 2>/dev/null && echo "npm"
-```
-
-| lock 파일        | 패키지 매니저 |
-| ---------------- | ------------- |
-| `yarn.lock`      | yarn          |
-| `pnpm-lock.yaml` | pnpm          |
-| `package-lock.json` | npm        |
-| 없음             | npm (기본)    |
+> **패키지 매니저**: lock 파일 기준 자동 감지 (`yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm)
 
 ### 2. 사용 가능한 스크립트 확인
 

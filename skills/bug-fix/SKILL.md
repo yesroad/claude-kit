@@ -226,26 +226,9 @@ Bash("{패키지매니저} build");
 
 ## 병렬 실행 패턴
 
-- 같은 파일 동시 수정은 금지 (충돌 위험)
-
 ### Task 병렬 모드 (HIGH 복잡도)
 
 HIGH 복잡도 버그 분석 시 병렬 탐색:
-
-```typescript
-Task(
-  (subagent_type = "explore"),
-  (model = "sonnet"),
-  (prompt = "근본 원인 분석"),
-);
-Task(
-  (subagent_type = "explore"),
-  (model = "haiku"),
-  (prompt = "영향 범위 파악"),
-);
-```
-
-독립적인 버그 수정도 병렬로:
 
 ```typescript
 Task(

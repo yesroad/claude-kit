@@ -215,13 +215,7 @@ server.use(
 
 패키지 매니저 자동 감지: `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm
 
-Phase 1에서 감지한 프레임워크를 그대로 사용한다.
-
 ```bash
-# Vitest (Phase 1에서 Vitest 감지된 경우)
-{패키지매니저} test --coverage --reporter=verbose {파일명}.test
-
-# Jest (Phase 1에서 Jest 감지된 경우)
 {패키지매니저} test -- --coverage --testPathPattern="{파일명}.test" --coverageReporters=text
 ```
 

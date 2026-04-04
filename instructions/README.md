@@ -25,6 +25,7 @@
 │   ├── coordination-guide.md         # 병렬 실행 핵심 원칙
 │   ├── agent-roster.md               # 에이전트 카탈로그
 │   ├── execution-patterns.md         # 실행 패턴 상세
+│   ├── model-routing.md              # 모델 선택 기준 (haiku/sonnet/opus)
 │   ├── team-evaluation.md            # Agent Teams 평가 기준
 │   └── teammate-done-process.md      # 팀원 완료 프로세스
 ├── validation/
@@ -32,7 +33,8 @@
 │   ├── required-behaviors.md         # 필수 행동 규칙
 │   └── release-readiness-gate.md     # 출시 품질 게이트
 └── workflow-patterns/
-    └── sequential-thinking.md        # 복잡도별 사고 단계
+    ├── sequential-thinking.md        # 복잡도별 사고 단계
+    └── error-recovery.md             # 에러 복구 전략
 ```
 
 ---
@@ -46,6 +48,7 @@
 | `coordination-guide.md`    | 병렬 실행, 모델 라우팅, 컨텍스트 보존     | 에이전트 조합 필요 시    |
 | `agent-roster.md`          | 에이전트 상세 (explore, code-reviewer 등) | 에이전트 선택 시         |
 | `execution-patterns.md`    | Fan-Out, 배치, 백그라운드 패턴            | 구체적 실행 방법 필요 시 |
+| `model-routing.md`         | haiku/sonnet/opus 모델 선택 기준 (SSOT)   | 에이전트 모델 결정 시    |
 | `team-evaluation.md`       | Agent Teams 팀원 평가 기준                | 팀 작업 완료 후          |
 | `teammate-done-process.md` | 팀원 5단계 완료 프로세스                  | 팀원 spawn 시 참조       |
 
@@ -62,6 +65,7 @@
 | 문서                     | 용도                          | 사용 시점           |
 | ------------------------ | ----------------------------- | ------------------- |
 | `sequential-thinking.md` | LOW/MEDIUM/HIGH 복잡도별 단계 | 작업 복잡도 판단 시 |
+| `error-recovery.md`      | 에러 복구 전략                | 에이전트 실패 시    |
 
 ---
 

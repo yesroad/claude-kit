@@ -259,10 +259,10 @@ describe('createUser', () => {
 ## Phase 4: 테스트 실행 [▶️ 테스트 실행 중...]
 
 ```bash
-# Vitest (Phase 1에서 Vitest 감지된 경우)
+# integration 프로젝트만 실행
 {패키지매니저} test --project integration
 
-# Jest (Phase 1에서 Jest 감지된 경우)
+# 특정 파일만
 {패키지매니저} test -- --testPathPattern="integration.test"
 ```
 
