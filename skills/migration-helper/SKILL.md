@@ -241,3 +241,4 @@ Task(subagent_type="Plan", model="opus", prompt=`
 | `@../../instructions/validation/release-readiness-gate.md` | 출시 게이트 |
 | `@../../rules/core/unit-test-conventions.md` | 정책 보호 테스트 |
 | `@../../skills/refactor/SKILL.md` | 점진적 변경 원칙 |
+| `../../references/typescript/ts-tooling-and-stack.md` | tsconfig, 도구 생태계, 스택 조합 |
