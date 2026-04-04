@@ -1,5 +1,7 @@
-# Claude Code 전체 (로컬 전용)
+# Claude Code (로컬 전용 — 스킬은 추적)
 .claude/
+!.claude/skills/
+!.claude/skills/**
 
 # macOS
 .DS_Store
@@ -9,3 +11,6 @@
 .env
 .env.local
 .env.*.local
+
+# 문서 (UX 리서치는 추적)
+docs/
