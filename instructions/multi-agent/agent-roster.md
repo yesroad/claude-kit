@@ -214,10 +214,13 @@ Task(
 | **code-quality** | "린트", "포맷", "타입체크" | lint-fixer |
 | **bug-fix** | "버그", "오류", "에러" | explore → implementation-executor |
 | **refactor** | "리팩토링", "구조 개선" | explore → Plan → implementation-executor |
-| **docs-creator** | "문서 작성", "CLAUDE.md" | explore |
-| **agents-generator** | "루트 지시문 생성" | explore |
+| **docs-creator** | "문서 작성", "CLAUDE.md", "SKILL.md" | explore |
+| **agents-generator** | "루트 지시문 생성", "CLAUDE.md 만들어줘" | explore |
 | **component-creator** | "컴포넌트 만들어", "페이지 추가" | explore → implementation-executor |
-| **test-generator** | "테스트 작성", "커버리지" | explore |
+| **test-unit** | "단위 테스트", "유닛 테스트", "unit test" | explore → implementation-executor |
+| **test-integration** | "통합 테스트", "API 테스트", "integration test" | explore → implementation-executor |
+| **test-e2e** | "e2e 테스트", "playwright", "브라우저 테스트" | explore → implementation-executor |
+| **nextjs-coding-convention** | "코드 리뷰", "컨벤션", "시니어 패턴" | explore |
 | **pr-review-responder** | "리뷰 반영", PR 번호 | explore → implementation-executor |
 | **migration-helper** | "업그레이드", "마이그레이션" | explore → Plan → implementation-executor |
 | **web-design** | "UI 만들어", "디자인", "랜딩페이지", "대시보드" | explore → implementation-executor |
@@ -227,19 +230,19 @@ Task(
 
 ```
 component-creator (컴포넌트 생성)
-  └→ test-generator (생성한 컴포넌트 테스트 작성)
+  └→ test-unit (단위 컴포넌트 테스트)
 
 bug-fix (버그 수정)
-  └→ test-generator (수정 후 회귀 방지 테스트)
+  └→ test-unit (회귀 방지 단위 테스트)
 
 refactor (리팩토링)
-  └→ test-generator (정책 보호 테스트)
+  └→ test-unit (정책 보호 테스트)
 
 /done (작업 완료)
   └→ PR 생성 후 pr-review-responder (리뷰 대응)
 
 migration-helper (라이브러리 업그레이드)
-  └→ test-generator (마이그레이션 검증 테스트)
+  └→ test-unit 또는 test-integration (마이그레이션 범위에 따라)
 ```
 
 ---

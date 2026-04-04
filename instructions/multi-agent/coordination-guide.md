@@ -403,7 +403,7 @@ Task(
 
 ```typescript
 Task(
-  (subagent_type = "test-generator"),
+  (subagent_type = "test-unit"),
   (prompt = `
   대상: src/{대상파일}
   테스트 위치: __tests__/{파일명}.test.ts

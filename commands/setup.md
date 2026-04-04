@@ -27,10 +27,11 @@ ls tailwind.config.* 2>/dev/null || true
 |-----------|-----------|
 | `dependencies`에 `next` 있음 | Q1 → Next.js |
 | `dependencies`에 `react` 있음 (next 없음) | Q1 → React |
-| `dependencies`에 `vue` 있음 | Q1 → Vue |
 | `app/` 또는 `src/app/` 디렉토리 있음 | Q2 → App Router |
 | `pages/` 또는 `src/pages/` 디렉토리 있음 | Q2 → Pages Router |
 | `dependencies`에 `tailwindcss` 있음 | Q3 → TailwindCSS |
+| `tailwindcss` 버전이 `^4` 또는 `>=4` | Q3-version → v4 |
+| `tailwindcss` 버전이 `^3` 또는 `>=3 <4` | Q3-version → v3 |
 | `dependencies`에 `@emotion/react` 또는 `@emotion/styled` 있음 | Q3 → Emotion |
 | `dependencies`에 `@tanstack/react-query` 있음 | Q4 → TanStack Query |
 | `dependencies`에 `swr` 있음 | Q4 → SWR |
@@ -54,9 +55,9 @@ ls tailwind.config.* 2>/dev/null || true
    ```
    📋 감지된 기술 스택:
    - 프레임워크: Next.js (App Router)
-   - 스타일링: TailwindCSS
+   - 스타일링: TailwindCSS v4
    - 서버 상태: TanStack Query
-   - 전역 상태: Jotai
+   - 전역 상태: Zustand
    - 폼 검증: Zod
 
    이대로 진행할까요? (Y/n)
@@ -75,6 +76,8 @@ ls tailwind.config.* 2>/dev/null || true
 2. React (CRA / Vite)
 3. 기타 (Node.js, Python, Go 등 — 프론트엔드 전용 rules 제외)
 
+> **참고**: Vue는 지원하지 않습니다. Vue 프로젝트는 Q1 = 기타로 선택하세요.
+
 ---
 
 **Q2. 라우터** (Q1 = Next.js일 때만 질문)
@@ -90,6 +93,11 @@ ls tailwind.config.* 2>/dev/null || true
 2. Emotion
 3. CSS Modules
 4. 기타
+
+**Q3-1. TailwindCSS 버전** (Q3 = TailwindCSS일 때만, 미감지 시 질문)
+
+1. v4 (`tailwind.config.js` 없음, CSS `@theme` 기반)
+2. v3 (`tailwind.config.js` 기반)
 
 ---
 
@@ -238,29 +246,7 @@ fi
 echo "✅ .claude/ 설치 완료"
 ```
 
-## 3단계: settings.json 생성
-
-`.claude/settings.json`이 없는 경우 생성합니다:
-
-```json
-{
-  "hooks": {
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ./.claude/hooks/notify.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-## 4단계: 기존 CLAUDE.md 백업
+## 3단계: 기존 CLAUDE.md 백업
 
 기존 `CLAUDE.md`가 있으면 `.claude/CLAUDE.back.md`로 백업합니다:
 
@@ -268,11 +254,11 @@ echo "✅ .claude/ 설치 완료"
 [ -f CLAUDE.md ] && cp CLAUDE.md .claude/CLAUDE.back.md && echo "✅ 기존 CLAUDE.md → .claude/CLAUDE.back.md 백업 완료"
 ```
 
-## 5단계: 알림 설정
+## 4단계: 알림 설정
 
 `/setup-notifier`를 실행합니다.
 
-## 6단계: CLAUDE.md 생성
+## 5단계: CLAUDE.md 생성
 
 `agents-generator` 스킬을 호출하여 CLAUDE.md를 생성합니다.
 
@@ -287,38 +273,44 @@ echo "✅ .claude/ 설치 완료"
 
 **포함할 @참조 (결정표 기반):**
 
-| rules 파일                    | 포함 조건                            |
-| ----------------------------- | ------------------------------------ |
-| `thinking-model.md`           | 항상                                 |
-| `required-behaviors.md`       | 항상                                 |
-| `forbidden-patterns.md`       | 항상                                 |
-| `unit-test-conventions.md`    | 항상                                 |
-| `pr-guide.md`                 | 항상                                 |
-| `policy-definitions.md`       | 항상                                 |
-| `coding-standards.md`         | Q1 = Next.js 또는 React              |
-| `react-nextjs-conventions.md` | Q1 = Next.js 또는 React              |
-| `react-hooks-patterns.md`     | Q1 = Next.js 또는 React              |
-| `nextjs-app-router.md`        | Q1 = Next.js **AND** Q2 = App Router |
-| `state-and-server-state.md`   | Q4 = TanStack Query 또는 SWR         |
-| `accessibility.md`            | Q1 = Next.js 또는 React              |
-| `validation-patterns.md`      | Q6 = Zod                              |
+| 파일                                             | 위치                       | 포함 조건                            |
+| ------------------------------------------------ | -------------------------- | ------------------------------------ |
+| `thinking-model.md`                              | `rules/core/`              | 항상                                 |
+| `required-behaviors.md`                          | `instructions/validation/` | 항상                                 |
+| `forbidden-patterns.md`                          | `instructions/validation/` | 항상                                 |
+| `unit-test-conventions.md`                       | `rules/core/`              | 항상                                 |
+| `pr-guide.md`                                    | `rules/core/`              | 항상                                 |
+| `policy-definitions.md`                          | `rules/core/`              | 항상                                 |
+| `coding-standards.md`                            | `rules/core/`              | Q1 = Next.js 또는 React              |
+| `react-nextjs-conventions.md`                    | `rules/core/`              | Q1 = Next.js 또는 React              |
+| `react-hooks-patterns.md`                        | `rules/core/`              | Q1 = Next.js 또는 React              |
+| `nextjs-app-router.md`                           | `rules/core/`              | Q1 = Next.js **AND** Q2 = App Router |
+| `state-and-server-state.md`                      | `rules/core/`              | Q4 = TanStack Query 또는 SWR         |
+| `accessibility.md`                               | `rules/core/`              | Q1 = Next.js 또는 React              |
+| `validation-patterns.md`                         | `rules/optional/`          | Q6 = Zod                             |
+| `tailwindcss-v4.md`                              | `rules/optional/`          | Q3 = TailwindCSS **AND** Q3-1 = v4   |
 
 > **Q1 = 기타**: `thinking-model.md`, `required-behaviors.md`, `forbidden-patterns.md`, `unit-test-conventions.md`, `pr-guide.md`, `policy-definitions.md`만 포함. 프론트엔드 전용 rules (`coding-standards.md`, `react-*`, `nextjs-*`, `state-*`, `accessibility.md`)는 제외.
 
 **포함할 스킬 quick_ref (결정표 기반):**
 
-| 스킬                     | 포함 조건                                        |
-| ------------------------ | ------------------------------------------------ |
-| `commit-helper`          | 항상                                             |
-| `pr-review-responder`    | 항상                                             |
-| `code-quality`           | 항상                                             |
-| `refactor`               | 항상                                             |
-| `bug-fix`                | 항상                                             |
-| `migration-helper`       | 항상                                             |
-| `test-generator`         | 항상                                             |
-| `next-project-structure` | Q1 = Next.js                                     |
-| `component-creator`      | Q1 = Next.js 또는 React                          |
-| `web-design`             | Q1 = Next.js 또는 React **AND** Q3 = TailwindCSS |
+| 스킬                       | 포함 조건                                        |
+| -------------------------- | ------------------------------------------------ |
+| `commit-helper`            | 항상                                             |
+| `pr-review-responder`      | 항상                                             |
+| `code-quality`             | 항상                                             |
+| `refactor`                 | 항상                                             |
+| `bug-fix`                  | 항상                                             |
+| `migration-helper`         | 항상                                             |
+| `docs-creator`             | 항상                                             |
+| `agents-generator`         | 항상                                             |
+| `test-e2e`                 | 항상                                             |
+| `test-unit`                | Q1 = Next.js 또는 React                          |
+| `test-integration`         | Q1 = Next.js 또는 React                          |
+| `nextjs-coding-convention` | Q1 = Next.js 또는 React                          |
+| `next-project-structure`   | Q1 = Next.js                                     |
+| `component-creator`        | Q1 = Next.js 또는 React                          |
+| `web-design`               | Q1 = Next.js 또는 React **AND** Q3 = TailwindCSS |
 
 agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아래 결정표에 따라 추가합니다.
 
@@ -336,7 +328,10 @@ agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아
 | 도메인 스캐폴딩 | next-project-structure 스킬 |
 | 버그 수정 | bug-fix 스킬 |
 | 리팩토링 | refactor 스킬 |
-| 테스트 | test-generator 스킬 |
+| 단위 테스트 | test-unit 스킬 |
+| 통합 테스트 | test-integration 스킬 |
+| E2E 테스트 | test-e2e 스킬 |
+| 코드 컨벤션 | nextjs-coding-convention 스킬 |
 | 에이전트 선택 | @.claude/instructions/multi-agent/agent-roster.md |
 | 복잡도 판단 | @.claude/instructions/workflow-patterns/sequential-thinking.md |
 </quick_ref>
@@ -354,12 +349,48 @@ agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아
 | 컴포넌트 생성 | component-creator 스킬 |
 | 버그 수정 | bug-fix 스킬 |
 | 리팩토링 | refactor 스킬 |
-| 테스트 | test-generator 스킬 |
+| 단위 테스트 | test-unit 스킬 |
+| 통합 테스트 | test-integration 스킬 |
+| E2E 테스트 | test-e2e 스킬 |
+| 코드 컨벤션 | nextjs-coding-convention 스킬 |
 | 에이전트 선택 | @.claude/instructions/multi-agent/agent-roster.md |
 | 복잡도 판단 | @.claude/instructions/workflow-patterns/sequential-thinking.md |
 </quick_ref>
 ```
 
-## 7단계: 설치 완료 보고
+## 6단계: 설치 완료 보고
 
-설치된 항목, 백업 여부, 생성된 CLAUDE.md 내용을 사용자에게 보여주고 사용 가능한 커맨드를 안내합니다.
+설치된 항목, 백업 여부, 생성된 CLAUDE.md 내용을 사용자에게 보여주고 아래 형식으로 안내합니다:
+
+```
+✅ cc-kit 설치 완료
+
+📁 설치된 항목:
+  .claude/rules/        — 코딩 규칙 (프레임워크별 선별 적용)
+  .claude/agents/       — 전문화된 서브에이전트
+  .claude/skills/       — 자동 트리거 스킬
+  .claude/commands/     — 슬래시 커맨드
+  .claude/instructions/ — 작업 방식 가이드
+  .claude/hooks/        — 알림 훅
+  CLAUDE.md             — 프로젝트 루트 지시문 (새로 생성)
+
+📋 사용 가능한 커맨드:
+  /start          — 작업 시작 (코드 분석 → 계획 → 구현 확인)
+  /done           — 작업 완료 (검증 → 커밋 → PR 생성)
+  /commit         — 커밋 플로우 자동화
+  /quality        — 포맷 → 린트 → 타입 체크
+  /test           — 단위 → 통합 → E2E 테스트 순차 실행
+  /setup-notifier — macOS 알림 환경 설정 (최초 1회)
+
+💡 자주 쓰는 스킬 (키워드로 자동 트리거):
+  bug-fix               — "버그", "오류", "에러"
+  refactor              — "리팩토링", "구조 개선"
+  component-creator     — "컴포넌트 만들어", "훅 만들어"
+  test-unit             — "단위 테스트", "유닛 테스트"
+  test-e2e              — "e2e 테스트", "playwright"
+  migration-helper      — "업그레이드", "마이그레이션"
+  web-design            — "UI 만들어", "화면 구현"  (Next.js + Tailwind)
+  nextjs-coding-convention — "코드 리뷰", "컨벤션 확인"
+```
+
+> CLAUDE.md가 백업된 경우: `.claude/CLAUDE.back.md`에서 이전 내용을 확인할 수 있습니다.

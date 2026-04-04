@@ -87,7 +87,7 @@
 
 ## 4. Skills — 자동 트리거 스킬
 
-`skills/` 하위 12개 스킬. 키워드 입력 시 자동 활성화되거나 커맨드 내부에서 호출됩니다.
+`skills/` 하위 15개 스킬. 키워드 입력 시 자동 활성화되거나 커맨드 내부에서 호출됩니다.
 
 ### 코드 완성 스킬
 
@@ -105,7 +105,9 @@
 | `component-creator/SKILL.md` | 212 | "컴포넌트 만들어", "훅 만들어" | **프로젝트 패턴 기반 컴포넌트/훅 생성**. 기존 유사 컴포넌트 탐색 → 스타일링/export/Props/`use client` 패턴 추출 → 생성 계획 출력 → 파일 생성 → 배럴 `index.ts` 업데이트 → tsc/lint 검증. 단일 컴포넌트만 (도메인 전체는 `next-project-structure`). |
 | `next-project-structure/SKILL.md` | 297 | "도메인 추가", "폴더 구조" | **Next.js 도메인 전체 스캐폴딩**. service + query 훅 + view를 한 번에 생성. `types/api/{domain}.ts` → `services/api/{domain}.ts` → `queries/{domain}/queryKeys.ts` + `index.ts` → `views/{page}/` → 배럴 업데이트. App Router/Pages Router 모두 지원. |
 | `web-design/SKILL.md` | 430 | "UI 만들어", "디자인해줘" | **2025-2026 트렌드 UI 구현**. Next.js + TailwindCSS v3/v4 + shadcn/ui. 컨텍스트 파악(업종/분위기) → 디자인 스타일 선택(어스톤/다크테크/파스텔 등) → 레이아웃 패턴 → **HTML 목업 필수(사용자 확인)** → React 구현 → 여백/간격 품질 체크. |
-| `test-generator/SKILL.md` | 231 | "테스트 작성", "커버리지" | **정책 케이스 포함 테스트 생성**. 순수 함수 우선(utils, helpers, lib). 정상/경계값/에러/정책 4가지 카테고리 커버. jest/vitest 자동 감지. `__tests__/{파일명}.test.ts` 생성 → 실행 → 결과 요약. |
+| `test-unit/SKILL.md` | - | "단위 테스트", "유닛 테스트" | **컴포넌트/함수/훅 단위 테스트 생성**. BDD 방식. 정상/경계값/에러/정책 4가지 카테고리 커버. jest/vitest 자동 감지. `__tests__/{파일명}.test.ts` 위치. React/Next.js 전용. |
+| `test-integration/SKILL.md` | - | "통합 테스트", "API 테스트" | **Route Handler·Server Actions 통합 테스트 생성**. Node.js 환경 테스트. API 엔드포인트 실제 동작 검증. React/Next.js 전용. |
+| `test-e2e/SKILL.md` | - | "e2e 테스트", "playwright" | **Playwright 기반 E2E 테스트 생성**. 사용자 시나리오·브라우저 자동화. 전체 흐름 테스트. |
 | `migration-helper/SKILL.md` | 244 | "업그레이드", "마이그레이션" | **라이브러리 안전 마이그레이션**. 현황 분석(영향 파일 탐색) → 계획 수립 → **정책 보호 테스트 작성(마이그레이션 전)** → 단계적 실행(각 단계 후 검증) → 최종 검증. React Query v4→v5, Pages→App Router 등. |
 
 ### PR / 문서 스킬
@@ -151,7 +153,7 @@
 |------|:-----:|--------|------|
 | `setup.md` | ~310 | `/setup` | **프로젝트 초기 설치**. 기술 스택 인터뷰 6문항(프레임워크/라우터/스타일링/서버상태/전역상태/MCP서버) → 응답 기반 `.claude/` 파일 설치 + 맞춤형 CLAUDE.md 생성. Rules 결정표에 따라 프레임워크별 필요 규칙만 선별 포함. |
 | `start.md` | ~150 | `/start` | **작업 시작**. 입력 유형 판별(Jira/MD/텍스트) → 작업 내용 파악 → 디자인 분석(선택) → 코드 분석(explore 에이전트) → 작업 계획 출력 → 복잡도 판단 및 에이전트 전략 → **"작업을 시작할까요?" 확인 후 구현**. Step 7 전에는 구현하지 않음. |
-| `done.md` | ~170 | `/done` | **작업 완료 → PR**. 변경 분석(정책 영향 판단) → 테스트 전략(순수 함수+정책이면 `test-generator`, UI면 스킵) → 코드 검증(`code-quality` 스킬) → 출시 게이트 5항목 → 선별 커밋(`commit-helper` 스킬) → PR 생성(`pr-guide.md` 템플릿). `--skip-test`, `--force-test`, `--draft` 옵션. |
+| `done.md` | ~170 | `/done` | **작업 완료 → PR**. 변경 분석(정책 영향 판단) → 테스트 전략(순수 함수+정책이면 `test-unit`, UI이면 `test-e2e`) → 코드 검증(`code-quality` 스킬) → 출시 게이트 5항목 → 선별 커밋(`commit-helper` 스킬) → PR 생성(`pr-guide.md` 템플릿). `--skip-test`, `--force-test`, `--draft` 옵션. |
 | `commit.md` | ~90 | `/commit` | **Git 플로우 자동화**. main 최신화 → 작업 브랜치 생성(`{type}/{description}`) → 커밋(`commit-helper` 스킬) → 푸시 → main 머지 → 브랜치 삭제 → main 최신화. staged 변경만 처리(`git add .` 금지). `--branch`, `--no-gate` 옵션. |
 | `quality.md` | ~18 | `/quality` | **코드 품질 검사**. `code-quality` 스킬 호출로 Prettier → ESLint → TypeScript 순차 실행. `--format-only`, `--lint-only`, `--type-only`, `--no-fix` 옵션. |
 | `setup-notifier.md` | ~76 | `/setup-notifier` | **macOS 알림 환경 설정**. terminal-notifier 설치 확인 → `install-notifier.sh` 실행 → `.claude/settings.local.json` 훅 설정 병합(PermissionRequest 이벤트에 notify.sh 연결). 최초 1회. |
@@ -240,7 +242,8 @@ CLAUDE.md
 ```
 /setup ──→ agents-generator 스킬 ──→ explore 에이전트
 /start ──→ explore 에이전트 (코드 분석)
-/done  ──→ test-generator 스킬 (정책 변경 시)
+/done  ──→ test-unit 스킬 (순수 함수+정책 변경 시)
+       ──→ test-e2e 스킬 (UI 변경 시)
        ──→ code-quality 스킬 ──→ lint-fixer 에이전트
        ──→ commit-helper 스킬 ──→ git-operator 에이전트
 /commit ──→ commit-helper 스킬
@@ -250,10 +253,10 @@ CLAUDE.md
 ### 스킬 간 연결
 
 ```
-component-creator → test-generator (생성 후 테스트)
-bug-fix           → test-generator (수정 후 회귀 방지)
-refactor          → test-generator (정책 보호 테스트)
-migration-helper  → test-generator (마이그레이션 검증)
+component-creator → test-unit (생성 후 단위 테스트)
+bug-fix           → test-unit (수정 후 회귀 방지)
+refactor          → test-unit (정책 보호 테스트)
+migration-helper  → test-unit 또는 test-integration (범위에 따라)
 /done             → pr-review-responder (리뷰 대응)
 ```
 

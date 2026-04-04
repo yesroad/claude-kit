@@ -81,18 +81,21 @@ brew install gh && gh auth login
 
 | 스킬                     | 트리거                              | 설명                                      | 조건                  |
 | ------------------------ | ----------------------------------- | ----------------------------------------- | --------------------- |
-| `commit-helper`          | "커밋 메시지 만들어줘"              | staged 기반 커밋 메시지 자동 생성         | 항상                  |
-| `code-quality`           | "린트", "포맷", "타입체크"          | 린트·포맷·타입체크 통합 실행              | 항상                  |
-| `bug-fix`                | "버그", "오류", "에러"              | 원인 분석 후 2-3가지 해결 옵션 제시       | 항상                  |
-| `refactor`               | "리팩토링", "구조 개선"             | 정책 보호 테스트 포함 단계별 리팩토링     | 항상                  |
-| `test-generator`         | "테스트 작성", "커버리지"           | 테스트 케이스 생성 + 커버리지 리포트      | 항상                  |
-| `pr-review-responder`    | "리뷰 반영", PR 번호/URL            | 수용/거절/질문 분류 후 자동 반영          | 항상                  |
-| `migration-helper`       | "업그레이드", "마이그레이션"        | 라이브러리 버전 업그레이드 단계적 실행    | 항상                  |
-| `docs-creator`           | "문서 작성", "CLAUDE.md"            | AI 코딩 도구용 문서 작성                  | 항상                  |
-| `agents-generator`       | "루트 지시문 생성"                  | 프로젝트 분석 후 CLAUDE.md/AGENTS.md 생성 | 항상                  |
-| `component-creator`      | "컴포넌트 만들어", "페이지 추가"    | 프로젝트 패턴 기반 컴포넌트/훅 생성      | React / Next.js       |
-| `next-project-structure` | "도메인 추가", "서비스 파일 만들어" | service + query 훅 + view 전체 스캐폴딩   | Next.js               |
-| `web-design`             | "UI 만들어", "화면 구현"            | shadcn/ui 기반 2025 트렌드 UI 구현        | Next.js + TailwindCSS |
+| `commit-helper`            | "커밋 메시지 만들어줘"              | staged 기반 커밋 메시지 자동 생성              | 항상                  |
+| `code-quality`             | "린트", "포맷", "타입체크"          | 린트·포맷·타입체크 통합 실행                  | 항상                  |
+| `bug-fix`                  | "버그", "오류", "에러"              | 원인 분석 후 2-3가지 해결 옵션 제시           | 항상                  |
+| `refactor`                 | "리팩토링", "구조 개선"             | 정책 보호 테스트 포함 단계별 리팩토링         | 항상                  |
+| `test-unit`                | "단위 테스트", "유닛 테스트"        | 컴포넌트/함수/훅 단위 테스트 생성 (BDD)       | React / Next.js       |
+| `test-integration`         | "통합 테스트", "API 테스트"         | Route Handler·Server Actions 통합 테스트 생성 | React / Next.js       |
+| `test-e2e`                 | "e2e 테스트", "playwright"          | Playwright 기반 E2E 테스트 생성               | 항상                  |
+| `pr-review-responder`      | "리뷰 반영", PR 번호/URL            | 수용/거절/질문 분류 후 자동 반영              | 항상                  |
+| `migration-helper`         | "업그레이드", "마이그레이션"        | 라이브러리 버전 업그레이드 단계적 실행        | 항상                  |
+| `docs-creator`             | "문서 작성", "CLAUDE.md"            | AI 코딩 도구용 문서 작성                      | 항상                  |
+| `agents-generator`         | "루트 지시문 생성"                  | 프로젝트 분석 후 CLAUDE.md/AGENTS.md 생성     | 항상                  |
+| `nextjs-coding-convention` | "코드 리뷰", "컨벤션 확인"          | 시니어 기준 컨벤션 적용 및 레벨 진단          | React / Next.js       |
+| `component-creator`        | "컴포넌트 만들어", "페이지 추가"    | 프로젝트 패턴 기반 컴포넌트/훅 생성          | React / Next.js       |
+| `next-project-structure`   | "도메인 추가", "서비스 파일 만들어" | service + query 훅 + view 전체 스캐폴딩       | Next.js               |
+| `web-design`               | "UI 만들어", "화면 구현"            | shadcn/ui 기반 2025 트렌드 UI 구현            | Next.js + TailwindCSS |
 
 ---
 
@@ -124,10 +127,13 @@ cc-kit/
 │   ├── code-quality/
 │   ├── bug-fix/
 │   ├── refactor/
-│   ├── component-creator/      # React/Next.js 전용
-│   ├── next-project-structure/ # Next.js 전용
-│   ├── web-design/             # Next.js + TailwindCSS 전용
-│   ├── test-generator/
+│   ├── component-creator/          # React/Next.js 전용
+│   ├── next-project-structure/     # Next.js 전용
+│   ├── web-design/                 # Next.js + TailwindCSS 전용
+│   ├── test-unit/                  # React/Next.js 전용
+│   ├── test-integration/           # React/Next.js 전용
+│   ├── test-e2e/
+│   ├── nextjs-coding-convention/   # React/Next.js 전용
 │   ├── pr-review-responder/
 │   ├── migration-helper/
 │   ├── docs-creator/
@@ -200,7 +206,9 @@ READ → REACT → ANALYZE → RESTRUCTURE → STRUCTURE → REFLECT
 component-creator       → 컴포넌트/훅 생성
 bug-fix                 → 버그 분석 + 해결 옵션
 refactor                → 구조 개선
-test-generator          → 테스트 작성
+test-unit               → 단위 테스트 작성
+test-integration        → 통합 테스트 작성
+test-e2e                → E2E 테스트 작성
   ↓
 /quality     → 포맷 → 린트 → 타입 체크
 /done        → 검증 → 커밋 → PR
