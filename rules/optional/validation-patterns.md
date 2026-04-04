@@ -229,3 +229,4 @@ export type UpdateOrderInput = z.infer<typeof updateOrderSchema>;
 | `../core/coding-standards.md` | 기본 TypeScript 표준 |
 | `../core/state-and-server-state.md` | RHF 사용 규칙 |
 | `../core/nextjs-app-router.md` | Server Action 인증 패턴 |
+| `../../references/zod/zod-v4-real-world.md` | RHF, Server Actions, tRPC 실전 연동 패턴 |

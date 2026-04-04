@@ -1,14 +1,8 @@
 # TypeScript 타입 패턴
 
-> 기본 패턴부터 심화 패턴까지 — 2026년 4월 기준
-
----
-
 ## 1. 기본 타입 패턴
 
 ### 1.1 Union Type + Discriminated Union
-
-프론트엔드 상태 관리의 핵심 패턴입니다.
 
 ```typescript
 // ❌ 이런 방식은 타입 안전하지 않음
@@ -136,8 +130,6 @@ type Pair = [string, number];
 ---
 
 ## 2. Brand Types — 실수 방지의 핵심
-
-`UserId`와 `OrderId`가 둘 다 `string`이면 TypeScript는 구분하지 못합니다.
 
 ```typescript
 // ❌ 타입은 통과, 런타임은 폭발
@@ -284,8 +276,6 @@ type UserData = ExtractData<UseQueryResult<User>>; // User | undefined
 ```
 
 ### 3.5 satisfies 연산자 — 타입 추론 유지하면서 검증
-
-TypeScript 4.9+, `as const`의 진화형.
 
 ```typescript
 type Config = {

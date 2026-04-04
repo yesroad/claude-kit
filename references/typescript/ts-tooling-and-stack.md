@@ -1,12 +1,6 @@
 # TypeScript 도구 생태계 & 스택
 
-> 2026년 4월 기준
-
----
-
 ## 1. 실전 tsconfig.json 설정
-
-TypeScript 6.0부터 `strict`가 기본값 `true`로 변경되었습니다.
 
 ```json
 {
@@ -69,34 +63,6 @@ export default tseslint.config(tseslint.configs.recommended, {
     "@typescript-eslint/no-unused-vars": "error",
   },
 });
-```
-
----
-
-## 3. 런타임 검증 — Zod
-
-TypeScript 타입은 컴파일 타임에만 존재합니다. API 응답, form 입력 등 런타임 데이터는 별도 검증이 필요합니다.
-
-```typescript
-import { z } from "zod";
-
-const UserSchema = z.object({
-  id: z.number(),
-  name: z.string().min(1),
-  email: z.string().email(),
-  role: z.enum(["admin", "user", "guest"]),
-});
-
-// 스키마에서 타입 자동 추출
-type User = z.infer<typeof UserSchema>;
-
-// 런타임 검증
-const result = UserSchema.safeParse(apiResponse);
-if (result.success) {
-  console.log(result.data.name); // 타입 안전
-} else {
-  console.error(result.error.issues);
-}
 ```
 
 ---
@@ -208,25 +174,3 @@ expectError(getOrder(userId)); // UserId → OrderId 불가 확인
 | **테스트** | Vitest + Testing Library + expectTypeOf |
 | **공통 도구** | ESLint + typescript-eslint + Prettier + tsx |
 
----
-
-## 8. 자주 논쟁되는 주제
-
-| 주제 | 현재 커뮤니티 다수 의견 |
-|------|------------------------|
-| interface vs type | 팀에서 통일이 핵심. 객체는 interface, 나머지는 type 선호 |
-| enum vs const 객체 | `const` + `as const` 선호 증가. enum은 번들 크기·erasableSyntax 문제 |
-| try/catch vs Result 타입 | 대형 프로젝트일수록 Result 타입(neverthrow) 선호 증가 |
-| 배럴 export | 타입 전용 패키지는 OK, 런타임 코드는 직접 경로 선호 |
-| any vs unknown | unknown 강제가 현재 표준. strict 모드 기본값화로 자연스럽게 정착 |
-| Zod vs Valibot | Zod가 압도적 점유율. Valibot은 번들 크기 민감한 경우 |
-
----
-
-## 9. 2026년 실무 트렌드
-
-- **TypeScript 직접 실행**: Node.js 22+, Deno, Bun이 TS를 별도 컴파일 없이 실행. `--erasableSyntaxOnly` 옵션이 중요해지고, `enum`·`namespace`를 피하는 스타일이 늘어남
-- **타입 추론 최대 활용**: 불필요한 타입 어노테이션을 줄이고 함수 반환 타입에만 명시하는 방향
-- **`satisfies` 적극 활용**: TypeScript 4.9 도입 이후 실무 활용 증가
-- **Zod + tRPC 조합 표준화**: 프론트-백엔드 타입을 한 번에 관리하는 풀스택 패턴
-- **TypeScript 7.0 (Go 기반)**: 기존 대비 10배 빠른 컴파일 속도를 목표로 논의 중. 6.0에서 deprecated된 옵션을 미리 정리해두는 것이 권장됨

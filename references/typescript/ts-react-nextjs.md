@@ -1,12 +1,6 @@
 # TypeScript × React / Next.js 패턴
 
-> React 19, Next.js 15+ 기준 — 2026년 4월
-
----
-
 ## 1. 컴포넌트 Props 타입 추출 — ComponentProps
-
-외부 라이브러리 컴포넌트를 래핑할 때 필수 패턴입니다.
 
 ```typescript
 import { ComponentProps } from 'react';
@@ -26,9 +20,6 @@ function CustomButton({ isLoading, variant, ...buttonProps }: CustomButtonProps)
 ---
 
 ## 2. ref 처리 — React 19 방식
-
-React 19부터 `forwardRef`가 deprecated되었습니다.
-`ref`를 일반 prop으로 직접 받는 방식이 표준입니다.
 
 ```typescript
 import { useRef, useImperativeHandle } from 'react';
@@ -69,8 +60,6 @@ function SmartInput({ placeholder, onChange, ref }: InputProps) {
 const inputRef = useRef<InputHandle>(null);
 inputRef.current?.focus(); // 타입 안전
 ```
-
-> React 18 이하를 지원해야 한다면 기존 `forwardRef` 방식을 유지할 것.
 
 ---
 
@@ -140,7 +129,7 @@ function useAsync<TData, TError = Error>(
   return { ...state, execute };
 }
 
-// TData가 자동 추론됨
 const { data, status, execute } = useAsync(() => fetchUser(id));
 // data 타입: User | undefined
 ```
+
