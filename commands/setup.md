@@ -66,9 +66,8 @@ ls tailwind.config.* 2>/dev/null || true
 3. `n` → 감지 결과 무시, **모든 질문을 처음부터 순서대로 진행**
 4. 감지된 항목이 하나도 없으면 → 모든 질문을 순서대로 진행
 
-> **⚠️ 중요: 질문은 반드시 하나씩 순차적으로 한다.**
-> 미감지 항목이 여러 개여도 한 번에 몰아 묻지 않는다.
-> 사용자가 답변하면 → 다음 질문을 보낸다. 모든 답변을 받은 뒤 2단계로 넘어간다.
+> **⚠️ 중요: 미감지 항목이 여러 개면 한 번에 모두 묻는다.**
+> 모든 답변을 받은 뒤 2단계로 넘어간다.
 
 아래는 **미감지 시 질문할 내용**입니다:
 
@@ -183,7 +182,7 @@ fi
 
 mkdir -p .claude
 
-for dir in rules instructions agents skills commands hooks scripts; do
+for dir in rules instructions agents skills commands hooks scripts references; do
   [ -d "$PLUGIN_ROOT/$dir" ] && cp -r "$PLUGIN_ROOT/$dir/" ".claude/$dir/"
 done
 
@@ -254,7 +253,7 @@ if os.path.exists(plugin_json_path):
         version = json.load(f).get("version", "unknown")
 
 # 설치된 파일 목록 수집
-managed_dirs = ["rules", "instructions", "agents", "skills", "commands", "hooks", "scripts"]
+managed_dirs = ["rules", "instructions", "agents", "skills", "commands", "hooks", "scripts", "references"]
 files = []
 for d in managed_dirs:
     dir_path = Path(".claude") / d
@@ -421,6 +420,7 @@ agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아
   .claude/commands/     — 슬래시 커맨드
   .claude/instructions/ — 작업 방식 가이드
   .claude/hooks/        — 알림 훅
+  .claude/references/   — 라이브러리 레퍼런스 문서
   CLAUDE.md             — 프로젝트 루트 지시문 (새로 생성)
 
 📋 사용 가능한 커맨드:

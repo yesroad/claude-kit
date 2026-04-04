@@ -139,7 +139,7 @@ if os.path.exists(plugin_json_path):
         version = json.load(f).get("version", "unknown")
 
 # 현재 설치된 파일 목록 수집
-managed_dirs = ["rules", "instructions", "agents", "skills", "commands", "hooks", "scripts"]
+managed_dirs = ["rules", "instructions", "agents", "skills", "commands", "hooks", "scripts", "references"]
 files = []
 for d in managed_dirs:
     dir_path = Path(".claude") / d
