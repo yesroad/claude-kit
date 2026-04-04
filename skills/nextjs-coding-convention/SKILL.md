@@ -33,6 +33,12 @@ user-invocable: true
 
 **참조**: `references/code-examples.md` (레벨별 대조 예제)
 
+**TypeScript 심화 패턴 적용 시 추가 참조:**
+- Brand Types, Conditional/Mapped Types, satisfies 등 → `../../references/typescript/ts-type-patterns.md` 읽기
+- ref prop, ComponentProps, Next.js 15 params 타입 → `../../references/typescript/ts-react-nextjs.md` 읽기
+- Result 타입, 에러 유니온, never 체크 → `../../references/typescript/ts-error-handling.md` 읽기
+- tsconfig, 스택 조합 → `../../references/typescript/ts-tooling-and-stack.md` 읽기
+
 ---
 
 ### 모드 B: 코드 리뷰 (레벨 진단)

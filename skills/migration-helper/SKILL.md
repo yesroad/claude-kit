@@ -83,6 +83,10 @@ Task(subagent_type="explore", model="haiku", prompt=`
 `)
 ```
 
+**마이그레이션 유형별 참조 파일 — 계획 수립 전 먼저 읽기:**
+- Zod v3 → v4 마이그레이션 → `../../references/zod/zod-v4-ecosystem.md` 읽기
+- TypeScript 버전 업 / tsconfig 변경 → `../../references/typescript/ts-tooling-and-stack.md` 읽기
+
 ---
 
 ### Phase 2: 마이그레이션 계획 수립

@@ -165,6 +165,10 @@ export interface {Name}Props { ... }  // interface (스펙에 따라)
 
 훅인 경우도 동일하게 기존 훅 파일을 읽어 패턴을 따른다.
 
+**생성 중 패턴 참조가 필요한 경우:**
+- `ref` prop 또는 `ComponentProps` 사용 → `../../references/typescript/ts-react-nextjs.md` 읽기 (React 19 방식)
+- Brand Types, Conditional Types 등 심화 타입 → `../../references/typescript/ts-type-patterns.md` 읽기
+
 ---
 
 ### Phase 4: 연관 파일 업데이트

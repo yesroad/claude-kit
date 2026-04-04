@@ -48,39 +48,6 @@ metadata:
 
 ### Phase 1: 현황 분석
 
-**Agent Teams 모드:**
-
-```typescript
-TeamCreate({
-  team_name: "refactor-team",
-  description: "리팩토링 분석 및 실행",
-});
-Task(
-  (subagent_type = "explore"),
-  (team_name = "refactor-team"),
-  (name = "code-analyzer"),
-  (model = "haiku"),
-  (prompt = "리팩토링 대상 코드 분석"),
-);
-Task(
-  (subagent_type = "explore"),
-  (team_name = "refactor-team"),
-  (name = "test-checker"),
-  (model = "haiku"),
-  (prompt = "관련 테스트 현황 파악"),
-);
-Task(
-  (subagent_type = "explore"),
-  (team_name = "refactor-team"),
-  (name = "dep-analyzer"),
-  (model = "haiku"),
-  (prompt = "의존성 파일 목록 추출"),
-);
-// 완료 후 → shutdown_request → TeamDelete
-```
-
-**Task 병렬 모드 (폴백):**
-
 ```typescript
 Task(
   (subagent_type = "explore"),

@@ -65,6 +65,8 @@ ls src/views/
 | 전체 도메인, 도메인 추가 | services + queries + view + types 모두 | |
 | 컴포넌트, 훅 단독 생성 | — | `component-creator` 스킬 사용 |
 
+**schemas/ 폴더 구조가 포함되는 경우 → `../../references/zod/zod-v4-project-patterns.md` 먼저 읽기**
+
 ### Step 4: 파일 생성 + 배럴 index.ts 즉시 업데이트
 
 파일을 만든 즉시 해당 폴더의 `index.ts` 배럴 export를 업데이트한다.
