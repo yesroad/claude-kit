@@ -1,5 +1,5 @@
 ---
-name: update
+name: update-cc-kit
 description: cc-kit 플러그인 파일을 최신 버전으로 업데이트합니다. CLAUDE.md와 커스텀 파일은 건드리지 않습니다.
 ---
 
