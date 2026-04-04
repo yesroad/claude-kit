@@ -78,7 +78,9 @@
 | 버그 수정                  | `skills/bug-fix`             |
 | 코드 리팩토링              | `skills/refactor`            |
 | 새 컴포넌트/페이지/훅 생성 | `skills/component-creator`   |
-| 테스트 작성                | `skills/test-generator`      |
+| 단위 테스트 작성           | `skills/test-unit`           |
+| 통합 테스트 작성           | `skills/test-integration`    |
+| E2E 테스트 작성            | `skills/test-e2e`            |
 | PR 리뷰 코멘트 반영        | `skills/pr-review-responder` |
 | 라이브러리 업그레이드      | `skills/migration-helper`    |
 | AI 도구 문서 작성          | `skills/docs-creator`        |

@@ -46,4 +46,25 @@ skills/web-design/SKILL.md          ← 항상 함께 수정
 
 한 곳만 수정하면 로컬 동작과 배포 내용이 달라진다.
 
+## 스킬/커맨드 변경 시 문서 동기화 필수
+
+스킬을 추가·수정·삭제할 때는 아래 문서를 함께 업데이트한다:
+
+| 문서 | 업데이트 내용 |
+|------|-------------|
+| `commands/setup.md` | 스킬 결정표, quick_ref 예시 |
+| `instructions/multi-agent/agent-roster.md` | 스킬 카탈로그, 연결 흐름 |
+| `README.md` | 스킬 목록 테이블, 디렉토리 구조 |
+| `FILE-MAP.md` | Skills 섹션, 흐름 다이어그램 |
+| `instructions/README.md` | 스킬 맵 테이블 |
+
+```
+# 예: test-unit 스킬 추가 시
+commands/setup.md                              ← 결정표 + quick_ref 예시에 추가
+instructions/multi-agent/agent-roster.md       ← 스킬 카탈로그 테이블에 추가
+README.md                                      ← 스킬 목록 + 디렉토리 구조에 추가
+FILE-MAP.md                                    ← Skills 섹션 + 흐름 다이어그램에 추가
+instructions/README.md                         ← 스킬 맵 테이블에 추가
+```
+
 </dev_rules>

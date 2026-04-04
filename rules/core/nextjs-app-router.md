@@ -333,6 +333,43 @@ function ProblematicComponent() {
 
 ---
 
+## Next.js 16 비직관적 동작 — 코드 전 확인 필수
+
+> Next.js 16은 LLM 훈련 데이터의 Next.js와 다르다. 아래 항목은 추측으로 작성하지 말고 먼저 확인한다.
+
+### 코드 작성 전 공식 문서 확인
+
+Next.js 16 관련 코드를 작성하기 전, 프로젝트 내 문서를 먼저 읽는다:
+
+```bash
+# App Router 관련 변경사항 확인
+ls node_modules/next/dist/docs/01-app/
+```
+
+특히 새로운 API·옵션·동작 변경이 의심될 때는 추측으로 코드를 작성하지 말고
+`node_modules/next/dist/docs/` 하위 관련 `.mdx` 파일을 읽은 후 작성한다.
+
+### 느린 클라이언트 사이드 네비게이션
+
+`<Suspense>`만으로는 해결되지 않을 수 있다. 수정 전 반드시 공식 가이드를 읽고 적용한다:
+
+```bash
+cat node_modules/next/dist/docs/01-app/02-guides/instant-navigation.mdx
+```
+
+> API명과 설정 방식은 버전마다 다르므로 추측으로 작성하지 말 것.
+
+### deprecated API 경고
+
+Next.js 16에서는 `deprecated` 경고가 실제 동작 변경으로 이어진다. 무시하지 말고 즉시 수정한다.
+
+```bash
+# 경고 발생 시 확인
+grep -r "deprecated" node_modules/next/dist/docs/ | grep -i "해당API명"
+```
+
+---
+
 ## 체크리스트
 
 App Router 코드 작성 시:
@@ -346,6 +383,9 @@ App Router 코드 작성 시:
 - [ ] 캐시가 필요한 Server Component에 `use cache` + `cacheLife`/`cacheTag`를 적용했는가?
 - [ ] `useEffectEvent`로 해결 가능한 Effect 의존성 버그가 없는가?
 - [ ] React Compiler 도입 시 문제 컴포넌트에 `"use no memo"`를 적용했는가?
+- [ ] Next.js 16 신규 API 사용 시 `node_modules/next/dist/docs/` 먼저 읽었는가?
+- [ ] `deprecated` 경고가 있으면 즉시 수정했는가?
+- [ ] 클라이언트 네비게이션이 느리면 `instant-navigation.mdx` 가이드를 읽고 적용했는가?
 
 ---
 
