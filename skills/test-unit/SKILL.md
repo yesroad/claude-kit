@@ -293,3 +293,5 @@ find src/utils src/helpers src/lib src/adapters -name "*.ts" ! -name "*.test.ts"
 | 문서 | 용도 |
 |------|------|
 | `@../../rules/core/unit-test-conventions.md` | 테스트 구조/규칙 |
+| `../../references/typescript/ts-type-patterns.md` | TS 타입 패턴 (타입 테스트 포함) |
+| `../../references/typescript/ts-error-handling.md` | 에러 처리 패턴 |
