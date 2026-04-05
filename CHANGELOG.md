@@ -33,7 +33,7 @@
 
 ### 주요 설계
 
-- CLAUDE.md 25줄 유지 (하네스 원칙 준수)
+- CLAUDE.md 25줄 유지 (워크플로우 원칙 준수)
 - `/done` 파이프라인: quality → test(확인) → review → Safety Gate → commit → PR
 - TaskCreate 진행 상황 추적: 커맨드 6개 + 독립 스킬 6개
 - guard-check.sh 8패턴: any, @ts-ignore, 자격증명, useState+fetch, console.log, eslint-disable, as any, useEffect([])
