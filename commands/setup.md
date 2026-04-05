@@ -131,14 +131,15 @@ ls tailwind.config.* 2>/dev/null || true
 
 **Q7. MCP 서버** (복수 선택 가능)
 
-| 번호 | 서버       | 용도                                               |
-| ---- | ---------- | -------------------------------------------------- |
-| 1    | Figma      | 피그마 디자인 파일 읽기 (API 키 필요)              |
-| 2    | Supabase   | DB 쿼리, 마이그레이션, Edge Function (API 키 필요) |
-| 3    | Playwright | 브라우저 자동화, E2E 테스트 (설정 불필요)          |
-| 4    | Atlassian  | Jira·Confluence 연동 (API 키 필요)                 |
-| 5    | shadcn     | shadcn/ui 컴포넌트 검색 및 설치 (설정 불필요)      |
-| 6    | 없음       |                                                    |
+| 번호 | 서버         | 용도                                               |
+| ---- | ------------ | -------------------------------------------------- |
+| 1    | Figma        | 피그마 디자인 파일 읽기 (API 키 필요)              |
+| 2    | Supabase     | DB 쿼리, 마이그레이션, Edge Function (API 키 필요) |
+| 3    | Playwright   | 브라우저 자동화, E2E 테스트 (설정 불필요)          |
+| 4    | Atlassian    | Jira·Confluence 연동 (API 키 필요)                 |
+| 5    | shadcn       | shadcn/ui 컴포넌트 검색 및 설치 (설정 불필요)      |
+| 6    | Basic Memory | 세션 간 프로젝트 메모리 (설정 불필요)              |
+| 7    | 없음         |                                                    |
 
 예시: "1 3" → Figma + Playwright 설치
 
@@ -152,15 +153,16 @@ ls tailwind.config.* 2>/dev/null || true
 
 Q7 답변을 기반으로 스크립트 실행 전에 `SELECTED_MCP` 변수를 설정합니다:
 
-| Q7 선택         | SELECTED_MCP 값         |
-| --------------- | ----------------------- |
-| 1 (Figma)       | `Figma`                 |
-| 2 (Supabase)    | `supabase`              |
-| 3 (Playwright)  | `playwright`            |
-| 4 (Atlassian)   | `Atlassian`             |
-| 5 (shadcn)      | `shadcn`                |
-| 복수 선택 "1 3" | `Figma,playwright`      |
-| 6 또는 엔터     | (빈 문자열, 설치 안 함) |
+| Q7 선택               | SELECTED_MCP 값         |
+| --------------------- | ----------------------- |
+| 1 (Figma)             | `Figma`                 |
+| 2 (Supabase)          | `supabase`              |
+| 3 (Playwright)        | `playwright`            |
+| 4 (Atlassian)         | `Atlassian`             |
+| 5 (shadcn)            | `shadcn`                |
+| 6 (Basic Memory)      | `basic-memory`          |
+| 복수 선택 "1 3"       | `Figma,playwright`      |
+| 7 또는 엔터           | (빈 문자열, 설치 안 함) |
 
 ```bash
 #!/bin/bash
@@ -227,16 +229,7 @@ with open(settings_path, "w") as f:
 print("📋 settings.json harness hooks 주입 완료")
 PYEOF
 
-# 메모리 계층 초기화 (이미 있으면 건드리지 않음)
-if [ ! -d ".claude/memory" ]; then
-  mkdir -p .claude/memory
-  if [ -f "$PLUGIN_ROOT/instructions/memory/project-memory.md" ]; then
-    cp "$PLUGIN_ROOT/instructions/memory/project-memory.md" ".claude/memory/project-memory.md"
-  fi
-  echo "📋 .claude/memory/ 초기화 완료"
-fi
-
-# .mcp.json: Q6 선택 서버만 추가 (없으면 새로 생성, 있으면 선택 항목만 머지)
+# .mcp.json: Q7 선택 서버만 추가 (없으면 새로 생성, 있으면 선택 항목만 머지)
 # SELECTED_MCP: Q7 답변 기반으로 Claude가 설정 — 쉼표 구분 서버 키 목록
 # 예) SELECTED_MCP="Figma,playwright" 또는 SELECTED_MCP="" (없음)
 # 서버 키 매핑: 1=Figma, 2=supabase, 3=playwright, 4=Atlassian
@@ -370,11 +363,11 @@ echo "✅ .claude/ 설치 완료"
 
 | 파일                                             | 위치                       | 포함 조건                            |
 | ------------------------------------------------ | -------------------------- | ------------------------------------ |
-| `thinking-model.md`                              | `rules/core/`              | 항상                                 |
+| `thinking-model.md`                              | `instructions/workflow-patterns/` | 항상                            |
 | `required-behaviors.md`                          | `instructions/validation/` | 항상                                 |
 | `forbidden-patterns.md`                          | `instructions/validation/` | 항상                                 |
 | `unit-test-conventions.md`                       | `rules/core/`              | 항상                                 |
-| `pr-guide.md`                                    | `rules/core/`              | 항상                                 |
+| `pr-guide.md`                                    | `instructions/git/`        | 항상                                 |
 | `policy-definitions.md`                          | `rules/core/`              | 항상                                 |
 | `coding-standards.md`                            | `rules/core/`              | Q1 = Next.js 또는 React              |
 | `react-nextjs-conventions.md`                    | `rules/core/`              | Q1 = Next.js 또는 React              |
@@ -385,7 +378,7 @@ echo "✅ .claude/ 설치 완료"
 | `validation-patterns.md`                         | `rules/optional/`          | Q6 = Zod                             |
 | `tailwindcss-v4.md`                              | `rules/optional/`          | Q3 = TailwindCSS **AND** Q3-1 = v4   |
 
-> **Q1 = 기타**: `thinking-model.md`, `required-behaviors.md`, `forbidden-patterns.md`, `unit-test-conventions.md`, `pr-guide.md`, `policy-definitions.md`만 포함. 프론트엔드 전용 rules (`coding-standards.md`, `react-*`, `nextjs-*`, `state-*`, `accessibility.md`)는 제외.
+> **Q1 = 기타**: `thinking-model.md`(`instructions/workflow-patterns/`), `required-behaviors.md`, `forbidden-patterns.md`, `unit-test-conventions.md`, `pr-guide.md`(`instructions/git/`), `policy-definitions.md`만 포함. 프론트엔드 전용 rules (`coding-standards.md`, `react-*`, `nextjs-*`, `state-*`, `accessibility.md`)는 제외.
 
 **포함할 스킬 quick_ref (결정표 기반):**
 
@@ -467,7 +460,7 @@ agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아
   .claude/commands/     — 슬래시 커맨드
   .claude/instructions/ — 작업 방식 가이드
   .claude/hooks/        — 알림 훅
-  .claude/references/   — 라이브러리 레퍼런스 문서
+  .claude/rules/references/ — 라이브러리 레퍼런스 문서 (TypeScript·Zod)
   CLAUDE.md             — 프로젝트 루트 지시문 (새로 생성)
 
 📋 사용 가능한 커맨드:

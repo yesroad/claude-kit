@@ -1,7 +1,7 @@
 # Claude Kit
 
 <instructions>
-@.claude/rules/core/thinking-model.md
+@.claude/instructions/workflow-patterns/thinking-model.md
 @.claude/instructions/validation/required-behaviors.md
 @.claude/instructions/validation/forbidden-patterns.md
 </instructions>

@@ -148,7 +148,7 @@ git reset HEAD {제외할 파일}
 
 ### 6. PR 생성 (GitHub)
 
-> PR 제목 형식, 섹션 작성 기준, 금지 사항: `@../rules/core/pr-guide.md`
+> PR 제목 형식, 섹션 작성 기준, 금지 사항: `@../instructions/git/pr-guide.md`
 
 `pr-guide.md`의 템플릿과 규칙에 따라 PR을 생성한다.
 
@@ -165,7 +165,23 @@ gh pr create --title "{type}: {제목}" --body "{pr-guide.md 템플릿에 따라
 
 ---
 
-### 8. 최종 요약 출력
+### 8. 메모리 저장 (Basic Memory MCP 설치 시)
+
+이번 작업에서 아래 중 하나라도 해당하면 `write_note`로 저장한다:
+
+- 같은 오류가 2회 이상 반복됨
+- 특정 파일/패턴에서 예상 밖 동작 발견
+- 프로젝트 특이사항 발견
+
+해당 없으면 스킵.
+
+저장 형식:
+- 제목: `{프로젝트명}/{YYYY-MM-DD}-{주제}`
+- 내용: 현상/원인/해결책
+
+---
+
+### 9. 최종 요약 출력
 
 ```markdown
 ## ✅ 작업 완료

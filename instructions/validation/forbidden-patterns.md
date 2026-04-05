@@ -275,4 +275,4 @@ PR 전 확인:
 | `@../../rules/core/react-nextjs-conventions.md` | 코드, Import   |
 | `@../../rules/core/state-and-server-state.md`   | 상태 관리      |
 | `@../../rules/core/unit-test-conventions.md`    | 테스트         |
-| `@../../rules/core/thinking-model.md`           | 워크플로우     |
+| `@../workflow-patterns/thinking-model.md`       | 워크플로우     |

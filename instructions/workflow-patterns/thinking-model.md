@@ -26,7 +26,7 @@ READ → REACT → ANALYZE → RESTRUCTURE → STRUCTURE → REFLECT
 ## 복잡도 기반 단계 조절
 
 > **SSOT**: 복잡도 판단 기준과 단계별 예시는 아래 파일을 참조한다.
-> `@../../instructions/workflow-patterns/sequential-thinking.md`
+> `@./sequential-thinking.md`
 
 복잡도(LOW / MEDIUM / HIGH)에 따라 적용할 **인지(cognitive) 단계** 수가 달라진다.
 에이전트 실행(operational) 단계는 `execution-patterns.md`를 참조한다.
@@ -261,9 +261,9 @@ rg "Typography" src/ --type tsx | head -10
 
 ## 참조 문서
 
-| 문서                                                           | 용도           |
-| -------------------------------------------------------------- | -------------- |
-| `@../../instructions/multi-agent/coordination-guide.md`        | 병렬 실행 원칙 |
-| `@../../instructions/multi-agent/model-routing.md`             | 에이전트 모델 선택 |
-| `@../../instructions/workflow-patterns/sequential-thinking.md` | 복잡도별 단계  |
-| `@../../instructions/validation/forbidden-patterns.md`         | 금지 패턴      |
+| 문서                                               | 용도               |
+| -------------------------------------------------- | ------------------ |
+| `@../multi-agent/coordination-guide.md`            | 병렬 실행 원칙     |
+| `@../multi-agent/model-routing.md`                 | 에이전트 모델 선택 |
+| `@./sequential-thinking.md`                        | 복잡도별 단계      |
+| `@../validation/forbidden-patterns.md`             | 금지 패턴          |

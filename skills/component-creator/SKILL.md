@@ -166,8 +166,8 @@ export interface {Name}Props { ... }  // interface (스펙에 따라)
 훅인 경우도 동일하게 기존 훅 파일을 읽어 패턴을 따른다.
 
 **생성 중 패턴 참조가 필요한 경우:**
-- `ref` prop 또는 `ComponentProps` 사용 → `../../references/typescript/ts-react-nextjs.md` 읽기 (React 19 방식)
-- Brand Types, Conditional Types 등 심화 타입 → `../../references/typescript/ts-type-patterns.md` 읽기
+- `ref` prop 또는 `ComponentProps` 사용 → `../../rules/references/typescript/ts-react-nextjs.md` 읽기 (React 19 방식)
+- Brand Types, Conditional Types 등 심화 타입 → `../../rules/references/typescript/ts-type-patterns.md` 읽기
 
 ---
 
@@ -214,5 +214,5 @@ export interface {Name}Props { ... }  // interface (스펙에 따라)
 | `@../../rules/core/react-hooks-patterns.md`     | 훅 패턴              |
 | `@../../rules/core/coding-standards.md`         | TypeScript 표준      |
 | `../next-project-structure/SKILL.md`            | 도메인 전체 스캐폴딩 (service + query + view) |
-| `../../references/typescript/ts-react-nextjs.md` | React 19 ref 패턴, ComponentProps |
-| `../../references/typescript/ts-type-patterns.md` | TS 타입 패턴 |
+| `../../rules/references/typescript/ts-react-nextjs.md` | React 19 ref 패턴, ComponentProps |
+| `../../rules/references/typescript/ts-type-patterns.md` | TS 타입 패턴 |

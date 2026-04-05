@@ -46,7 +46,7 @@ Claude Code에서 실행합니다:
 /setup
 ```
 
-기술 스택 인터뷰(6문항)를 진행한 후 프로젝트에 맞춤화된 `.claude/`와 CLAUDE.md를 자동 생성합니다.
+기술 스택 인터뷰(7문항)를 진행한 후 프로젝트에 맞춤화된 `.claude/`와 CLAUDE.md를 자동 생성합니다.
 이후 커맨드는 `/start`, `/done`, `/commit` 등 네임스페이스 없이 사용할 수 있습니다.
 
 ---
@@ -60,7 +60,8 @@ Claude Code에서 실행합니다:
 | **Q3. 스타일링**   | TailwindCSS / Emotion / CSS Modules / 기타                   |
 | **Q4. 서버 상태**  | TanStack Query / SWR / 없음                                  |
 | **Q5. 전역 상태**  | Jotai / Zustand / Redux Toolkit / 없음                       |
-| **Q6. MCP 서버**   | Figma / Supabase / Playwright / Atlassian / shadcn / 없음 (복수 선택) |
+| **Q6. 검증 라이브러리** | Zod / 없음                                             |
+| **Q7. MCP 서버**   | Figma / Supabase / Playwright / Atlassian / shadcn / Basic Memory / 없음 (복수 선택) |
 
 ---
 
@@ -86,6 +87,7 @@ brew install gh && gh auth login
 | `/done`           | 작업 완료 — 검증 → 커밋 → PR                           |
 | `/commit`         | staged 변경사항으로 커밋 메시지 생성 후 커밋           |
 | `/quality`        | 포맷 → 린트 → 타입 체크 자동 수정                      |
+| `/test`           | 단위 → 통합 → E2E 테스트 순차 실행                     |
 | `/setup-notifier` | macOS 알림 초기 환경 설정 (최초 1회)                   |
 
 ---
@@ -119,7 +121,6 @@ brew install gh && gh auth login
 ```
 cc-kit/
 ├── rules/core/                 # 코딩 규칙
-│   ├── thinking-model.md           # 통합 사고 모델 (READ→REACT→ANALYZE→...)
 │   ├── coding-standards.md         # TypeScript 표준, 에러 처리, React 패턴
 │   ├── react-nextjs-conventions.md # React/Next.js 컨벤션, Import 순서
 │   ├── react-hooks-patterns.md     # Hook 성능 패턴 (useMemo, useRef 등)
@@ -127,7 +128,6 @@ cc-kit/
 │   ├── state-and-server-state.md   # TanStack Query v5 + Jotai 상태 경계
 │   ├── unit-test-conventions.md    # 순수 함수 유닛 테스트 규칙
 │   ├── accessibility.md            # WCAG 2.1 AA 접근성 규칙
-│   ├── pr-guide.md                 # PR 작성 가이드
 │   └── policy-definitions.md       # 정책(Policy) 정의 기준
 │
 ├── agents/                     # 전문화된 서브에이전트
@@ -135,7 +135,8 @@ cc-kit/
 │   ├── lint-fixer.md               # 린트/타입 오류 자동 수정
 │   ├── git-operator.md             # git 상태 확인, 커밋, PR 관리
 │   ├── implementation-executor.md  # 계획 기반 코드 구현
-│   └── code-reviewer.md            # 코드 품질·규칙 준수 검토
+│   ├── code-reviewer.md            # 코드 품질·규칙 준수 검토
+│   └── nextjs-reviewer.md          # Next.js 레벨 진단 (주니어/미들/시니어)
 │
 ├── skills/                     # 스킬 (자동 트리거)
 │   ├── commit-helper/
@@ -160,12 +161,15 @@ cc-kit/
 │   ├── done.md
 │   ├── commit.md
 │   ├── quality.md
+│   ├── test.md
+│   ├── update-cc-kit.md
 │   └── setup-notifier.md
 │
 ├── instructions/               # 작업 방식 가이드
 │   ├── multi-agent/            # 멀티 에이전트 협업 패턴
 │   ├── validation/             # 금지 패턴, 필수 행동
-│   └── workflow-patterns/      # 복잡도별 작업 단계
+│   ├── git/                    # Git 워크플로우 (pr-guide.md)
+│   └── workflow-patterns/      # 복잡도별 작업 단계 (thinking-model.md 포함)
 │
 ├── hooks/
 │   ├── notify.sh               # 크로스 플랫폼 알림 훅
@@ -183,16 +187,17 @@ cc-kit/
 
 ## MCP 서버 템플릿
 
-`/setup` Q6에서 선택한 서버만 `.mcp.json`에 추가됩니다.
+`/setup` Q7에서 선택한 서버만 `.mcp.json`에 추가됩니다.
 기존 `.mcp.json`이 있으면 없는 항목만 머지합니다.
 
-| 서버       | 용도                                 | API 키 필요 |
-| ---------- | ------------------------------------ | :---------: |
-| Figma      | 피그마 디자인 파일 읽기              |     ✅      |
-| Supabase   | DB 쿼리, 마이그레이션, Edge Function |     ✅      |
-| Playwright | 브라우저 자동화, E2E 테스트          |     ❌      |
-| Atlassian  | Jira·Confluence 연동                 |     ✅      |
-| shadcn     | shadcn/ui 컴포넌트 검색 및 설치      |     ❌      |
+| 서버         | 용도                                 | API 키 필요 |
+| ------------ | ------------------------------------ | :---------: |
+| Figma        | 피그마 디자인 파일 읽기              |     ✅      |
+| Supabase     | DB 쿼리, 마이그레이션, Edge Function |     ✅      |
+| Playwright   | 브라우저 자동화, E2E 테스트          |     ❌      |
+| Atlassian    | Jira·Confluence 연동                 |     ✅      |
+| shadcn       | shadcn/ui 컴포넌트 검색 및 설치      |     ❌      |
+| Basic Memory | 세션 간 프로젝트 메모리              |     ❌      |
 
 ---
 

@@ -210,8 +210,8 @@ server.use(
 처리: "이 컴포넌트는 async Server Component입니다. test-e2e 스킬을 사용하세요." 안내 후 종료.
 
 **테스트 작성 중 패턴 참조:**
-- `expectTypeOf` 등 타입 테스트 작성 시 → `../../references/typescript/ts-type-patterns.md` 읽기
-- Result 타입 / 에러 처리 함수 테스트 시 → `../../references/typescript/ts-error-handling.md` 읽기
+- `expectTypeOf` 등 타입 테스트 작성 시 → `../../rules/references/typescript/ts-type-patterns.md` 읽기
+- Result 타입 / 에러 처리 함수 테스트 시 → `../../rules/references/typescript/ts-error-handling.md` 읽기
 
 ---
 
@@ -297,5 +297,5 @@ find src/utils src/helpers src/lib src/adapters -name "*.ts" ! -name "*.test.ts"
 | 문서 | 용도 |
 |------|------|
 | `@../../rules/core/unit-test-conventions.md` | 테스트 구조/규칙 |
-| `../../references/typescript/ts-type-patterns.md` | TS 타입 패턴 (타입 테스트 포함) |
-| `../../references/typescript/ts-error-handling.md` | 에러 처리 패턴 |
+| `../../rules/references/typescript/ts-type-patterns.md` | TS 타입 패턴 (타입 테스트 포함) |
+| `../../rules/references/typescript/ts-error-handling.md` | 에러 처리 패턴 |
