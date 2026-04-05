@@ -76,7 +76,7 @@ Basic Memory MCP가 설치된 프로젝트에서 아래 3가지 트리거에 따
 
 > **SSOT**: 복잡도 판단 기준은 아래 파일을 단일 기준으로 따른다.
 
-**참조**: `@../workflow-patterns/sequential-thinking.md`
+**참조**: `@../workflow-patterns/thinking-model.md` (복잡도 판단 기준 섹션)
 
 ### 필수 2: 파일 읽기 전 Read 사용
 
@@ -275,7 +275,7 @@ git add src/{수정한 파일 경로}
 | 문서                        | 관련 필수 항목 |
 | --------------------------- | -------------- |
 | `forbidden-patterns.md`     | 4, 5, 6        |
-| `sequential-thinking.md`    | 1              |
+| `thinking-model.md`         | 1              |
 | `state-and-server-state.md` | 5              |
 | `unit-test-conventions.md`  | 8              |
 | `coordination-guide.md`     | 3, 9, 10       |

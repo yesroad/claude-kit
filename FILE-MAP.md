@@ -28,7 +28,7 @@
 |------|:-----:|------|
 | `CLAUDE.md` | ~25 | **플러그인 개발용 루트 지시문**. `thinking-model.md`, `required-behaviors.md`, `forbidden-patterns.md`를 `<instructions>`로 로드. 플러그인 개발 시 참조 진입점. |
 | `README.md` | ~200 | **플러그인 사용 설명서**. 설치 방법, 인터뷰 항목, 커맨드/스킬 목록, 디렉토리 구조, MCP 서버 템플릿, 개발 사이클 설명. |
-| `CHANGELOG.md` | ~43 | **변경 이력**. Semantic Versioning 기반. 1.0.0 초기 릴리스, 1.0.1 정합성 보정/크로스 플랫폼/Vue 지원. |
+| `CHANGELOG.md` | ~60 | **변경 이력**. Semantic Versioning 기반. 1.1.0 Basic Memory MCP·nextjs-reviewer·test 커맨드 추가, 1.0.2 cc-kit 리네임, 1.0.1 정합성 보정. |
 | `.mcp.json` | ~48 | **MCP 서버 설정 템플릿**. Atlassian(Jira/Confluence), Figma, Supabase, Playwright, shadcn(/ui 컴포넌트 검색), Basic Memory(세션 간 메모리) 연동 설정. `/setup` Q7에서 선택한 서버만 설치됨. |
 | `.gitignore` | ~21 | `settings.local.json`, `temp/`, `memory/` 등 로컬 전용 파일 제외. |
 

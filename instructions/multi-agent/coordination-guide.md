@@ -248,7 +248,7 @@ Task(subagent_type='general-purpose', team_name='sprint-team', name='refactorer'
 
 4. 팀 리드: 결과 취합, 충돌 해결, 빌드 검증
 
-5. 평가: team-evaluation.md 기준으로 각 팀원 평가 (90+ A등급 목표)
+5. 평가: optional/team-evaluation.md 기준으로 각 팀원 평가 (90+ A등급 목표)
 
 6. 정리: 팀원별 shutdown_request → TeamDelete
 ```
@@ -265,7 +265,7 @@ Task(subagent_type='general-purpose', team_name='sprint-team', name='refactorer'
 □ 2. 각 팀원 커밋 검증 (git log로 커밋 존재 + git diff로 범위 확인)
 □ 3. 통합 린트/빌드 검증 ({패키지매니저} lint)
 □ 3.5 release-readiness-gate 기준 최종 PASS 확인
-□ 4. team-evaluation.md 기준 각 팀원 평가 작성 → 사용자에게 공유
+□ 4. optional/team-evaluation.md 기준 각 팀원 평가 작성 → 사용자에게 공유
 □ 5. 평가 완료 후 → shutdown_request → TeamDelete
 ```
 
@@ -375,7 +375,57 @@ Task(subagent_type='general-purpose', model='opus',
 
 ## 모델 라우팅 전략
 
-> **모델 선택 기준**: `@./model-routing.md` 참조 (단일 진실 공급원)
+> 작업 복잡도와 비즈니스 로직 포함 여부에 따라 적절한 모델을 선택한다.
+
+### 기본 복잡도 기준
+
+| 복잡도     | 모델   | 사용 케이스                                        | 비용   |
+| ---------- | ------ | -------------------------------------------------- | ------ |
+| **LOW**    | haiku  | 파일 탐색, 단순 검색, 린트 수정, 커밋/브랜치 관리 | 💰     |
+| **MEDIUM** | sonnet | 코드 리뷰, 테스트 생성, 구현                       | 💰💰   |
+| **HIGH**   | opus   | 아키텍처 설계, 복잡한 버그, 리팩토링 분석          | 💰💰💰 |
+
+### 비즈니스 로직 관련 = 상향 조정
+
+**비즈니스 로직이 포함되면 무조건 sonnet 이상:**
+
+| 작업 성격                             | 최소 모델  | 이유                       |
+| ------------------------------------- | ---------- | -------------------------- |
+| 날짜/금액/수량 계산 로직              | **opus**   | 정확성 중요, 엣지케이스 多 |
+| 상태 전이 / 상태 머신                 | **opus**   | 전체 흐름 이해 필요        |
+| 조건부 렌더링, disabled/readonly 조건 | **sonnet** | 상태 의존성 파악           |
+| 필터/정렬/검색 로직                   | **sonnet** | 연쇄 영향 분석             |
+| 아키텍처 변경, 모듈 간 의존성 재설계  | **opus**   | 전체 구조 파악             |
+
+### 불확실할 때: 상향 조정
+
+> **원칙: 비용보다 정확성 우선 — 모호하면 상향**
+
+아래 키워드가 보이면 무조건 상향:
+
+```
+날짜·기간·일수  →  opus
+금액·할인·세금  →  opus
+상태·전이·전환  →  opus
+disabled·readonly·조건부  →  sonnet
+필터·정렬·검색  →  sonnet
+```
+
+### 모델 선택 예시
+
+```typescript
+// haiku - 구조 파악, 파일 목록, 단순 검색
+Task(subagent_type="explore", model="haiku", prompt="src/ 폴더 구조 파악");
+Task(subagent_type="lint-fixer", model="haiku", prompt="린트 오류 수정");
+
+// sonnet - 구현, 코드 리뷰, 분석 (기본값)
+Task(subagent_type="explore", model="sonnet", prompt="조건부 렌더링 로직 분석");
+Task(subagent_type="code-reviewer", model="sonnet", prompt="코드 리뷰");
+
+// opus - 비즈니스 로직 분석, 아키텍처 설계, 복잡한 리팩토링
+Task(subagent_type="explore", model="opus", prompt="결제 플로우 상태 전이 전체 분석");
+Task(subagent_type="Plan", model="opus", prompt="인증 모듈 리팩토링 계획 수립");
+```
 
 ---
 
@@ -431,8 +481,7 @@ Task(
 | ------------------ | ------------------------------------- |
 | 에이전트 목록      | `./agent-roster.md`                   |
 | 실행 패턴          | `./execution-patterns.md`             |
-| 모델 라우팅        | `./model-routing.md`                  |
 | 팀원 Done 프로세스 | `./teammate-done-process.md`          |
-| 팀 평가 템플릿     | `./team-evaluation.md`                |
+| 팀 평가 템플릿     | `./optional/optional/team-evaluation.md`       |
 | 에러 복구          | `../workflow-patterns/error-recovery.md` |
 | 금지 패턴          | `../validation/forbidden-patterns.md` |

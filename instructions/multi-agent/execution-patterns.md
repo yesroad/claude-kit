@@ -210,76 +210,10 @@ Task(
 
 ---
 
-## /start 커맨드 패턴
-
-### 단계별 모델 선택
-
-```typescript
-// 1단계: 복잡도 판단 (haiku - 빠른 초기 파악)
-Task(
-  (subagent_type = "explore"),
-  (model = "haiku"),
-  (prompt = `
-  작업: {작업내용}
-  복잡도 판단:
-  - 영향 파일 수
-  - 비즈니스 로직 포함 여부 (계산, 상태 전이, 조건부 동작 등)
-  결과: LOW / MEDIUM / HIGH
-`),
-);
-
-// 2단계: 복잡도별 분석
-// LOW → haiku
-// MEDIUM → sonnet
-// HIGH → opus
-
-// 3단계: 정책 분석 (HIGH일 때 opus)
-Task(
-  (subagent_type = "Plan"),
-  (model = "opus"),
-  (prompt = `
-  정책 분석:
-  - 기존 비즈니스 로직
-  - 변경 영향 범위
-  - 정책 보호 테스트 필요 여부
-`),
-);
-```
-
----
-
-## /done 커맨드 패턴
-
-```typescript
-// 병렬 검증
-Task(
-  (subagent_type = "lint-fixer"),
-  (model = "haiku"),
-  (prompt = "린트 오류 수정"),
-);
-Task(
-  (subagent_type = "code-reviewer"),
-  (model = "sonnet"),
-  (prompt = "코드 리뷰 - 규칙 준수 확인"),
-);
-
-// 결과 확인 후 PR 생성
-Bash("gh pr create ...");
-```
-
----
-
-## 작업별 권장 모델
-
-> **작업별 모델 선택**: `./model-routing.md` 참조
-
----
-
 ## 참조 문서
+
+> 패턴 개념 및 모델 선택 기준: `./coordination-guide.md`
 
 | 문서                      | 용도          |
 | ------------------------- | ------------- |
-| `./coordination-guide.md` | 핵심 원칙     |
 | `./agent-roster.md`       | 에이전트 상세 |
-| `../../commands/start.md` | /start 커맨드 |
-| `../../commands/done.md`  | /done 커맨드  |

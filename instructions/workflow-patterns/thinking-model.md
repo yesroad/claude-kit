@@ -25,12 +25,70 @@ READ → REACT → ANALYZE → RESTRUCTURE → STRUCTURE → REFLECT
 
 ## 복잡도 기반 단계 조절
 
-> **SSOT**: 복잡도 판단 기준과 단계별 예시는 아래 파일을 참조한다.
-> `@./sequential-thinking.md`
-
 복잡도(LOW / MEDIUM / HIGH)에 따라 적용할 **인지(cognitive) 단계** 수가 달라진다.
-에이전트 실행(operational) 단계는 `execution-patterns.md`를 참조한다.
-판단 기준, 에이전트 연계, 병렬 실행 패턴은 sequential-thinking.md를 단일 기준으로 사용한다.
+
+### 복잡도 판단 기준
+
+| 복잡도     | 기준                        | 예시                         |
+| ---------- | --------------------------- | ---------------------------- |
+| **LOW**    | 단일 파일, 명확한 수정      | 오타 수정, 단순 스타일 변경  |
+| **MEDIUM** | 2-5개 파일, 기존 패턴 따름  | 새 컴포넌트 추가, 훅 작성    |
+| **HIGH**   | 5개+ 파일, 새 패턴/아키텍처 | 도메인 리팩토링, 시스템 설계 |
+
+### 복잡도별 단계 수
+
+| 복잡도     | 단계 수  | 핵심 단계                                |
+| ---------- | -------- | ---------------------------------------- |
+| **LOW**    | 1-2단계  | READ → REACT                             |
+| **MEDIUM** | 3-5단계  | READ → ANALYZE → STRUCTURE → REACT → REFLECT |
+| **HIGH**   | 7-10+단계 | READ → ANALYZE → RESTRUCTURE → STRUCTURE → REACT → REFLECT + 검증 |
+
+### 사고 단계 ↔ 복잡도 매핑
+
+| thinking-model | LOW | MEDIUM | HIGH |
+| -------------- | --- | ------ | ---- |
+| READ           | ✅  | ✅     | ✅   |
+| REACT          | ✅  | ✅     | ✅   |
+| ANALYZE        | -   | ✅     | ✅   |
+| RESTRUCTURE    | -   | -      | ✅   |
+| STRUCTURE      | -   | ✅     | ✅   |
+| REFLECT        | -   | ✅     | ✅   |
+
+### 에이전트/모델 연계
+
+| 복잡도 | 에이전트            | 모델          |
+| ------ | ------------------- | ------------- |
+| LOW    | - (직접 처리)       | -             |
+| MEDIUM | explore, code-reviewer | haiku, sonnet |
+| HIGH   | Plan, code-reviewer | opus, sonnet  |
+
+### 병렬 실행 결합
+
+복잡도가 높아도 독립 작업은 병렬 실행:
+
+```typescript
+// HIGH 복잡도에서도 탐색은 병렬
+Task((subagent_type = 'explore'), (model = 'haiku'), (prompt = '현재 구조 분석'));
+Task((subagent_type = 'explore'), (model = 'haiku'), (prompt = '의존성 파악'));
+Task((subagent_type = 'explore'), (model = 'haiku'), (prompt = '테스트 현황'));
+
+// 결과 수집 후 순차적 계획
+Task((subagent_type = 'Plan'), (model = 'opus'), (prompt = '분석 결과 기반 계획'));
+```
+
+### 자동 복잡도 판단
+
+```typescript
+const judgeComplexity = (task: string): 'LOW' | 'MEDIUM' | 'HIGH' => {
+  if (affectedFiles.length <= 1) return 'LOW';
+  if (affectedFiles.length <= 5) return 'MEDIUM';
+  return 'HIGH';
+  // 키워드 기반
+  if (task.includes('리팩토링') || task.includes('아키텍처')) return 'HIGH';
+  if (task.includes('추가') || task.includes('수정')) return 'MEDIUM';
+  return 'LOW';
+};
+```
 
 ---
 
@@ -264,6 +322,5 @@ rg "Typography" src/ --type tsx | head -10
 | 문서                                               | 용도               |
 | -------------------------------------------------- | ------------------ |
 | `@../multi-agent/coordination-guide.md`            | 병렬 실행 원칙     |
-| `@../multi-agent/model-routing.md`                 | 에이전트 모델 선택 |
-| `@./sequential-thinking.md`                        | 복잡도별 단계      |
+| `@../multi-agent/coordination-guide.md`            | 모델 선택 기준 (모델 라우팅 포함) |
 | `@../validation/forbidden-patterns.md`             | 금지 패턴          |

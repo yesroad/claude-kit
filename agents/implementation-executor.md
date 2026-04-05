@@ -6,12 +6,14 @@ model: sonnet
 ---
 
 @../instructions/multi-agent/coordination-guide.md
-@../instructions/workflow-patterns/sequential-thinking.md
 @../instructions/validation/forbidden-patterns.md
 @../instructions/validation/release-readiness-gate.md
 @../rules/core/react-nextjs-conventions.md
 @../rules/core/react-hooks-patterns.md
 @../rules/core/nextjs-app-router.md
+
+> ⚠️ **DEPRECATED**: `general-purpose` 에이전트 + 역할 프롬프트 방식 권장.
+> 이 에이전트는 tools가 제한적입니다. 대신 `coordination-guide.md`의 역할 주입 패턴을 사용하세요.
 
 # Implementation Executor Agent
 

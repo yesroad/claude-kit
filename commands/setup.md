@@ -184,7 +184,7 @@ fi
 
 mkdir -p .claude
 
-for dir in rules instructions agents skills commands hooks scripts references; do
+for dir in rules instructions agents skills commands hooks scripts; do
   [ -d "$PLUGIN_ROOT/$dir" ] && cp -r "$PLUGIN_ROOT/$dir/" ".claude/$dir/"
 done
 
@@ -221,6 +221,10 @@ if "Stop" not in hooks:
                    "command": "NOTIFIER_TITLE='CC-Kit' NOTIFIER_MESSAGE='응답 완료 — /done으로 검증하세요' bash \"./.claude/hooks/notify.sh\"",
                    "timeout": 5}]
     }]
+
+# planMode 기본값 설정 — 이미 설정한 경우 덮어쓰지 않음
+if "planMode" not in settings:
+    settings["planMode"] = True
 
 with open(settings_path, "w") as f:
     json.dump(settings, f, indent=2, ensure_ascii=False)

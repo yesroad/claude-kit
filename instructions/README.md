@@ -24,17 +24,16 @@
 ├── multi-agent/
 │   ├── coordination-guide.md         # 병렬 실행 핵심 원칙
 │   ├── agent-roster.md               # 에이전트 카탈로그
-│   ├── execution-patterns.md         # 실행 패턴 상세
-│   ├── model-routing.md              # 모델 선택 기준 (haiku/sonnet/opus)
-│   ├── team-evaluation.md            # Agent Teams 평가 기준
+│   ├── execution-patterns.md         # 실행 패턴 코드 예시
+│   ├── optional/
+│   │   └── team-evaluation.md        # Agent Teams 평가 기준 (Max 플랜 전용)
 │   └── teammate-done-process.md      # 팀원 완료 프로세스
 ├── validation/
 │   ├── forbidden-patterns.md         # 금지 패턴 목록
 │   ├── required-behaviors.md         # 필수 행동 규칙
 │   └── release-readiness-gate.md     # 출시 품질 게이트
 ├── workflow-patterns/
-│   ├── thinking-model.md             # 통합 사고 모델 (SSOT)
-│   ├── sequential-thinking.md        # 복잡도별 사고 단계
+│   ├── thinking-model.md             # 통합 사고 모델 + 복잡도 판단 (SSOT)
 │   └── error-recovery.md             # 에러 복구 전략
 ├── git/
 │   └── pr-guide.md                   # PR 작성 가이드
@@ -51,9 +50,8 @@
 | -------------------------- | ----------------------------------------- | ------------------------ |
 | `coordination-guide.md`    | 병렬 실행, 모델 라우팅, 컨텍스트 보존     | 에이전트 조합 필요 시    |
 | `agent-roster.md`          | 에이전트 상세 (explore, code-reviewer 등) | 에이전트 선택 시         |
-| `execution-patterns.md`    | Fan-Out, 배치, 백그라운드 패턴            | 구체적 실행 방법 필요 시 |
-| `model-routing.md`         | haiku/sonnet/opus 모델 선택 기준 (SSOT)   | 에이전트 모델 결정 시    |
-| `team-evaluation.md`       | Agent Teams 팀원 평가 기준                | 팀 작업 완료 후          |
+| `execution-patterns.md`    | Fan-Out, 배치, 백그라운드 패턴 코드 예시  | 구체적 실행 방법 필요 시 |
+| `optional/team-evaluation.md` | Agent Teams 팀원 평가 기준 (Max 플랜) | 팀 작업 완료 후          |
 | `teammate-done-process.md` | 팀원 5단계 완료 프로세스                  | 팀원 spawn 시 참조       |
 
 ### Validation
@@ -68,8 +66,7 @@
 
 | 문서                     | 용도                          | 사용 시점           |
 | ------------------------ | ----------------------------- | ------------------- |
-| `thinking-model.md`      | READ→REACT→ANALYZE→…6단계 사고 모델 (SSOT) | 모든 작업 시 |
-| `sequential-thinking.md` | LOW/MEDIUM/HIGH 복잡도별 단계 | 작업 복잡도 판단 시 |
+| `thinking-model.md`      | READ→REACT→ANALYZE→…6단계 사고 모델 + 복잡도 판단 (SSOT) | 모든 작업 시 |
 | `error-recovery.md`      | 에러 복구 전략                | 에이전트 실패 시    |
 
 ### Git
@@ -119,7 +116,7 @@
 | **구체적 실행 방법**       | `multi-agent/execution-patterns.md`        |
 | **코드 품질 검증**         | `validation/forbidden-patterns.md`         |
 | **배포 전 최종 점검**      | `validation/release-readiness-gate.md`     |
-| **작업 복잡도 판단**       | `workflow-patterns/sequential-thinking.md` |
+| **작업 복잡도 판단**       | `workflow-patterns/thinking-model.md` (복잡도 판단 섹션) |
 
 ---
 
@@ -128,7 +125,7 @@
 ### 작업 시작 시
 
 ```
-1. sequential-thinking.md → 복잡도 판단 (LOW/MEDIUM/HIGH)
+1. thinking-model.md → 복잡도 판단 (LOW/MEDIUM/HIGH)
 2. agent-roster.md → 필요한 에이전트 선택
 3. execution-patterns.md → 실행 패턴 결정
 ```
@@ -146,7 +143,7 @@
 
 | 문서           | 경로                                     | 연결                     |
 | -------------- | ---------------------------------------- | ------------------------ |
-| 통합 사고 모델 | `instructions/workflow-patterns/thinking-model.md` | sequential-thinking 통합 |
+| 통합 사고 모델 | `instructions/workflow-patterns/thinking-model.md` | 복잡도 판단 포함 (SSOT) |
 | React/Next.js  | `rules/core/react-nextjs-conventions.md` | 코드 품질                |
 | 상태 관리      | `rules/core/state-and-server-state.md`   | TanStack Query           |
 | 테스트 규칙    | `rules/core/unit-test-conventions.md`    | lint-fixer 연계          |

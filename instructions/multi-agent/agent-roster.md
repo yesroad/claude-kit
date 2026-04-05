@@ -51,7 +51,7 @@ Task(
 );
 ```
 
-**참조**: `@../workflow-patterns/sequential-thinking.md` (탐색 단계)
+**참조**: `@../workflow-patterns/thinking-model.md` (탐색 단계)
 
 ---
 
@@ -139,7 +139,7 @@ Task(
 );
 ```
 
-**참조**: `@../workflow-patterns/sequential-thinking.md` (HIGH 복잡도 단계)
+**참조**: `@../workflow-patterns/thinking-model.md` (HIGH 복잡도 단계)
 
 ---
 
@@ -223,6 +223,7 @@ Task(
 .claude/agents/
 ├── explore.md              # 코드베이스 탐색
 ├── code-reviewer.md        # 코드 리뷰
+├── nextjs-reviewer.md      # Next.js 레벨 진단
 ├── lint-fixer.md           # 린트 수정
 ├── implementation-executor.md  # 구현 전문가
 └── git-operator.md         # Git 커밋/PR 관리

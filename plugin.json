@@ -1,7 +1,7 @@
 {
   "name": "cc-kit",
   "description": "AI 코딩 워크플로우 보일러플레이트 — rules, skills, agents, commands를 포함한 Claude Code 확장 키트",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": {
     "name": "yesroad"
   },
@@ -14,6 +14,7 @@
     "agents/code-reviewer.md",
     "agents/lint-fixer.md",
     "agents/implementation-executor.md",
-    "agents/git-operator.md"
+    "agents/git-operator.md",
+    "agents/nextjs-reviewer.md"
   ]
 }

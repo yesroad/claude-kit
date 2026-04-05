@@ -13,7 +13,7 @@ cc-kit 플러그인 파일을 최신 버전으로 업데이트합니다.
 | `rules/optional/` | `rules/custom/` (프로젝트 전용 rules) |
 | `agents/` | `.mcp.json` |
 | `skills/` | `settings.json`, `settings.local.json` |
-| `commands/` | `.claude/memory/` (프로젝트 축적 데이터) |
+| `commands/` | |
 | `instructions/` | 플러그인 소스에 없는 모든 파일 |
 | `hooks/` | |
 | `scripts/` | |
@@ -119,7 +119,35 @@ UPDATE_DIRS="rules instructions agents skills commands hooks scripts"
 
 ---
 
-## 5단계: manifest.json 갱신
+## 5단계: settings.json planMode 설정
+
+구버전 설치에서 planMode가 없을 수 있으므로, 없을 때만 기본값을 추가한다.
+
+```bash
+python3 - <<'PYEOF'
+import json, os
+
+settings_path = ".claude/settings.json"
+settings = {}
+if os.path.exists(settings_path):
+    with open(settings_path) as f:
+        settings = json.load(f)
+
+# planMode 기본값 설정 — 이미 설정한 경우 덮어쓰지 않음
+if "planMode" not in settings:
+    settings["planMode"] = True
+    with open(settings_path, "w") as f:
+        json.dump(settings, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    print("📋 settings.json planMode 기본값 설정 완료")
+else:
+    print("📋 settings.json planMode 이미 설정됨 — 건드리지 않음")
+PYEOF
+```
+
+---
+
+## 6단계: manifest.json 갱신
 
 파일 추가/업데이트/삭제가 완료된 후 `.claude/manifest.json`의 `cc-kit` 키를 최신 상태로 갱신한다.
 
@@ -171,7 +199,7 @@ PYEOF
 
 ---
 
-## 6단계: 임시 파일 정리
+## 7단계: 임시 파일 정리
 
 ```bash
 [ "$PLUGIN_ROOT" = "/tmp/cc-kit_update" ] && rm -rf /tmp/cc-kit_update

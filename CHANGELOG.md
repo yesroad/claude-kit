@@ -24,6 +24,7 @@
 - `required-behaviors.md` 필수 0.65에 Basic Memory 유사 에러 검색 단계 추가
 - `required-behaviors.md` 필수 0.7을 3-트리거 표로 재구성 (읽기/읽기/쓰기)
 - `commands/start.md`에 Basic Memory 조회 섹션 추가 (조건부)
+- `commands/done.md` 8단계에 Basic Memory 저장 단계 추가
 
 ### 제거
 
