@@ -5,8 +5,8 @@ tools: Read, Glob, Grep, Bash
 model: haiku
 ---
 
-@../instructions/multi-agent/coordination-guide.md
-@../instructions/validation/forbidden-patterns.md
+@../workflows/coordination/guide.md
+@../workflows/quality-gates/anti-patterns.md
 
 # Explore Agent
 
