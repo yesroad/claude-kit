@@ -46,6 +46,21 @@ if grep -q "console\.log(" "$FILE" 2>/dev/null; then
   VIOLATIONS="${VIOLATIONS}\n  ⚠️  console.log() 감지 — 디버그 로그를 제거하세요"
 fi
 
+# 6. eslint-disable 잔류
+if grep -qE "eslint-disable" "$FILE" 2>/dev/null; then
+  VIOLATIONS="${VIOLATIONS}\n  ⚠️  eslint-disable 감지 — 규칙 비활성화 대신 코드를 수정하세요"
+fi
+
+# 7. as any 타입 단언
+if grep -qE "as any" "$FILE" 2>/dev/null; then
+  VIOLATIONS="${VIOLATIONS}\n  ⚠️  as any 타입 단언 감지 — 구체적인 타입으로 단언하세요"
+fi
+
+# 8. useEffect 빈 의존성 배열
+if grep -qE "useEffect\(.*,\s*\[\s*\]\s*\)" "$FILE" 2>/dev/null; then
+  VIOLATIONS="${VIOLATIONS}\n  ⚠️  useEffect([], []) 빈 의존성 배열 감지 — 의도적인지 확인하세요"
+fi
+
 if [ -n "$VIOLATIONS" ]; then
   echo ""
   echo "🛡️  Guard Check: $FILE"
