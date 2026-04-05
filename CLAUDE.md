@@ -1,8 +1,8 @@
 # Claude Kit
 
 <tech_stack>
-cc-kit은 Claude Code용 AI 코딩 하네스 플러그인입니다.
-에이전트 = 모델 + 하네스 (오케스트레이션 + 스캐폴딩 + 가드레일 + 피드백 루프 + 메모리)
+cc-kit은 Claude Code용 AI 코딩 워크플로우 플러그인입니다.
+주요 구성: rules, agents, skills, commands, workflows
 주요 의존성: terminal-notifier, gh CLI
 </tech_stack>
 

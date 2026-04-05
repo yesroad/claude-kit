@@ -1,6 +1,6 @@
 {
   "name": "cc-kit",
-  "description": "Claude Code 프론트엔드 AI 코딩 하네스 (rules · agents · skills · commands)",
+  "description": "Claude Code 프론트엔드 AI 코딩 워크플로우 키트 (rules · agents · skills · commands)",
   "version": "1.0.0",
   "author": {
     "name": "yesroad"
