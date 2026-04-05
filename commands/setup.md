@@ -188,6 +188,53 @@ done
 
 # hooks 실행 권한 부여
 [ -f ".claude/hooks/notify.sh" ] && chmod +x .claude/hooks/notify.sh
+[ -f ".claude/hooks/guard-check.sh" ] && chmod +x .claude/hooks/guard-check.sh
+
+# settings.json에 harness hooks 주입 (없으면 생성, 있으면 머지)
+python3 - <<'PYEOF'
+import json, os
+
+settings_path = ".claude/settings.json"
+settings = {}
+if os.path.exists(settings_path):
+    with open(settings_path) as f:
+        settings = json.load(f)
+
+hooks = settings.setdefault("hooks", {})
+
+# PostToolUse 훅 (guard-check) — 이미 있으면 건드리지 않음
+if "PostToolUse" not in hooks:
+    hooks["PostToolUse"] = [{
+        "matcher": "Write|Edit",
+        "hooks": [{"type": "command",
+                   "command": "bash \"./.claude/hooks/guard-check.sh\"",
+                   "timeout": 10}]
+    }]
+
+# Stop 훅 (완료 알림) — 이미 있으면 건드리지 않음
+if "Stop" not in hooks:
+    hooks["Stop"] = [{
+        "matcher": "",
+        "hooks": [{"type": "command",
+                   "command": "NOTIFIER_TITLE='CC-Kit' NOTIFIER_MESSAGE='응답 완료 — /done으로 검증하세요' bash \"./.claude/hooks/notify.sh\"",
+                   "timeout": 5}]
+    }]
+
+with open(settings_path, "w") as f:
+    json.dump(settings, f, indent=2, ensure_ascii=False)
+    f.write("\n")
+
+print("📋 settings.json harness hooks 주입 완료")
+PYEOF
+
+# 메모리 계층 초기화 (이미 있으면 건드리지 않음)
+if [ ! -d ".claude/memory" ]; then
+  mkdir -p .claude/memory
+  if [ -f "$PLUGIN_ROOT/instructions/memory/project-memory.md" ]; then
+    cp "$PLUGIN_ROOT/instructions/memory/project-memory.md" ".claude/memory/project-memory.md"
+  fi
+  echo "📋 .claude/memory/ 초기화 완료"
+fi
 
 # .mcp.json: Q6 선택 서버만 추가 (없으면 새로 생성, 있으면 선택 항목만 머지)
 # SELECTED_MCP: Q7 답변 기반으로 Claude가 설정 — 쉼표 구분 서버 키 목록

@@ -10,6 +10,30 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/guard-check.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "NOTIFIER_TITLE='CC-Kit' NOTIFIER_MESSAGE='응답 완료 — /done으로 검증하세요' bash \"${CLAUDE_PLUGIN_ROOT}/hooks/notify.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }

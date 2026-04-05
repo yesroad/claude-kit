@@ -191,6 +191,12 @@
 | `sequential-thinking.md` | ~180 | **복잡도별 사고 단계 (SSOT)**. LOW(1-2단계: READ→REACT), MEDIUM(3-5단계: +ANALYZE/STRUCTURE/REFLECT), HIGH(7-10단계: 전체+Plan). 에이전트 연계(LOW=직접, MEDIUM=explore+code-reviewer, HIGH=Plan+code-reviewer). 자동 복잡도 판단 로직. |
 | `error-recovery.md` | ~101 | **에러 복구 가이드**. 병렬 에이전트 실패(일부/전체/타임아웃), `/commit` 머지 충돌·푸시 실패·staged 유실 복구, `/done` 중단 후 재개(테스트/린트/PR 실패별), 빌드 실패 부분 롤백(`git checkout <커밋> -- <파일>`). |
 
+### memory/ — 세션 간 메모리
+
+| 파일 | 줄 수 | 설명 |
+|------|:-----:|------|
+| `project-memory.md` | ~30 | **프로젝트 메모리 템플릿**. `/setup` 시 `.claude/memory/project-memory.md`로 복사. 반복 패턴(자동 축적)·프로젝트 특이사항(수동) 두 섹션. 동일 실수 2회+ 감지 시 Claude가 패턴을 기록. 작업 시작 전 읽기 필수(`required-behaviors.md` 필수 0.7). |
+
 ---
 
 ## 7. Hooks & Scripts — 자동화
@@ -198,7 +204,8 @@
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
 | `hooks/notify.sh` | ~33 | **크로스 플랫폼 알림 스크립트**. macOS: terminal-notifier(기본) → osascript(폴백). Linux: notify-send(libnotify). 환경변수 `NOTIFIER_TITLE`, `NOTIFIER_MESSAGE`로 커스텀. 터미널 벨(`printf '\a'`) 공통. |
-| `hooks/hooks.json` | ~15 | **훅 이벤트 설정**. `PermissionRequest` 이벤트 발생 시 `notify.sh` 실행(타임아웃 5초). Claude Code가 사용자 확인 필요할 때 데스크톱 알림 전송. |
+| `hooks/guard-check.sh` | ~45 | **코드 품질 가드레일 (PostToolUse)**. Write/Edit 후 자동 실행. `.ts/.tsx/.js/.jsx` 파일만 대상. 5가지 패턴 검사: any 타입, @ts-ignore, 하드코딩 자격증명, useState+fetch 조합, console.log. 위반 시 `exit 2`(경고, 블로킹 없음). |
+| `hooks/hooks.json` | ~30 | **훅 이벤트 설정**. `PermissionRequest`(notify.sh), `PostToolUse`(guard-check.sh, Write/Edit 후), `Stop`(notify.sh로 "응답 완료" 알림). `/setup` 시 설정된 경로로 `settings.json`에 자동 주입됨. |
 | `scripts/install-notifier.sh` | ~60 | **알림 의존성 설치 스크립트**. macOS: Homebrew + terminal-notifier 설치. Linux: apt-get/dnf/pacman으로 libnotify 설치. 훅 스크립트 실행 권한 부여(`chmod +x`). |
 
 ---

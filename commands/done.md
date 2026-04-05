@@ -99,6 +99,25 @@ Task(
 
 ---
 
+### Safety Gate (커밋 직전 필수)
+
+> **tsc 또는 lint FAIL 시 커밋 절대 금지 — 에러 복구 루프(필수 0.65) 실행 후 재시도**
+
+커밋 전 아래 항목을 명시적으로 PASS/FAIL 판정:
+
+| 항목 | 체크 방법 | 결과 |
+|------|----------|------|
+| `tsc --noEmit` | 타입 에러 없음 | PASS / FAIL |
+| `lint` | lint 오류 없음 | PASS / FAIL |
+| 변경 파일에 `TODO`/`FIXME` 없음 | grep 확인 | PASS / FAIL |
+| 변경 파일에 `console.log` 없음 | guard-check.sh 결과 | PASS / FAIL |
+| 정책 변경 시 테스트 통과 | 해당 테스트 실행 | PASS / SKIP |
+
+→ 하나라도 FAIL이면 커밋 중단, 에러 복구 루프 진입
+→ 전체 PASS이면 커밋 진행
+
+---
+
 ### 5. 커밋 생성
 
 #### ⚠️ 중요: 이번 작업에서 수정한 파일만 커밋

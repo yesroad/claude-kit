@@ -32,9 +32,11 @@
 │   ├── forbidden-patterns.md         # 금지 패턴 목록
 │   ├── required-behaviors.md         # 필수 행동 규칙
 │   └── release-readiness-gate.md     # 출시 품질 게이트
-└── workflow-patterns/
-    ├── sequential-thinking.md        # 복잡도별 사고 단계
-    └── error-recovery.md             # 에러 복구 전략
+├── workflow-patterns/
+│   ├── sequential-thinking.md        # 복잡도별 사고 단계
+│   └── error-recovery.md             # 에러 복구 전략
+└── memory/
+    └── project-memory.md             # 프로젝트 메모리 템플릿 (→ .claude/memory/로 복사됨)
 ```
 
 ---
@@ -66,6 +68,12 @@
 | ------------------------ | ----------------------------- | ------------------- |
 | `sequential-thinking.md` | LOW/MEDIUM/HIGH 복잡도별 단계 | 작업 복잡도 판단 시 |
 | `error-recovery.md`      | 에러 복구 전략                | 에이전트 실패 시    |
+
+### Memory
+
+| 문서                     | 용도                                      | 사용 시점              |
+| ------------------------ | ----------------------------------------- | ---------------------- |
+| `project-memory.md`      | 프로젝트 메모리 템플릿 (설치 시 복사됨)   | `/setup` 실행 시       |
 
 ---
 

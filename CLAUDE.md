@@ -21,7 +21,8 @@
 </quick_ref>
 
 <tech_stack>
-Claude Kit은 .claude/ 보일러플레이트 시스템 (코드 없음).
+cc-kit은 Claude Code용 AI 코딩 하네스입니다.
+에이전트 = 모델 + 하네스 (오케스트레이션 + 스캐폴딩 + 가드레일 + 피드백 루프 + 메모리)
 주요 의존성: terminal-notifier, gh CLI
 </tech_stack>
 

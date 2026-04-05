@@ -13,8 +13,8 @@ cc-kit 플러그인 파일을 최신 버전으로 업데이트합니다.
 | `rules/optional/` | `rules/custom/` (프로젝트 전용 rules) |
 | `agents/` | `.mcp.json` |
 | `skills/` | `settings.json`, `settings.local.json` |
-| `commands/` | 플러그인 소스에 없는 모든 파일 |
-| `instructions/` | |
+| `commands/` | `.claude/memory/` (프로젝트 축적 데이터) |
+| `instructions/` | 플러그인 소스에 없는 모든 파일 |
 | `hooks/` | |
 | `scripts/` | |
 | `references/` | |

@@ -1,6 +1,20 @@
-# cc-kit
+# cc-kit — AI 코딩 하네스
 
-Claude Code 확장 플러그인 — rules, agents, skills, commands를 포함한 AI 코딩 워크플로우 키트.
+Claude Code용 AI 코딩 하네스 — 에이전트에 오케스트레이션·스캐폴딩·가드레일·피드백루프·메모리를 더한 완전한 코딩 환경.
+
+> **에이전트 = 모델 + 하네스**
+
+---
+
+## 하네스 구성 요소
+
+| 계층 | 파일 | 역할 |
+|------|------|------|
+| 오케스트레이션 | `instructions/multi-agent/` | 에이전트 팀 조율 |
+| 에이전트/스캐폴딩 | `rules/core/`, `agents/` | 컨텍스트 + 규칙 |
+| 가드레일 | `hooks/guard-check.sh` | 코드 저장 시 자동 패턴 검사 |
+| 피드백 루프 | `/start`, `/done` | Plan→Observe→Adjust 사이클 |
+| 메모리 | `.claude/memory/` | 세션 간 학습 축적 |
 
 ---
 
