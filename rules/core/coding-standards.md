@@ -1,6 +1,6 @@
 # 코딩 표준 & 모범 사례
 
-> CLAUDE.md, react-nextjs-conventions.md 보완 규칙
+> CLAUDE.md, react-conventions.md 보완 규칙
 
 ---
 
@@ -303,7 +303,7 @@ import { PaymentMethodType } from "@/payment/types"; // 실제 사용 모듈
 
 | 문서                          | 용도               |
 | ----------------------------- | ------------------ |
-| `react-nextjs-conventions.md` | React/Next.js 규칙 |
+| `react-conventions.md`        | React/Next.js 규칙 |
 | `react-hooks-patterns.md`     | Hook 성능 패턴     |
 | `state-and-server-state.md`   | 상태 관리 경계     |
-| `forbidden-patterns.md`       | 금지 패턴          |
+| `anti-patterns.md`            | 금지 패턴          |

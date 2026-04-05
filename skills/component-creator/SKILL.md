@@ -3,7 +3,7 @@ name: component-creator
 description: >
   React/Next.js 단일 컴포넌트 또는 훅을 신규 생성. 기존 프로젝트 패턴(스타일링 방식, export 형태, props 타입 위치)을 분석하여 일관된 보일러플레이트 생성.
   "컴포넌트 만들어", "새 컴포넌트", "훅 만들어", "페이지 추가" 가 언급될 때 사용.
-  단, service+query+view를 함께 만드는 도메인 전체 스캐폴딩이나 "어디에 파일 만들어야 해?" 같은 폴더 구조 질문은 next-project-structure를 사용.
+  단, service+query+view를 함께 만드는 도메인 전체 스캐폴딩이나 "어디에 파일 만들어야 해?" 같은 폴더 구조 질문은 nextjs-scaffold를 사용.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Write, Edit, Bash
 metadata:
@@ -18,13 +18,24 @@ metadata:
 
 ---
 
+## 진행 상황 추적
+
+실행 시작 시 아래 항목을 TaskCreate로 등록한다. 각 단계 시작 시 `in_progress`, 완료 시 `completed`로 TaskUpdate한다.
+
+- 기존 패턴 탐색
+- 컴포넌트 설계
+- 구현
+- 테스트 작성
+
+---
+
 ## 스킬 경계
 
 | 요청 유형 | 사용할 스킬 |
 |---|---|
 | 단일 컴포넌트/훅 생성 | **component-creator** (이 스킬) |
-| service + query + view 전체 도메인 | **next-project-structure** |
-| "어디에 파일 만들어야 해?" 폴더 구조 질문 | **next-project-structure** |
+| service + query + view 전체 도메인 | **nextjs-scaffold** |
+| "어디에 파일 만들어야 해?" 폴더 구조 질문 | **nextjs-scaffold** |
 | 기존 컴포넌트 구조 개선 | **refactor** |
 
 ---
@@ -209,10 +220,10 @@ export interface {Name}Props { ... }  // interface (스펙에 따라)
 
 | 문서                                            | 용도                 |
 | ----------------------------------------------- | -------------------- |
-| `@../../rules/core/react-nextjs-conventions.md` | React/Next.js 컨벤션 |
+| `@../../rules/core/react-conventions.md` | React/Next.js 컨벤션 |
 | `@../../rules/core/nextjs-app-router.md`        | App Router 규칙      |
 | `@../../rules/core/react-hooks-patterns.md`     | 훅 패턴              |
 | `@../../rules/core/coding-standards.md`         | TypeScript 표준      |
-| `../next-project-structure/SKILL.md`            | 도메인 전체 스캐폴딩 (service + query + view) |
+| `../nextjs-scaffold/SKILL.md`        | 도메인 전체 스캐폴딩 (service + query + view) |
 | `../../rules/references/typescript/ts-react-nextjs.md` | React 19 ref 패턴, ComponentProps |
 | `../../rules/references/typescript/ts-type-patterns.md` | TS 타입 패턴 |

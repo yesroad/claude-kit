@@ -1,13 +1,13 @@
 ---
 name: nextjs-reviewer
-description: Next.js 16 + React 19.2 코드 레벨 진단 전문가. 주니어/미들/시니어 패턴 판별 + 다음 레벨 로드맵 제시. nextjs-coding-convention 루브릭 기반.
+description: Next.js 16 + React 19.2 코드 레벨 진단 전문가. 주니어/미들/시니어 패턴 판별 + 다음 레벨 로드맵 제시. code-level-review 루브릭 기반.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---
 
-@../skills/nextjs-coding-convention/references/level-rubric.md
-@../skills/nextjs-coding-convention/references/code-examples.md
-@../skills/nextjs-coding-convention/references/axios-react-query.md
+@../skills/code-level-review/references/level-rubric.md
+@../skills/code-level-review/references/code-examples.md
+@../skills/code-level-review/references/axios-react-query.md
 @../rules/core/nextjs-app-router.md
 @../rules/core/state-and-server-state.md
 

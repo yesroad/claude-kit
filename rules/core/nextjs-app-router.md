@@ -393,5 +393,5 @@ App Router 코드 작성 시:
 
 | 문서 | 용도 |
 |------|------|
-| `react-nextjs-conventions.md` | 공통 React/Next.js 컨벤션 |
+| `react-conventions.md` | 공통 React/Next.js 컨벤션 |
 | `state-and-server-state.md` | 상태 관리 경계 |

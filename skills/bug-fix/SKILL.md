@@ -13,6 +13,17 @@ metadata:
 
 ---
 
+## 진행 상황 추적
+
+실행 시작 시 아래 항목을 TaskCreate로 등록한다. 각 단계 시작 시 `in_progress`, 완료 시 `completed`로 TaskUpdate한다.
+
+- 증상 분석 & 재현
+- 원인 탐색
+- 수정 구현
+- 회귀 테스트
+
+---
+
 ## 트리거 조건
 
 | 트리거                        | 반응        |
@@ -70,7 +81,7 @@ $ARGUMENTS 있음 → 다음 단계 진행
 | 단계 | 작업           | 도구                   |
 | ---- | -------------- | ---------------------- |
 | 1    | 입력 확인      | -                      |
-| 2    | 복잡도 판단    | thinking-model.md |
+| 2    | 복잡도 판단    | model.md |
 | 3    | 버그 재현/탐색 | Read/Grep/Glob         |
 | 4    | 원인 분석      | Task (Explore)         |
 | 5    | 옵션 도출      | 분석 결과 기반         |
@@ -281,7 +292,7 @@ describe("버그 수정 후 정책 유지", () => {
 
 ## 완료 전 출시 게이트
 
-수정 완료 후 `release-readiness-gate.md` 5개 게이트를 점검한다.
+수정 완료 후 `release-gate.md` 5개 게이트를 점검한다.
 하나라도 FAIL이면 원인 정리 후 수정하고 재검증한다.
 
 ---
@@ -290,8 +301,8 @@ describe("버그 수정 후 정책 유지", () => {
 
 | 문서                                                           | 용도        |
 | -------------------------------------------------------------- | ----------- |
-| `@../../instructions/workflow-patterns/thinking-model.md` | 복잡도 판단 |
-| `@../../instructions/multi-agent/coordination-guide.md`        | 병렬 협업 + 실행 패턴 |
-| `@../../instructions/validation/forbidden-patterns.md`         | 금지 패턴   |
-| `@../../instructions/validation/release-readiness-gate.md`     | 출시 게이트 |
+| `@../../workflows/thinking/model.md`              | 복잡도 판단 |
+| `@../../workflows/coordination/guide.md`          | 병렬 협업 + 실행 패턴 |
+| `@../../workflows/quality-gates/anti-patterns.md` | 금지 패턴   |
+| `@../../workflows/quality-gates/release-gate.md`  | 출시 게이트 |
 | `@../../rules/core/unit-test-conventions.md`                   | 테스트 규칙 |

@@ -150,5 +150,5 @@ className="focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-b
 | 문서 | 용도 |
 |------|------|
 | `coding-standards.md` | 기본 React 패턴 |
-| `react-nextjs-conventions.md` | 컴포넌트 작성 규칙 |
+| `react-conventions.md` | 컴포넌트 작성 규칙 |
 | [WCAG 2.1](https://www.w3.org/TR/WCAG21/) | 공식 기준 |
