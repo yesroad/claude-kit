@@ -5,10 +5,10 @@ tools: Read, Grep, Glob, Bash
 model: sonnet
 ---
 
-@../instructions/multi-agent/coordination-guide.md
-@../instructions/validation/forbidden-patterns.md
-@../instructions/validation/release-readiness-gate.md
-@../rules/core/react-nextjs-conventions.md
+@../workflows/coordination/guide.md
+@../workflows/quality-gates/anti-patterns.md
+@../workflows/quality-gates/release-gate.md
+@../rules/core/react-conventions.md
 @../rules/core/react-hooks-patterns.md
 @../rules/core/nextjs-app-router.md
 @../rules/core/state-and-server-state.md
@@ -116,8 +116,8 @@ git diff --staged
 git diff
 
 # 2. 규칙 참조하여 검토
-# - forbidden-patterns.md
-# - react-nextjs-conventions.md
+# - anti-patterns.md
+# - react-conventions.md
 # - state-and-server-state.md
 
 # 3. 심각도별 분류

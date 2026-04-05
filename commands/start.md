@@ -5,13 +5,27 @@ description: 작업 시작. 코드 분석 → 작업 계획 → 구현 확인.
 
 **참조 규칙**:
 
-- `@../instructions/workflow-patterns/thinking-model.md` (복잡도 판단)
-- `@../instructions/multi-agent/agent-roster.md` (에이전트 선택)
+- `@../workflows/thinking/model.md` (복잡도 판단)
+- `@../workflows/coordination/roster.md` (에이전트 선택)
 
 **[즉시 실행]** 이 메시지를 받으면 아래 단계를 바로 실행하세요.
 단, Step 7 전에는 구현을 시작하지 말고 계획/분석까지만 수행하세요.
 
 **작업 내용**: $ARGUMENTS
+
+---
+
+## 진행 상황 추적
+
+실행 시작 시 아래 항목을 TaskCreate로 등록한다. 각 Step 시작 시 `in_progress`, 완료 시 `completed`로 TaskUpdate한다.
+
+- 입력 유형 판별
+- 작업 내용 파악
+- 디자인 분석
+- 코드 분석
+- 작업 계획 출력
+- 복잡도 판단
+- 구현 시작 확인
 
 ---
 
@@ -130,7 +144,7 @@ Task(
 
 ## Step 6. 복잡도 판단 및 구현 전략
 
-> **복잡도 판단**: `@../instructions/workflow-patterns/thinking-model.md` 참조 (LOW/MEDIUM/HIGH 기준)
+> **복잡도 판단**: `@../workflows/thinking/model.md` 참조 (LOW/MEDIUM/HIGH 기준)
 
 **HIGH 복잡도 시 Plan 에이전트 활용:**
 
@@ -154,6 +168,9 @@ Task(
 ## Step 7. 구현 시작 여부 확인
 
 "작업을 시작할까요?" 라고 물어보기
+
+사용자가 "네"로 응답하면 **메인 컨텍스트에서 직접 구현을 진행**한다.
+HIGH 복잡도 작업은 general-purpose 에이전트에 위임할 수 있다.
 
 ---
 

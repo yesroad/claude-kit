@@ -15,6 +15,17 @@ metadata:
 
 ---
 
+## 진행 상황 추적
+
+실행 시작 시 아래 항목을 TaskCreate로 등록한다. 각 단계 시작 시 `in_progress`, 완료 시 `completed`로 TaskUpdate한다.
+
+- 현재 버전 분석
+- 마이그레이션 계획
+- 변경 적용
+- 빌드 & 테스트 검증
+
+---
+
 ## 트리거 조건
 
 | 트리거 | 반응 |
@@ -233,7 +244,7 @@ Task(subagent_type="Plan", model="opus", prompt=`
 
 ## 완료 전 출시 게이트
 
-`release-readiness-gate.md` 5개 게이트 점검 후 커밋.
+`release-gate.md` 5개 게이트 점검 후 커밋.
 
 ---
 
@@ -241,8 +252,8 @@ Task(subagent_type="Plan", model="opus", prompt=`
 
 | 문서 | 용도 |
 |------|------|
-| `@../../instructions/workflow-patterns/thinking-model.md` | 복잡도 판단 |
-| `@../../instructions/validation/release-readiness-gate.md` | 출시 게이트 |
+| `@../../workflows/thinking/model.md`             | 복잡도 판단 |
+| `@../../workflows/quality-gates/release-gate.md` | 출시 게이트 |
 | `@../../rules/core/unit-test-conventions.md` | 정책 보호 테스트 |
 | `@../../skills/refactor/SKILL.md` | 점진적 변경 원칙 |
 | `../../rules/references/typescript/ts-tooling-and-stack.md` | tsconfig, 도구 생태계, 스택 조합 |

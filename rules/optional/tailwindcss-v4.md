@@ -86,4 +86,4 @@
 | 문서 | 용도 |
 |------|------|
 | `nextjs-app-router.md` | App Router 전용 규칙 |
-| `react-nextjs-conventions.md` | 공통 컨벤션 |
+| `react-conventions.md` | 공통 컨벤션 |

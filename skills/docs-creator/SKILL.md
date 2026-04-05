@@ -274,5 +274,5 @@ argument-hint: <인자>
 
 | 문서                                                    | 용도      |
 | ------------------------------------------------------- | --------- |
-| `@../../instructions/multi-agent/coordination-guide.md` | 병렬 실행 |
-| `@../../instructions/validation/forbidden-patterns.md`  | 금지 패턴 |
+| `@../../workflows/coordination/guide.md`          | 병렬 실행 |
+| `@../../workflows/quality-gates/anti-patterns.md` | 금지 패턴 |

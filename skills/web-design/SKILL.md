@@ -9,6 +9,17 @@ description: 2025-2026 트렌드를 반영한 웹/앱 UI를 Next.js + TailwindCS
 
 ---
 
+## 진행 상황 추적
+
+실행 시작 시 아래 항목을 TaskCreate로 등록한다. 각 단계 시작 시 `in_progress`, 완료 시 `completed`로 TaskUpdate한다.
+
+- 요구사항 분석
+- 디자인 참조 탐색
+- UI 구현
+- 반응형 & 접근성 검증
+
+---
+
 ## Step 0: 프로젝트 환경 파악 (항상 먼저 실행)
 
 작업 디렉토리의 `package.json`을 읽어 다음을 확인하세요:

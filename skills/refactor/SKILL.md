@@ -13,6 +13,17 @@ metadata:
 
 ---
 
+## 진행 상황 추적
+
+실행 시작 시 아래 항목을 TaskCreate로 등록한다. 각 단계 시작 시 `in_progress`, 완료 시 `completed`로 TaskUpdate한다.
+
+- 현재 구조 분석
+- 리팩토링 계획
+- 구현
+- 테스트 & 검증
+
+---
+
 ## 트리거 조건
 
 | 트리거                       | 반응        |
@@ -230,7 +241,7 @@ Task((subagent_type = "code-reviewer"), (prompt = "리팩토링 결과 리뷰"))
 
 ## 완료 전 출시 게이트
 
-최종 결과는 `release-readiness-gate.md` 5개 게이트를 모두 통과해야 한다.
+최종 결과는 `release-gate.md` 5개 게이트를 모두 통과해야 한다.
 통과 전에는 커밋/PR을 진행하지 않는다.
 
 ---
@@ -239,8 +250,8 @@ Task((subagent_type = "code-reviewer"), (prompt = "리팩토링 결과 리뷰"))
 
 | 문서                                                           | 용도             |
 | -------------------------------------------------------------- | ---------------- |
-| `@../../instructions/workflow-patterns/thinking-model.md` | 복잡도 판단      |
-| `@../../instructions/multi-agent/agent-roster.md`              | Plan 에이전트    |
-| `@../../instructions/validation/release-readiness-gate.md`     | 출시 게이트      |
+| `@../../workflows/thinking/model.md`              | 복잡도 판단      |
+| `@../../workflows/coordination/roster.md`         | Plan 에이전트    |
+| `@../../workflows/quality-gates/release-gate.md`  | 출시 게이트      |
 | `@../../rules/core/unit-test-conventions.md`                   | 테스트 규칙      |
-| `@../../instructions/workflow-patterns/thinking-model.md`      | RESTRUCTURE 단계 |
+| `@../../workflows/thinking/model.md`                           | RESTRUCTURE 단계 |
