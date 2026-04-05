@@ -243,4 +243,4 @@ Task((subagent_type = "code-reviewer"), (prompt = "리팩토링 결과 리뷰"))
 | `@../../instructions/multi-agent/agent-roster.md`              | Plan 에이전트    |
 | `@../../instructions/validation/release-readiness-gate.md`     | 출시 게이트      |
 | `@../../rules/core/unit-test-conventions.md`                   | 테스트 규칙      |
-| `@../../rules/core/thinking-model.md`                          | RESTRUCTURE 단계 |
+| `@../../instructions/workflow-patterns/thinking-model.md`      | RESTRUCTURE 단계 |

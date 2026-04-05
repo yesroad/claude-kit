@@ -65,7 +65,7 @@ ls src/views/
 | 전체 도메인, 도메인 추가 | services + queries + view + types 모두 | |
 | 컴포넌트, 훅 단독 생성 | — | `component-creator` 스킬 사용 |
 
-**schemas/ 폴더 구조가 포함되는 경우 → `../../references/zod/zod-v4-project-patterns.md` 먼저 읽기**
+**schemas/ 폴더 구조가 포함되는 경우 → `../../rules/references/zod/zod-v4-project-patterns.md` 먼저 읽기**
 
 ### Step 4: 파일 생성 + 배럴 index.ts 즉시 업데이트
 
@@ -297,4 +297,4 @@ export default function {Name}(props: {Name}Props) {
 | `references/pages-router.md` | Pages Router 전용 패턴 |
 | `references/boilerplate-templates.md` | 복사 즉시 사용 가능한 전체 보일러플레이트 |
 | `../component-creator/SKILL.md` | 단일 컴포넌트/훅 생성 |
-| `../../references/zod/zod-v4-project-patterns.md` | Zod 스키마 폴더 구조 및 파일 작성 패턴 |
+| `../../rules/references/zod/zod-v4-project-patterns.md` | Zod 스키마 폴더 구조 및 파일 작성 패턴 |

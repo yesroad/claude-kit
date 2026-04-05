@@ -4,7 +4,7 @@
 
 > **이 표가 단일 기준이다** — 복잡도 판단은 이 파일의 표를 SSOT로 사용하고, 다른 문서에서는 이 파일을 참조한다.
 
-**통합 사고 모델과 연계**: `@../../rules/core/thinking-model.md`
+**통합 사고 모델과 연계**: `@./thinking-model.md`
 
 ---
 
@@ -158,6 +158,6 @@ const judgeComplexity = (task: string): 'LOW' | 'MEDIUM' | 'HIGH' => {
 
 | 문서                                    | 연계           |
 | --------------------------------------- | -------------- |
-| `@../../rules/core/thinking-model.md`   | 사고 단계 상세 |
+| `@./thinking-model.md`                  | 사고 단계 상세 |
 | `@../multi-agent/coordination-guide.md` | 병렬 실행      |
 | `@../multi-agent/agent-roster.md`       | 에이전트 선택  |

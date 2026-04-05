@@ -34,10 +34,10 @@ user-invocable: true
 **참조**: `references/code-examples.md` (레벨별 대조 예제)
 
 **TypeScript 심화 패턴 적용 시 추가 참조:**
-- Brand Types, Conditional/Mapped Types, satisfies 등 → `../../references/typescript/ts-type-patterns.md` 읽기
-- ref prop, ComponentProps, Next.js 15 params 타입 → `../../references/typescript/ts-react-nextjs.md` 읽기
-- Result 타입, 에러 유니온, never 체크 → `../../references/typescript/ts-error-handling.md` 읽기
-- tsconfig, 스택 조합 → `../../references/typescript/ts-tooling-and-stack.md` 읽기
+- Brand Types, Conditional/Mapped Types, satisfies 등 → `../../rules/references/typescript/ts-type-patterns.md` 읽기
+- ref prop, ComponentProps, Next.js 15 params 타입 → `../../rules/references/typescript/ts-react-nextjs.md` 읽기
+- Result 타입, 에러 유니온, never 체크 → `../../rules/references/typescript/ts-error-handling.md` 읽기
+- tsconfig, 스택 조합 → `../../rules/references/typescript/ts-tooling-and-stack.md` 읽기
 
 ---
 
@@ -95,8 +95,8 @@ user-invocable: true
 | `references/axios-react-query.md` | Axios/React Query 레벨 패턴 |
 | `../../rules/core/nextjs-app-router.md` | App Router 상세 규칙 |
 | `../../rules/core/state-and-server-state.md` | 상태 관리 상세 규칙 |
-| `../../references/typescript/ts-naming-and-structure.md` | TS 네이밍, 폴더 구조, 타입 위치 원칙 |
-| `../../references/typescript/ts-type-patterns.md` | Brand Types, Conditional/Mapped Types 등 |
-| `../../references/typescript/ts-react-nextjs.md` | React 19 ref 패턴, Next.js 15+ 타입 |
-| `../../references/typescript/ts-error-handling.md` | Result 타입, 에러 유니온, never 체크 |
-| `../../references/typescript/ts-tooling-and-stack.md` | tsconfig, Zod, 스택 조합, 논쟁 주제 |
+| `../../rules/references/typescript/ts-naming-and-structure.md` | TS 네이밍, 폴더 구조, 타입 위치 원칙 |
+| `../../rules/references/typescript/ts-type-patterns.md` | Brand Types, Conditional/Mapped Types 등 |
+| `../../rules/references/typescript/ts-react-nextjs.md` | React 19 ref 패턴, Next.js 15+ 타입 |
+| `../../rules/references/typescript/ts-error-handling.md` | Result 타입, 에러 유니온, never 체크 |
+| `../../rules/references/typescript/ts-tooling-and-stack.md` | tsconfig, Zod, 스택 조합, 논쟁 주제 |

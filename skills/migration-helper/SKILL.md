@@ -84,8 +84,8 @@ Task(subagent_type="explore", model="haiku", prompt=`
 ```
 
 **마이그레이션 유형별 참조 파일 — 계획 수립 전 먼저 읽기:**
-- Zod v3 → v4 마이그레이션 → `../../references/zod/zod-v4-ecosystem.md` 읽기
-- TypeScript 버전 업 / tsconfig 변경 → `../../references/typescript/ts-tooling-and-stack.md` 읽기
+- Zod v3 → v4 마이그레이션 → `../../rules/references/zod/zod-v4-ecosystem.md` 읽기
+- TypeScript 버전 업 / tsconfig 변경 → `../../rules/references/typescript/ts-tooling-and-stack.md` 읽기
 
 ---
 
@@ -245,5 +245,5 @@ Task(subagent_type="Plan", model="opus", prompt=`
 | `@../../instructions/validation/release-readiness-gate.md` | 출시 게이트 |
 | `@../../rules/core/unit-test-conventions.md` | 정책 보호 테스트 |
 | `@../../skills/refactor/SKILL.md` | 점진적 변경 원칙 |
-| `../../references/typescript/ts-tooling-and-stack.md` | tsconfig, 도구 생태계, 스택 조합 |
-| `../../references/zod/zod-v4-ecosystem.md` | Zod v3→v4 Breaking Changes, 마이그레이션 포인트 |
+| `../../rules/references/typescript/ts-tooling-and-stack.md` | tsconfig, 도구 생태계, 스택 조합 |
+| `../../rules/references/zod/zod-v4-ecosystem.md` | Zod v3→v4 Breaking Changes, 마이그레이션 포인트 |

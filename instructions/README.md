@@ -20,7 +20,7 @@
 
 ```
 .claude/instructions/
-├── index.md                          # 이 파일
+├── README.md                         # 이 파일
 ├── multi-agent/
 │   ├── coordination-guide.md         # 병렬 실행 핵심 원칙
 │   ├── agent-roster.md               # 에이전트 카탈로그
@@ -33,10 +33,12 @@
 │   ├── required-behaviors.md         # 필수 행동 규칙
 │   └── release-readiness-gate.md     # 출시 품질 게이트
 ├── workflow-patterns/
+│   ├── thinking-model.md             # 통합 사고 모델 (SSOT)
 │   ├── sequential-thinking.md        # 복잡도별 사고 단계
 │   └── error-recovery.md             # 에러 복구 전략
-└── memory/
-    └── project-memory.md             # 프로젝트 메모리 템플릿 (→ .claude/memory/로 복사됨)
+├── git/
+│   └── pr-guide.md                   # PR 작성 가이드
+└── memory/                           # 세션 간 메모리 → Basic Memory MCP로 관리 (/setup Q7)
 ```
 
 ---
@@ -66,14 +68,23 @@
 
 | 문서                     | 용도                          | 사용 시점           |
 | ------------------------ | ----------------------------- | ------------------- |
+| `thinking-model.md`      | READ→REACT→ANALYZE→…6단계 사고 모델 (SSOT) | 모든 작업 시 |
 | `sequential-thinking.md` | LOW/MEDIUM/HIGH 복잡도별 단계 | 작업 복잡도 판단 시 |
 | `error-recovery.md`      | 에러 복구 전략                | 에이전트 실패 시    |
 
+### Git
+
+| 문서 | 용도 | 사용 시점 |
+|------|------|-----------|
+| `pr-guide.md` | PR 제목·섹션 작성 기준, 변경 유형별 판단 | 커밋/PR 생성 시 |
+
 ### Memory
 
-| 문서                     | 용도                                      | 사용 시점              |
-| ------------------------ | ----------------------------------------- | ---------------------- |
-| `project-memory.md`      | 프로젝트 메모리 템플릿 (설치 시 복사됨)   | `/setup` 실행 시       |
+세션 간 메모리는 Basic Memory MCP(`uvx basic-memory mcp`)로 관리한다. `/setup` Q7에서 선택 시 `.mcp.json`에 추가됨.
+
+| 규칙 | 용도 | 사용 시점 |
+| ---- | ---- | --------- |
+| `required-behaviors.md` 필수 0.7 | Basic Memory MCP로 프로젝트 컨텍스트 조회·저장 | 작업 시작/완료 시 |
 
 ---
 
@@ -86,9 +97,12 @@
 | 버그 수정                  | `skills/bug-fix`             |
 | 코드 리팩토링              | `skills/refactor`            |
 | 새 컴포넌트/페이지/훅 생성 | `skills/component-creator`   |
+| Next.js 도메인 전체 스캐폴딩 | `skills/next-project-structure` |
+| UI/디자인 구현             | `skills/web-design`          |
 | 단위 테스트 작성           | `skills/test-unit`           |
 | 통합 테스트 작성           | `skills/test-integration`    |
 | E2E 테스트 작성            | `skills/test-e2e`            |
+| Next.js 컨벤션 확인·레벨 진단 | `skills/nextjs-coding-convention` |
 | PR 리뷰 코멘트 반영        | `skills/pr-review-responder` |
 | 라이브러리 업그레이드      | `skills/migration-helper`    |
 | AI 도구 문서 작성          | `skills/docs-creator`        |
@@ -132,7 +146,7 @@
 
 | 문서           | 경로                                     | 연결                     |
 | -------------- | ---------------------------------------- | ------------------------ |
-| 통합 사고 모델 | `rules/core/thinking-model.md`           | sequential-thinking 통합 |
+| 통합 사고 모델 | `instructions/workflow-patterns/thinking-model.md` | sequential-thinking 통합 |
 | React/Next.js  | `rules/core/react-nextjs-conventions.md` | 코드 품질                |
 | 상태 관리      | `rules/core/state-and-server-state.md`   | TanStack Query           |
 | 테스트 규칙    | `rules/core/unit-test-conventions.md`    | lint-fixer 연계          |

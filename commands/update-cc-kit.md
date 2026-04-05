@@ -17,7 +17,7 @@ cc-kit 플러그인 파일을 최신 버전으로 업데이트합니다.
 | `instructions/` | 플러그인 소스에 없는 모든 파일 |
 | `hooks/` | |
 | `scripts/` | |
-| `references/` | |
+| `rules/references/` | (`rules/`에 포함되어 자동 처리됨) |
 
 ---
 
@@ -64,7 +64,7 @@ except:
 아래 디렉토리에 대해 파일 하나씩 비교한다:
 
 ```bash
-UPDATE_DIRS="rules instructions agents skills commands hooks scripts references"
+UPDATE_DIRS="rules instructions agents skills commands hooks scripts"
 ```
 
 각 파일에 대해:
@@ -139,7 +139,7 @@ if os.path.exists(plugin_json_path):
         version = json.load(f).get("version", "unknown")
 
 # 현재 설치된 파일 목록 수집
-managed_dirs = ["rules", "instructions", "agents", "skills", "commands", "hooks", "scripts", "references"]
+managed_dirs = ["rules", "instructions", "agents", "skills", "commands", "hooks", "scripts"]
 files = []
 for d in managed_dirs:
     dir_path = Path(".claude") / d

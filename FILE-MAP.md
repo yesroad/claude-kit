@@ -1,6 +1,6 @@
 # cc-kit 파일 맵
 
-> 전체 파일 설명서 — 버전 1.0.1 (2026-03-22 기준)
+> 전체 파일 설명서 — 버전 1.1.0 (2026-04-05 기준)
 >
 > **이원화 구조**: 루트(`/`)와 `.claude/`에 동일 파일이 존재합니다.
 > 루트는 플러그인 배포용, `.claude/`는 설치된 프로젝트에서 사용됩니다.
@@ -29,20 +29,19 @@
 | `CLAUDE.md` | ~25 | **플러그인 개발용 루트 지시문**. `thinking-model.md`, `required-behaviors.md`, `forbidden-patterns.md`를 `<instructions>`로 로드. 플러그인 개발 시 참조 진입점. |
 | `README.md` | ~200 | **플러그인 사용 설명서**. 설치 방법, 인터뷰 항목, 커맨드/스킬 목록, 디렉토리 구조, MCP 서버 템플릿, 개발 사이클 설명. |
 | `CHANGELOG.md` | ~43 | **변경 이력**. Semantic Versioning 기반. 1.0.0 초기 릴리스, 1.0.1 정합성 보정/크로스 플랫폼/Vue 지원. |
-| `.mcp.json` | ~43 | **MCP 서버 설정 템플릿**. Atlassian(Jira/Confluence), Figma, Supabase, Playwright, shadcn(/ui 컴포넌트 검색) 연동 설정. `/setup` Q6에서 선택한 서버만 설치됨. |
+| `.mcp.json` | ~48 | **MCP 서버 설정 템플릿**. Atlassian(Jira/Confluence), Figma, Supabase, Playwright, shadcn(/ui 컴포넌트 검색), Basic Memory(세션 간 메모리) 연동 설정. `/setup` Q7에서 선택한 서버만 설치됨. |
 | `.gitignore` | ~21 | `settings.local.json`, `temp/`, `memory/` 등 로컬 전용 파일 제외. |
 
 ---
 
 ## 2. Rules — 코딩 규칙
 
-`rules/core/` 하위 11개 파일. 프로젝트에 설치되면 `.claude/rules/core/`로 자동 로드되어 모든 코드 작성에 적용됩니다.
+`rules/core/` 하위 8개 파일. 프로젝트에 설치되면 `.claude/rules/core/`로 자동 로드되어 모든 코드 작성에 적용됩니다.
 
 ### 핵심 사고 모델
 
 | 파일 | 줄 수 | 적용 대상 | 설명 |
 |------|:-----:|-----------|------|
-| `thinking-model.md` | ~180 | 모든 프로젝트 | **통합 사고 모델 (SSOT)**. `READ → REACT → ANALYZE → RESTRUCTURE → STRUCTURE → REFLECT` 6단계 인지 흐름. 복잡도(LOW/MEDIUM/HIGH)에 따라 단계 수 조절. 기존 로직 참조 원칙, 디자인 시스템 컴포넌트 사용 전 Grep 필수, lint/tsc 검증 체크리스트 포함. |
 | `policy-definitions.md` | ~80 | 모든 프로젝트 | **정책(Policy) 정의 기준**. 날짜/기간 계산, 가격/할인, 상태 전이, 필터 기본값, disabled 조건, 권한 규칙을 "정책"으로 분류. 정책 변경 시 탐색→확인→테스트→변경 4단계 프로세스. 텍스트/스타일/변수명은 정책이 아님. |
 
 ### TypeScript / 공통
@@ -51,7 +50,6 @@
 |------|:-----:|-----------|------|
 | `coding-standards.md` | ~310 | 모든 프로젝트 | **TypeScript 코딩 표준**. KISS/DRY/YAGNI/Readability 원칙. 변수·함수 네이밍, Immutability(`toSorted()` 사용), 에러 처리(`Promise.all` 병렬), null 처리(optional chaining), 조건부 렌더링, Early Return, 매직 넘버 상수화, 배럴 export(`index.ts`), services/queries 폴더 구조, enum 호환성 규칙. |
 | `unit-test-conventions.md` | ~180 | 모든 프로젝트 | **순수 함수 유닛 테스트 규칙**. jest/vitest 러너 자동 감지. `__tests__/{파일명}.test.ts` 위치. 정상/경계값/에러/정책 4가지 케이스 필수. 날짜 함수는 `useFakeTimers()` 필수. 정책 보호(회귀 방지) 테스트 패턴. |
-| `pr-guide.md` | ~100 | 모든 프로젝트 | **PR 작성 가이드**. `{type}({scope}): {한 줄 요약}` 제목 형식(50자 이내). 작업 내용(필수), 디자인(선택), 특이사항(선택) 3개 섹션. 변경 유형별 판단 기준표. |
 
 ### React / Next.js
 
@@ -63,17 +61,11 @@
 | `state-and-server-state.md` | ~280 | React / Next.js | **상태 관리 경계**. TanStack Query(서버 상태), Jotai(전역 UI), React Hook Form(폼), useState(로컬). 쿼리 키 팩토리 패턴, 캐시 무효화 도메인 훅, 5가지 안티패턴(useEffect 데이터 패칭, 파생 상태 useEffect, atom 과다 생성, 불안정 쿼리 키, 서버/클라이언트 혼합). |
 | `accessibility.md` | ~130 | 프론트엔드 전체 | **WCAG 2.1 AA 접근성**. 색상 대비 4.5:1, 터치 타깃 44×44px, aria-label(아이콘 버튼), label-input 연결, 모달 포커스 트랩, 동적 콘텐츠 `aria-live`, 애니메이션 `prefers-reduced-motion`. |
 
-### Vue
-
-| 파일 | 줄 수 | 적용 대상 | 설명 |
-|------|:-----:|-----------|------|
-| `vue-conventions.md` | ~147 | Vue 3 프로젝트 | **Vue 3 + Composition API 컨벤션**. `<script setup lang="ts">` 필수, Options API/Vuex/Mixin 금지. Pinia 상태 관리, `withDefaults(defineProps<>())` 타입, `defineEmits<>()`, Composable 패턴(`composables/use*.ts`). |
-
 ---
 
 ## 3. Agents — 서브에이전트
 
-`agents/` 하위 5개 파일. 각 에이전트는 특화된 역할과 기본 모델이 지정되어 있습니다.
+`agents/` 하위 6개 파일. 각 에이전트는 특화된 역할과 기본 모델이 지정되어 있습니다.
 
 | 파일 | 줄 수 | 기본 모델 | 병렬 | 설명 |
 |------|:-----:|:---------:|:----:|------|
@@ -82,6 +74,7 @@
 | `lint-fixer.md` | 97 | haiku | ✅ | **린트/타입 오류 자동 수정**. 간단한 오류(prefer-const, console.log)는 즉시 수정, 복잡한 타입 오류(TS2322)는 분석 후 수정. 하나씩 검사→수정→재검사 반복. |
 | `implementation-executor.md` | 101 | sonnet | ⚠️ | **구현 전문가**. 옵션 제시 없이 최적 방법으로 즉시 구현. 복잡도별 접근(간단/보통/복잡) 및 기존 패턴 확인 후 구현. 구현 후 lint/build 검증 필수. 같은 파일 수정 시 순차 실행. 비즈니스 로직 포함 시 opus 상향. |
 | `git-operator.md` | 143 | haiku | ❌ | **Git 관리 전문가**. 명시된 파일만 스테이징(`git add -A` 금지). 커밋 메시지 `{type}: {한글 설명}` 형식. 한 커밋 = 한 논리적 변경. 파괴적 명령(force push, reset --hard) 금지. |
+| `nextjs-reviewer.md` | - | sonnet | ✅ | **Next.js 레벨 진단 전문가**. Next.js 16 + React 19.2 기준 주니어/미들/시니어 레벨 판별. 파일 전체 분석 후 🟢🔵🔴 마커로 성장 포인트 제시. `/done`·`/refactor`·`component-creator` 후 호출. |
 
 ---
 
@@ -142,20 +135,23 @@
 | `spacing.md` | 124 | 스페이싱 시스템. 8px 그리드, 디자인 토큰, 브레이크포인트별 여백값, WCAG 기준(45-75자, 줄간격 1.5배). |
 | `trend.md` | 262 | 2025-2026 디자인 종합 트렌드. AI 침투, UX 강화, 비주얼 양극화 4대 흐름. 모바일 퍼스트, 볼드 타이포그래피 등 10가지. |
 | `typography.md` | 186 | 타이포그래피 가이드. 자간 -0.01em~-0.02em, 줄간격 1.5-1.6, `clamp()` 유체 타이포그래피, rem/ch 단위. |
+| `ux-patterns.md` | - | UX 패턴 참조. 인터랙션 패턴, 사용성 기준, 컴포넌트별 UX 가이드라인. |
 
 ---
 
 ## 5. Commands — 슬래시 커맨드
 
-`commands/` 하위 6개 파일. 사용자가 `/커맨드명`으로 명시적으로 호출합니다.
+`commands/` 하위 8개 파일. 사용자가 `/커맨드명`으로 명시적으로 호출합니다.
 
 | 파일 | 줄 수 | 커맨드 | 설명 |
 |------|:-----:|--------|------|
-| `setup.md` | ~310 | `/setup` | **프로젝트 초기 설치**. 기술 스택 인터뷰 6문항(프레임워크/라우터/스타일링/서버상태/전역상태/MCP서버) → 응답 기반 `.claude/` 파일 설치 + 맞춤형 CLAUDE.md 생성. Rules 결정표에 따라 프레임워크별 필요 규칙만 선별 포함. |
-| `start.md` | ~150 | `/start` | **작업 시작**. 입력 유형 판별(Jira/MD/텍스트) → 작업 내용 파악 → 디자인 분석(선택) → 코드 분석(explore 에이전트) → 작업 계획 출력 → 복잡도 판단 및 에이전트 전략 → **"작업을 시작할까요?" 확인 후 구현**. Step 7 전에는 구현하지 않음. |
-| `done.md` | ~170 | `/done` | **작업 완료 → PR**. 변경 분석(정책 영향 판단) → 테스트 전략(순수 함수+정책이면 `test-unit`, UI이면 `test-e2e`) → 코드 검증(`code-quality` 스킬) → 출시 게이트 5항목 → 선별 커밋(`commit-helper` 스킬) → PR 생성(`pr-guide.md` 템플릿). `--skip-test`, `--force-test`, `--draft` 옵션. |
+| `setup.md` | ~310 | `/setup` | **프로젝트 초기 설치**. 기술 스택 인터뷰 7문항(프레임워크/라우터/스타일링/서버상태/전역상태/Zod/MCP서버) → 응답 기반 `.claude/` 파일 설치 + 맞춤형 CLAUDE.md 생성. Rules 결정표에 따라 프레임워크별 필요 규칙만 선별 포함. |
+| `start.md` | ~150 | `/start` | **작업 시작**. Basic Memory 조회(설치 시) → 입력 유형 판별(Jira/MD/텍스트) → 작업 내용 파악 → 디자인 분석(선택) → 코드 분석(explore 에이전트) → 작업 계획 출력 → 복잡도 판단 → **"작업을 시작할까요?" 확인 후 구현**. Step 7 전에는 구현하지 않음. |
+| `done.md` | ~170 | `/done` | **작업 완료 → PR**. 변경 분석 → 코드 검증(`code-quality`) → 코드 리뷰(code-reviewer) → 출시 게이트 → 선별 커밋(`commit-helper`) → PR 생성(`pr-guide.md` 템플릿) → 정리 → Basic Memory 저장(설치 시) → 최종 요약. `--no-review`, `--draft` 옵션. |
 | `commit.md` | ~90 | `/commit` | **Git 플로우 자동화**. main 최신화 → 작업 브랜치 생성(`{type}/{description}`) → 커밋(`commit-helper` 스킬) → 푸시 → main 머지 → 브랜치 삭제 → main 최신화. staged 변경만 처리(`git add .` 금지). `--branch`, `--no-gate` 옵션. |
 | `quality.md` | ~18 | `/quality` | **코드 품질 검사**. `code-quality` 스킬 호출로 Prettier → ESLint → TypeScript 순차 실행. `--format-only`, `--lint-only`, `--type-only`, `--no-fix` 옵션. |
+| `test.md` | - | `/test` | **테스트 전체 실행**. 단위 → 통합 → E2E 순서로 실행. 실패 시 원인 분석 및 수정 안내. |
+| `update-cc-kit.md` | - | `/update-cc-kit` | **플러그인 파일 최신화**. CLAUDE.md·커스텀 파일 보존. manifest.json 기반으로 변경된 파일만 업데이트. 충돌 시 사용자 확인. |
 | `setup-notifier.md` | ~76 | `/setup-notifier` | **macOS 알림 환경 설정**. terminal-notifier 설치 확인 → `install-notifier.sh` 실행 → `.claude/settings.local.json` 훅 설정 병합(PermissionRequest 이벤트에 notify.sh 연결). 최초 1회. |
 
 ---
@@ -168,7 +164,7 @@
 
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
-| `agent-roster.md` | ~200 | **에이전트 카탈로그**. 6개 에이전트(explore/code-reviewer/lint-fixer/Plan/implementation-executor/git-operator)의 모델·병렬 여부·용도. 조합 패턴(탐색→구현, 구현→검증). 12개 스킬 카탈로그 및 연결 흐름. |
+| `agent-roster.md` | ~200 | **에이전트 카탈로그**. 7개 에이전트(explore/code-reviewer/nextjs-reviewer/lint-fixer/Plan/implementation-executor/git-operator)의 모델·병렬 여부·용도. 조합 패턴(탐색→구현, 구현→검증). 15개 스킬 카탈로그 및 연결 흐름. |
 | `coordination-guide.md` | ~453 | **병렬 실행 원칙 (SSOT)**. Agent Teams 우선(3개+ 에이전트 시), 일반 Task 병렬(폴백). 동기화 전략, 팀 수명주기(생성→협업→완료→정리). 버그 수정 복잡도 판단 기준표(LOW/MEDIUM/HIGH) 포함. 병렬 실행으로 5-10배 속도 향상 목표. |
 | `execution-patterns.md` | ~294 | **실행 패턴 상세**. 6가지 패턴: Agent Teams, Single-Message Parallel, Fan-Out/Fan-In, Sequential Pipeline, Batching, Background. `/start`, `/done` 커맨드의 구체적 병렬 검증 패턴. |
 | `model-routing.md` | ~103 | **모델 선택 전략**. LOW(haiku), MEDIUM(sonnet), HIGH(opus). 비즈니스 로직(날짜/수치/상태 계산) 포함 시 상향. **불확실할 때 상향 원칙** 및 키워드별 빠른 참조 포함. coordination-guide.md에 종속. |
@@ -188,14 +184,28 @@
 
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
+| `thinking-model.md` | ~180 | **통합 사고 모델 (SSOT)**. `READ → REACT → ANALYZE → RESTRUCTURE → STRUCTURE → REFLECT` 6단계 인지 흐름. 복잡도(LOW/MEDIUM/HIGH)에 따라 단계 수 조절. 기존 로직 참조 원칙, 디자인 시스템 컴포넌트 사용 전 Grep 필수, lint/tsc 검증 체크리스트 포함. |
 | `sequential-thinking.md` | ~180 | **복잡도별 사고 단계 (SSOT)**. LOW(1-2단계: READ→REACT), MEDIUM(3-5단계: +ANALYZE/STRUCTURE/REFLECT), HIGH(7-10단계: 전체+Plan). 에이전트 연계(LOW=직접, MEDIUM=explore+code-reviewer, HIGH=Plan+code-reviewer). 자동 복잡도 판단 로직. |
 | `error-recovery.md` | ~101 | **에러 복구 가이드**. 병렬 에이전트 실패(일부/전체/타임아웃), `/commit` 머지 충돌·푸시 실패·staged 유실 복구, `/done` 중단 후 재개(테스트/린트/PR 실패별), 빌드 실패 부분 롤백(`git checkout <커밋> -- <파일>`). |
 
-### memory/ — 세션 간 메모리
+### git/ — Git 워크플로우
 
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
-| `project-memory.md` | ~30 | **프로젝트 메모리 템플릿**. `/setup` 시 `.claude/memory/project-memory.md`로 복사. 반복 패턴(자동 축적)·프로젝트 특이사항(수동) 두 섹션. 동일 실수 2회+ 감지 시 Claude가 패턴을 기록. 작업 시작 전 읽기 필수(`required-behaviors.md` 필수 0.7). |
+| `pr-guide.md` | ~100 | **PR 작성 가이드**. `{type}({scope}): {한 줄 요약}` 제목 형식(50자 이내). 작업 내용(필수), 디자인(선택), 특이사항(선택) 3개 섹션. 변경 유형별 판단 기준표. |
+
+### memory/ — 세션 간 메모리
+
+세션 간 메모리는 **Basic Memory MCP**(`uvx basic-memory mcp`)로 관리한다.
+`/setup` Q7에서 선택 시 `.mcp.json`에 추가됨. API 키 불필요.
+
+3가지 트리거에 따라 동작 (`required-behaviors.md` 필수 0.7):
+
+| 타이밍 | 동작 |
+|--------|------|
+| `/start` — 작업 분석 전 | `recent_activity`/`search`로 프로젝트 관련 메모리 조회 → 결과 있으면 계획 반영 |
+| 에러 복구 루프 (필수 0.65) | `search_notes`로 유사 에러·해결책 검색 후 반영 |
+| `/done` — 작업 완료 후 | 반복 오류·특이사항 발견 시 `write_note` 저장 (없으면 스킵) |
 
 ---
 
@@ -227,7 +237,7 @@
 
 ```
 CLAUDE.md
-├── rules/core/thinking-model.md ─────────────── 사고 모델 (SSOT)
+├── instructions/workflow-patterns/thinking-model.md ── 사고 모델 (SSOT)
 │   ├── instructions/workflow-patterns/sequential-thinking.md  복잡도 판단
 │   ├── instructions/multi-agent/coordination-guide.md         병렬 실행
 │   └── instructions/multi-agent/model-routing.md              모델 선택
@@ -274,13 +284,15 @@ migration-helper  → test-unit 또는 test-integration (범위에 따라)
 | 카테고리 | 파일 수 | 비고 |
 |----------|:-------:|------|
 | 루트 파일 | 5 | CLAUDE.md, README.md, CHANGELOG.md, .mcp.json, .gitignore |
-| Rules | 11 | 코딩 규칙 (프레임워크별 조건부 설치) |
-| Agents | 5 | 특화 서브에이전트 |
-| Skills (SKILL.md) | 12 | 자동 트리거 |
-| Skills (references) | 11 | web-design 8 + next-project-structure 3 |
-| Commands | 6 | 슬래시 커맨드 |
-| Instructions | 10 | 멀티에이전트 7 + 검증 3 + 워크플로우 2 + README 1 |
+| Rules (core) | 8 | 코딩 규칙 (프레임워크별 조건부 설치) |
+| Rules (optional) | 2 | tailwindcss-v4, validation-patterns |
+| Rules (references) | 8 | TypeScript 5 + Zod 3 |
+| Agents | 6 | 특화 서브에이전트 |
+| Skills (SKILL.md) | 15 | 자동 트리거 |
+| Skills (references) | 12 | web-design 9 + next-project-structure 3 |
+| Commands | 8 | 슬래시 커맨드 |
+| Instructions | 11 | 멀티에이전트 6 + 검증 3 + 워크플로우 3(thinking-model 포함) + git 1 + README |
 | Hooks & Scripts | 3 | 알림 자동화 |
 | 메타데이터 | 2 | plugin.json, marketplace.json |
 | **.claude/ 사본** | **동일** | 루트와 100% 동기화 |
-| **합계 (고유 파일)** | **65** | |
+| **합계 (고유 파일)** | **~80** | |

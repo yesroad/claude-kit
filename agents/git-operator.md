@@ -8,7 +8,7 @@ model: haiku
 @../instructions/validation/required-behaviors.md
 @../instructions/validation/forbidden-patterns.md
 @../instructions/validation/release-readiness-gate.md
-@../rules/core/thinking-model.md
+@../instructions/workflow-patterns/thinking-model.md
 
 # Git Operator Agent
 

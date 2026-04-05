@@ -281,4 +281,4 @@ migration-helper (라이브러리 업그레이드)
 | `./execution-patterns.md`             | 실행 패턴 상세 |
 | `../validation/forbidden-patterns.md` | 금지 패턴      |
 | `../validation/required-behaviors.md` | 필수 행동      |
-| `../../rules/core/thinking-model.md`  | 사고 모델      |
+| `../workflow-patterns/thinking-model.md` | 사고 모델   |
