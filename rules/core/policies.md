@@ -78,6 +78,6 @@ rg "(defaultValue|initialValue|initialState)" src/ --type ts
 
 | 문서 | 용도 |
 |------|------|
-| `../../instructions/workflow-patterns/thinking-model.md` | 기존 로직 탐색 원칙 |
+| `../../workflows/thinking/model.md` | 기존 로직 탐색 원칙 |
 | `unit-test-conventions.md` | 정책 보호 테스트 작성 |
 | `@../../commands/done.md` | 완료 시 정책 영향 판단 |
