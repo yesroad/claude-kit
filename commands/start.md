@@ -5,7 +5,7 @@ description: 작업 시작. 코드 분석 → 작업 계획 → 구현 확인.
 
 **참조 규칙**:
 
-- `@../instructions/workflow-patterns/sequential-thinking.md` (복잡도 판단)
+- `@../instructions/workflow-patterns/thinking-model.md` (복잡도 판단)
 - `@../instructions/multi-agent/agent-roster.md` (에이전트 선택)
 
 **[즉시 실행]** 이 메시지를 받으면 아래 단계를 바로 실행하세요.
@@ -130,7 +130,7 @@ Task(
 
 ## Step 6. 복잡도 판단 및 구현 전략
 
-> **복잡도 판단**: `@../instructions/workflow-patterns/sequential-thinking.md` 참조 (LOW/MEDIUM/HIGH 기준)
+> **복잡도 판단**: `@../instructions/workflow-patterns/thinking-model.md` 참조 (LOW/MEDIUM/HIGH 기준)
 
 **HIGH 복잡도 시 Plan 에이전트 활용:**
 

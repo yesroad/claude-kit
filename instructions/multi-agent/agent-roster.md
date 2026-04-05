@@ -278,8 +278,7 @@ migration-helper (라이브러리 업그레이드)
 
 | 문서                                  | 용도           |
 | ------------------------------------- | -------------- |
-| `./coordination-guide.md`             | 병렬 실행 원칙 |
-| `./execution-patterns.md`             | 실행 패턴 상세 |
+| `./coordination-guide.md`             | 병렬 실행 원칙 + 실행 패턴 |
 | `../validation/forbidden-patterns.md` | 금지 패턴      |
 | `../validation/required-behaviors.md` | 필수 행동      |
 | `../workflow-patterns/thinking-model.md` | 사고 모델   |

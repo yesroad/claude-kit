@@ -248,7 +248,7 @@ Task(subagent_type='general-purpose', team_name='sprint-team', name='refactorer'
 
 4. 팀 리드: 결과 취합, 충돌 해결, 빌드 검증
 
-5. 평가: optional/team-evaluation.md 기준으로 각 팀원 평가 (90+ A등급 목표)
+5. 평가: team-evaluation.md 기준으로 각 팀원 평가 (90+ A등급 목표)
 
 6. 정리: 팀원별 shutdown_request → TeamDelete
 ```
@@ -265,7 +265,7 @@ Task(subagent_type='general-purpose', team_name='sprint-team', name='refactorer'
 □ 2. 각 팀원 커밋 검증 (git log로 커밋 존재 + git diff로 범위 확인)
 □ 3. 통합 린트/빌드 검증 ({패키지매니저} lint)
 □ 3.5 release-readiness-gate 기준 최종 PASS 확인
-□ 4. optional/team-evaluation.md 기준 각 팀원 평가 작성 → 사용자에게 공유
+□ 4. team-evaluation.md 기준 각 팀원 평가 작성 → 사용자에게 공유
 □ 5. 평가 완료 후 → shutdown_request → TeamDelete
 ```
 
@@ -463,6 +463,24 @@ Task(
 
 ---
 
+## 실행 패턴 빠른 참조
+
+| 패턴                        | 사용 시점               | 토큰 절감     |
+| --------------------------- | ----------------------- | ------------- |
+| **Agent Teams**             | 3개+ 에이전트 협업 필요 | 팀 기반 협업  |
+| **Single-Message Parallel** | 독립 작업 동시 실행     | 50-70%        |
+| **Fan-Out/Fan-In**          | 분할 → 병합             | 60-80%        |
+| **Sequential Pipeline**     | 의존성 있는 작업        | -             |
+| **Batching**                | 대량 파일 처리          | 70-90%        |
+| **Background**              | 긴 작업 분리            | 컨텍스트 보호 |
+
+- **Agent Teams**: 위 "Agent Teams" 섹션 참조. 3개+ 에이전트, 에이전트 간 통신 필요 시.
+- **Fan-Out/Fan-In**: 도메인별 분석을 병렬 에이전트로 분할 → 결과를 수집하여 통합 분석.
+- **Batching**: 대량 파일을 청크로 분할 (예: lint-fixer에 파일 3-5개씩 분배).
+- **Background**: `run_in_background=true`로 긴 작업을 분리하여 메인 컨텍스트 보호.
+
+---
+
 ## 에러 핸들링
 
 | 전략              | 설명                        | 적용         |
@@ -471,7 +489,25 @@ Task(
 | **재시도**        | 최대 3회, 유형 분류 후 대응 | 일시적 실패  |
 | **서킷 브레이커** | 연속 실패 시 중단           | API 호출     |
 
-> **재시도 프로토콜 상세**: `../workflow-patterns/error-recovery.md` — 실패 유형 분류(SCOPE_TOO_LARGE / ENV_ERROR / LOGIC_ERROR), 회차별 행동, 3회차 후 보고 형식 포함.
+### 자동 재시도 프로토콜
+
+> 실패 감지 시 사람에게 묻기 전에 반드시 아래 루프를 먼저 실행한다. **3회차를 모두 소진하기 전까지 사람에게 보고하지 않는다.**
+
+**실패 유형 분류:**
+
+| 유형 | 판단 기준 | 1회차 대응 |
+|------|----------|-----------|
+| **SCOPE_TOO_LARGE** | 컨텍스트 초과, 타임아웃 | 작업을 2개 이상으로 분할 후 재시도 |
+| **ENV_ERROR** | 경로 오류, 파일 없음, 권한 오류 | 경로/환경 재확인 후 재시도 |
+| **LOGIC_ERROR** | 타입 에러, 빌드 실패, 테스트 실패 | 다른 접근법으로 재시도 |
+| **UNKNOWN** | 위 셋 중 판단 불가 | LOGIC_ERROR로 처리 |
+
+**회차별 행동:**
+- **1회차**: 유형 분류 → 유형별 대응 → 재시도
+- **2회차**: 모델 업그레이드 (`haiku→sonnet`, `sonnet→opus`) → 재spawn → 재시도
+- **3회차**: 루프 종료 → 사람에게 보고 (실패 유형, 시도한 방법, 에러 메시지)
+
+**병렬 에이전트 실패 시**: 일부 실패 → 성공 결과만 활용 + 실패 작업 재시도. 전체 실패 → 순차 실행으로 전환.
 
 ---
 
@@ -480,8 +516,6 @@ Task(
 | 문서               | 경로                                  |
 | ------------------ | ------------------------------------- |
 | 에이전트 목록      | `./agent-roster.md`                   |
-| 실행 패턴          | `./execution-patterns.md`             |
 | 팀원 Done 프로세스 | `./teammate-done-process.md`          |
-| 팀 평가 템플릿     | `./optional/optional/team-evaluation.md`       |
-| 에러 복구          | `../workflow-patterns/error-recovery.md` |
+| 팀 평가 템플릿     | `./team-evaluation.md`       |
 | 금지 패턴          | `../validation/forbidden-patterns.md` |

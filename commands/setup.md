@@ -477,7 +477,7 @@ agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아
 | E2E 테스트 | test-e2e 스킬 |
 | 코드 컨벤션 | nextjs-coding-convention 스킬 |
 | 에이전트 선택 | @.claude/instructions/multi-agent/agent-roster.md |
-| 복잡도 판단 | @.claude/instructions/workflow-patterns/sequential-thinking.md |
+| 복잡도 판단 | @.claude/instructions/workflow-patterns/thinking-model.md |
 </quick_ref>
 ```
 
@@ -498,7 +498,7 @@ agents-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 아
 | E2E 테스트 | test-e2e 스킬 |
 | 코드 컨벤션 | nextjs-coding-convention 스킬 |
 | 에이전트 선택 | @.claude/instructions/multi-agent/agent-roster.md |
-| 복잡도 판단 | @.claude/instructions/workflow-patterns/sequential-thinking.md |
+| 복잡도 판단 | @.claude/instructions/workflow-patterns/thinking-model.md |
 </quick_ref>
 ```
 

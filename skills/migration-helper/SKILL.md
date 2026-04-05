@@ -241,7 +241,7 @@ Task(subagent_type="Plan", model="opus", prompt=`
 
 | 문서 | 용도 |
 |------|------|
-| `@../../instructions/workflow-patterns/sequential-thinking.md` | 복잡도 판단 |
+| `@../../instructions/workflow-patterns/thinking-model.md` | 복잡도 판단 |
 | `@../../instructions/validation/release-readiness-gate.md` | 출시 게이트 |
 | `@../../rules/core/unit-test-conventions.md` | 정책 보호 테스트 |
 | `@../../skills/refactor/SKILL.md` | 점진적 변경 원칙 |

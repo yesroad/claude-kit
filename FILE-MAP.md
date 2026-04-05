@@ -165,9 +165,7 @@
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
 | `agent-roster.md` | ~200 | **에이전트 카탈로그**. 7개 에이전트(explore/code-reviewer/nextjs-reviewer/lint-fixer/Plan/implementation-executor/git-operator)의 모델·병렬 여부·용도. 조합 패턴(탐색→구현, 구현→검증). 15개 스킬 카탈로그 및 연결 흐름. |
-| `coordination-guide.md` | ~453 | **병렬 실행 원칙 (SSOT)**. Agent Teams 우선(3개+ 에이전트 시), 일반 Task 병렬(폴백). 동기화 전략, 팀 수명주기(생성→협업→완료→정리). 버그 수정 복잡도 판단 기준표(LOW/MEDIUM/HIGH) 포함. 병렬 실행으로 5-10배 속도 향상 목표. |
-| `execution-patterns.md` | ~294 | **실행 패턴 상세**. 6가지 패턴: Agent Teams, Single-Message Parallel, Fan-Out/Fan-In, Sequential Pipeline, Batching, Background. `/start`, `/done` 커맨드의 구체적 병렬 검증 패턴. |
-| `model-routing.md` | ~103 | **모델 선택 전략**. LOW(haiku), MEDIUM(sonnet), HIGH(opus). 비즈니스 로직(날짜/수치/상태 계산) 포함 시 상향. **불확실할 때 상향 원칙** 및 키워드별 빠른 참조 포함. coordination-guide.md에 종속. |
+| `coordination-guide.md` | ~500 | **병렬 실행 원칙 + 실행 패턴 + 에러 복구 (SSOT)**. Agent Teams 우선(3개+ 에이전트 시), 일반 Task 병렬(폴백). 6가지 실행 패턴(Agent Teams, Single-Message Parallel, Fan-Out/Fan-In, Sequential Pipeline, Batching, Background). 에러 자동 재���도 프로토콜(3회차). |
 | `team-evaluation.md` | ~147 | **팀원 작업 평가 기준**. 10개 항목 100점 만점. 규칙 참조/코딩 표준/React 컨벤션/디자인 품질/테스트/Done 프로세스 등. A등급(90+) 목표. 팀 리드만 평가 수행. |
 | `teammate-done-process.md` | ~103 | **팀원 5단계 완료 프로세스**. 변경 분석 → 정책 키워드 탐지 → 린트 검증 → 커밋(Co-Authored-By 금지) → SendMessage 보고. 범위 밖 변경 금지, Skill 도구 사용 불가. |
 | `README.md` | ~136 | **Instructions 인덱스**. 멀티에이전트/검증/워크플로우 문서 카탈로그. 상황별(작업 시작/코드 작성/검증/커밋) 참조 가이드. 스킬 맵. |
@@ -184,9 +182,7 @@
 
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
-| `thinking-model.md` | ~180 | **통합 사고 모델 (SSOT)**. `READ → REACT → ANALYZE → RESTRUCTURE → STRUCTURE → REFLECT` 6단계 인지 흐름. 복잡도(LOW/MEDIUM/HIGH)에 따라 단계 수 조절. 기존 로직 참조 원칙, 디자인 시스템 컴포넌트 사용 전 Grep 필수, lint/tsc 검증 체크리스트 포함. |
-| `sequential-thinking.md` | ~180 | **복잡도별 사고 단계 (SSOT)**. LOW(1-2단계: READ→REACT), MEDIUM(3-5단계: +ANALYZE/STRUCTURE/REFLECT), HIGH(7-10단계: 전체+Plan). 에이전트 연계(LOW=직접, MEDIUM=explore+code-reviewer, HIGH=Plan+code-reviewer). 자동 복잡도 판단 로직. |
-| `error-recovery.md` | ~101 | **에러 복구 가이드**. 병렬 에이전트 실패(일부/전체/타임아웃), `/commit` 머지 충돌·푸시 실패·staged 유실 복구, `/done` 중단 후 재개(테스트/린트/PR 실패별), 빌드 실패 부분 롤백(`git checkout <커밋> -- <파일>`). |
+| `thinking-model.md` | ~320 | **통합 사고 모델 + 복잡도 판단 (SSOT)**. `READ → REACT → ANALYZE → RESTRUCTURE → STRUCTURE → REFLECT` 6단계 인지 흐름. 복잡도(LOW/MEDIUM/HIGH)에 따라 단계 수 조절. 에이전트/모델 연계. 기존 로직 참조 원칙, lint/tsc 검증 체크리스트 포함. |
 
 ### git/ — Git 워크플로우
 
@@ -237,10 +233,8 @@
 
 ```
 CLAUDE.md
-├── instructions/workflow-patterns/thinking-model.md ── 사고 모델 (SSOT)
-│   ├── instructions/workflow-patterns/sequential-thinking.md  복잡도 판단
-│   ├── instructions/multi-agent/coordination-guide.md         병렬 실행
-│   └── instructions/multi-agent/model-routing.md              모델 선택
+├── instructions/workflow-patterns/thinking-model.md ── 사고 모델 + 복잡도 판단 (SSOT)
+│   ├── instructions/multi-agent/coordination-guide.md         병렬 실행 + 모델 선택
 │
 ├── instructions/validation/required-behaviors.md ── 필수 행동 13개
 │   ├── instructions/validation/forbidden-patterns.md

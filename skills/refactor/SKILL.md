@@ -239,7 +239,7 @@ Task((subagent_type = "code-reviewer"), (prompt = "리팩토링 결과 리뷰"))
 
 | 문서                                                           | 용도             |
 | -------------------------------------------------------------- | ---------------- |
-| `@../../instructions/workflow-patterns/sequential-thinking.md` | 복잡도 판단      |
+| `@../../instructions/workflow-patterns/thinking-model.md` | 복잡도 판단      |
 | `@../../instructions/multi-agent/agent-roster.md`              | Plan 에이전트    |
 | `@../../instructions/validation/release-readiness-gate.md`     | 출시 게이트      |
 | `@../../rules/core/unit-test-conventions.md`                   | 테스트 규칙      |

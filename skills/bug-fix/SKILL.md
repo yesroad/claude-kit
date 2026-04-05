@@ -70,7 +70,7 @@ $ARGUMENTS 있음 → 다음 단계 진행
 | 단계 | 작업           | 도구                   |
 | ---- | -------------- | ---------------------- |
 | 1    | 입력 확인      | -                      |
-| 2    | 복잡도 판단    | sequential-thinking.md |
+| 2    | 복잡도 판단    | thinking-model.md |
 | 3    | 버그 재현/탐색 | Read/Grep/Glob         |
 | 4    | 원인 분석      | Task (Explore)         |
 | 5    | 옵션 도출      | 분석 결과 기반         |
@@ -290,9 +290,8 @@ describe("버그 수정 후 정책 유지", () => {
 
 | 문서                                                           | 용도        |
 | -------------------------------------------------------------- | ----------- |
-| `@../../instructions/workflow-patterns/sequential-thinking.md` | 복잡도 판단 |
-| `@../../instructions/multi-agent/coordination-guide.md`        | 병렬 협업   |
-| `@../../instructions/multi-agent/execution-patterns.md`        | 실행 패턴   |
+| `@../../instructions/workflow-patterns/thinking-model.md` | 복잡도 판단 |
+| `@../../instructions/multi-agent/coordination-guide.md`        | 병렬 협업 + 실행 패턴 |
 | `@../../instructions/validation/forbidden-patterns.md`         | 금지 패턴   |
 | `@../../instructions/validation/release-readiness-gate.md`     | 출시 게이트 |
 | `@../../rules/core/unit-test-conventions.md`                   | 테스트 규칙 |
