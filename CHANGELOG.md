@@ -4,6 +4,20 @@
 
 ---
 
+## [1.1.1] - 2026-04-17
+
+### Added
+
+- **`rules/core/frontend-fundamentals.md`**: Frontend Fundamentals 4가지 설계 원칙 — 가독성/예측 가능성/응집도/결합도, 트레이드오프 포함
+
+### Changed
+
+- **`rules/core/coding-standards.md`**: Code Smell 중복 코드 항목에 결합도 관점 단서 추가 (`frontend-fundamentals.md` 참조 연결)
+- **`skills/refactor/SKILL.md`**: 중복 코드 리팩토링 판단 기준 보정 — "동작·UI가 완전히 동일할 때"만 공통화 조건 명시
+- **`skills/code-level-review/SKILL.md`**: 모드 A에 FF 설계 원칙 점검 항목(예측가능성·결합도) 추가
+
+---
+
 ## [1.1.0] - 2026-04-05
 
 ### Added

@@ -48,6 +48,7 @@
 
 | 파일 | 줄 수 | 적용 대상 | 설명 |
 |------|:-----:|-----------|------|
+| `frontend-fundamentals.md` | ~120 | 모든 프로젝트 | **FF 4가지 설계 원칙**. 가독성(맥락 줄이기/이름 붙이기/위에서 아래로), 예측 가능성(이름 충돌 방지/반환 타입 통일/숨은 로직 금지), 응집도(도메인 폴더/매직 넘버/폼 설계), 결합도(단일 책임 Hook/중복 허용 판단/Props Drilling 해소). 4가지 기준 간 트레이드오프 포함. |
 | `coding-standards.md` | ~310 | 모든 프로젝트 | **TypeScript 코딩 표준**. KISS/DRY/YAGNI/Readability 원칙. 변수·함수 네이밍, Immutability(`toSorted()` 사용), 에러 처리(`Promise.all` 병렬), null 처리(optional chaining), 조건부 렌더링, Early Return, 매직 넘버 상수화, 배럴 export(`index.ts`), services/queries 폴더 구조, enum 호환성 규칙. |
 | `unit-test-conventions.md` | ~180 | 모든 프로젝트 | **순수 함수 유닛 테스트 규칙**. jest/vitest 러너 자동 감지. `__tests__/{파일명}.test.ts` 위치. 정상/경계값/에러/정책 4가지 케이스 필수. 날짜 함수는 `useFakeTimers()` 필수. 정책 보호(회귀 방지) 테스트 패턴. |
 
@@ -277,7 +278,7 @@ migration-helper  → test-unit 또는 test-integration (범위에 따라)
 | 카테고리 | 파일 수 | 비고 |
 |----------|:-------:|------|
 | 루트 파일 | 5 | CLAUDE.md, README.md, CHANGELOG.md, .mcp.json, .gitignore |
-| Rules (core) | 8 | 코딩 규칙 (프레임워크별 조건부 설치) |
+| Rules (core) | 9 | 코딩 규칙 (프레임워크별 조건부 설치) |
 | Rules (optional) | 2 | tailwindcss-v4, validation-patterns |
 | Rules (references) | 8 | TypeScript 5 + Zod 3 |
 | Agents | 5 | 특화 서브에이전트 |

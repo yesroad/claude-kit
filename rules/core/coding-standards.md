@@ -209,7 +209,9 @@ function OrderCard({ order }: Props) {
 | **긴 파일**   | 300줄 이상     | 컴포넌트/로직 분리 |
 | **깊은 중첩** | 4레벨 이상     | Early return       |
 | **매직 넘버** | 설명 없는 숫자 | 상수로 추출        |
-| **중복 코드** | 3회 이상 반복  | 함수로 추출        |
+| **중복 코드** | 3회 이상 반복  | 함수로 추출*       |
+
+> \*공통화 전 판단: 동작·UI가 달라질 여지가 있으면 중복 허용 → `frontend-fundamentals.md` 4. 결합도 참조
 
 ---
 
@@ -307,3 +309,4 @@ import { PaymentMethodType } from "@/payment/types"; // 실제 사용 모듈
 | `react-hooks-patterns.md`     | Hook 성능 패턴     |
 | `state-and-server-state.md`   | 상태 관리 경계     |
 | `anti-patterns.md`            | 금지 패턴          |
+| `frontend-fundamentals.md`    | FF 4가지 설계 원칙 (가독성/예측가능성/응집도/결합도) |

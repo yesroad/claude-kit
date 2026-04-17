@@ -232,8 +232,8 @@ Task((subagent_type = "code-reviewer"), (prompt = "리팩토링 결과 리뷰"))
 
 | 리팩토링 필요         | 리팩토링 불필요  |
 | --------------------- | ---------------- |
-| 동일 로직 3곳+ 중복   | 1-2곳 유사 코드  |
-| 명백한 책임 분리 위반 | 단순 가독성 개선 |
+| 동일 로직 3곳+ 중복 **(동작·UI가 완전히 동일할 때)** | 1-2곳 유사 코드 |
+| 명백한 책임 분리 위반 | **동작이 달라질 여지 있는 유사 코드** |
 | 테스트 불가능한 구조  | 취향 차이 수준   |
 | 500줄+ 파일           | 200줄 이하 파일  |
 
@@ -255,3 +255,4 @@ Task((subagent_type = "code-reviewer"), (prompt = "리팩토링 결과 리뷰"))
 | `@../../workflows/quality-gates/release-gate.md`  | 출시 게이트      |
 | `@../../rules/core/unit-test-conventions.md`                   | 테스트 규칙      |
 | `@../../workflows/thinking/model.md`                           | ANALYZE 단계 |
+| `@../../rules/core/frontend-fundamentals.md`                   | FF 4기준 (리팩토링 방향 판단) |
