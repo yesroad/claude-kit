@@ -43,6 +43,12 @@ user-invocable: true
 
 **참조**: `references/code-examples.md` (레벨별 대조 예제)
 
+**FF 설계 원칙 점검 (코드 작성 시):**
+- 예측 가능성: 커스텀 모듈이 외부 라이브러리와 이름 겹치지 않는가?
+- 예측 가능성: 같은 카테고리 Hook의 반환 타입이 통일되어 있는가?
+- 결합도: Props Drilling 3단계+ 시 조합 패턴을 먼저 검토했는가?
+- 결합도: 공통화 대상이 "앞으로도 동일하게 변경될 것"이 확실한가?
+
 **TypeScript 심화 패턴 적용 시 추가 참조:**
 - Brand Types, Conditional/Mapped Types, satisfies 등 → `../../rules/references/typescript/ts-type-patterns.md` 읽기
 - ref prop, ComponentProps, Next.js 15 params 타입 → `../../rules/references/typescript/ts-react-nextjs.md` 읽기
@@ -110,3 +116,4 @@ user-invocable: true
 | `../../rules/references/typescript/ts-react-nextjs.md` | React 19 ref 패턴, Next.js 15+ 타입 |
 | `../../rules/references/typescript/ts-error-handling.md` | Result 타입, 에러 유니온, never 체크 |
 | `../../rules/references/typescript/ts-tooling-and-stack.md` | tsconfig, Zod, 스택 조합, 논쟁 주제 |
+| `../../rules/core/frontend-fundamentals.md` | FF 4가지 설계 원칙 |
