@@ -13,7 +13,7 @@ Claude Code 확장 플러그인 — rules, agents, skills, commands를 포함한
 | 오케스트레이션 | `workflows/coordination/` | 에이전트 팀 조율 |
 | 에이전트/스캐폴딩 | `rules/core/`, `agents/` | 컨텍스트 + 규칙 |
 | 가드레일 | `hooks/guard-check.sh` | 코드 저장 시 자동 패턴 검사 |
-| 피드백 루프 | `/start`, `/work`, `/done` | Plan→Implement→Verify→Adjust 사이클 |
+| 피드백 루프 | `/start`, `/done` | Plan→Implement→Verify→Adjust 사이클 |
 | 메모리 | Basic Memory MCP (선택) | 세션 간 프로젝트 메모리 |
 
 ---
@@ -83,8 +83,7 @@ brew install gh && gh auth login
 | ----------------- | ------------------------------------------------------ |
 | `/setup`          | 기술 스택 인터뷰 → 맞춤형 `.claude/` + CLAUDE.md 생성 |
 | `/update-cc-kit`  | 플러그인 파일 최신화 (CLAUDE.md·커스텀 파일 보존, 충돌 시 확인) |
-| `/start`          | 작업 시작 — Plan Mode → 분석 → 계획 생성               |
-| `/work`           | 구현 + 검증 — 계획 읽기 → 구현 → 계획 대비 검증         |
+| `/start`          | 작업 시작 — Plan Mode → 분석 → 계획 생성 → 승인 → 구현 + 검증 |
 | `/done`           | 작업 완료 — 검증 → 커밋 → PR                           |
 | `/commit`         | staged 변경사항으로 커밋 메시지 생성 후 커밋           |
 | `/test`           | 단위 → 통합 → E2E 테스트 순차 실행                     |
@@ -156,8 +155,7 @@ cc-kit/
 │
 ├── commands/                   # 슬래시 커맨드
 │   ├── setup.md                # 기술 스택 인터뷰 → 프로젝트 설정
-│   ├── start.md                # Plan Mode → 분석 → 계획 생성
-│   ├── work.md                 # 계획 기반 구현 + 검증
+│   ├── start.md                # Plan Mode → 분석 → 계획 생성 → 승인 → 구현 + 검증
 │   ├── done.md
 │   ├── commit.md
 │   ├── test.md
@@ -220,9 +218,7 @@ SCAN → ANALYZE → PLAN → BUILD → CHECK
 
 ```
 /setup       → 최초 1회: 기술 스택 설정
-/start       → Plan Mode: 분석 + 계획 생성
-  ↓ 계획 검토
-/work        → 구현 + 계획 대비 검증
+/start       → Plan Mode: 분석 + 계획 생성 → 승인 → 구현 + 검증
   ↓ 구현 중 활용
   component-creator     → 컴포넌트/훅 생성
   bug-fix               → 버그 분석 + 해결 옵션

@@ -141,13 +141,12 @@
 
 ## 5. Commands — 슬래시 커맨드
 
-`commands/` 하위 8개 파일. 사용자가 `/커맨드명`으로 명시적으로 호출합니다.
+`commands/` 하위 7개 파일. 사용자가 `/커맨드명`으로 명시적으로 호출합니다.
 
 | 파일 | 줄 수 | 커맨드 | 설명 |
 |------|:-----:|--------|------|
 | `setup.md` | ~320 | `/setup` | **프로젝트 초기 설치**. 기술 스택 인터뷰 7문항(프레임워크/라우터/스타일링/서버상태/전역상태/Zod/MCP서버) → 응답 기반 `.claude/` 파일 설치 + 맞춤형 CLAUDE.md 생성. Rules 결정표에 따라 프레임워크별 필요 규칙만 선별 포함. `plansDirectory` 설정으로 Plan Mode 계획 파일을 프로젝트 로컬에 저장. |
-| `start.md` | ~170 | `/start` | **작업 계획 생성**. `EnterPlanMode` 호출 → Plan Mode(read-only)에서 분석 수행 → 입력 유형 판별(Jira/MD/텍스트) → 작업 내용 파악 → 디자인 분석(선택) → 코드 분석(explore 에이전트) → 작업 계획을 plan 파일에 Write → `ExitPlanMode` → `/work`로 안내. **구현은 하지 않음.** |
-| `work.md` | ~140 | `/work` | **계획 기반 구현 + 검증**. `.claude/plans/`에서 최근 계획 파일 읽기 → 계획 요약 출력 → 복잡도 판단 → 구현 진행 → 계획 대비 검증(작업 체크리스트/변경 파일/tsc/lint) → FAIL 시 재작업 루프(최대 3회) → 전체 PASS 시 `/done` 안내. |
+| `start.md` | ~270 | `/start` | **작업 계획 + 구현**. `EnterPlanMode` 호출 → Plan Mode(read-only)에서 분석 수행 → 입력 유형 판별(Jira/MD/텍스트) → 작업 내용 파악 → 디자인 분석(선택) → 코드 분석(explore 에이전트) → 작업 계획을 plan 파일에 Write → `ExitPlanMode` → 승인 후 즉시 구현 진입 → 계획 대비 검증(작업 체크리스트/변경 파일/tsc/lint) → FAIL 시 재작업 루프(최대 3회) → `/done` 안내. |
 | `done.md` | ~170 | `/done` | **작업 완료 → PR**. 변경 분석 → 코드 검증(`code-quality`) → 코드 리뷰(code-reviewer) → 출시 게이트 → 선별 커밋(`commit-helper`) → PR 생성(`pr-guide.md` 템플릿) → 정리 → Basic Memory 저장(설치 시) → 최종 요약. `--no-review`, `--draft` 옵션. |
 | `commit.md` | ~90 | `/commit` | **Git 플로우 자동화**. main 최신화 → 작업 브랜치 생성(`{type}/{description}`) → 커밋(`commit-helper` 스킬) → 푸시 → main 머지 → 브랜치 삭제 → main 최신화. staged 변경만 처리(`git add .` 금지). `--branch`, `--no-gate` 옵션. |
 | `test.md` | - | `/test` | **테스트 전체 실행**. 단위 → 통합 → E2E 순서로 실행. 실패 시 원인 분석 및 수정 안내. |
@@ -252,8 +251,7 @@ CLAUDE.md
 
 ```
 /setup ──→ directive-generator 스킬 ──→ explore 에이전트
-/start ──→ EnterPlanMode → explore 에이전트 (코드 분석) → ExitPlanMode
-/work  ──→ .claude/plans/ 읽기 → 구현 → 계획 대비 검증
+/start ──→ EnterPlanMode → explore 에이전트 (코드 분석) → ExitPlanMode → 승인 → 구현 → 계획 대비 검증
 /done  ──→ test-unit 스킬 (순수 함수+정책 변경 시)
        ──→ test-e2e 스킬 (UI 변경 시)
        ──→ code-quality 스킬 ──→ lint-fixer 에이전트

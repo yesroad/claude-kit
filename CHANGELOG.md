@@ -4,6 +4,21 @@
 
 ---
 
+## [1.2.0] - 2026-05-21
+
+### Changed
+
+- **`/start` 커맨드**: ExitPlanMode 승인 후 즉시 구현 단계 자동 진입 — 계획 대비 검증·재작업 루프·완료 안내 포함 (기존 `/work` 역할 통합)
+- **`/setup` 커맨드**: Stage 4(알림 설정) `setup-notifier.md` 직접 참조 방식으로 명확화, Stage 5(CLAUDE.md 생성) `directive-generator/SKILL.md` 직접 참조 방식으로 명확화, python3 에러 메시지 수정, quick_ref 예시 갱신
+- **워크플로우**: `/start` → `/done` 2단계 사이클로 변경
+- **Commands 수**: 8개 → 7개
+
+### Removed
+
+- **`/work` 커맨드**: `/start` 승인 후 자동 구현 진입으로 대체됨
+
+---
+
 ## [1.1.1] - 2026-04-17
 
 ### Added
