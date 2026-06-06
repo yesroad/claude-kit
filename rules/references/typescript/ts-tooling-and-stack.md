@@ -1,3 +1,12 @@
+---
+paths:
+  - "**/tsconfig*.json"
+  - "**/eslint.config.*"
+  - "**/.eslintrc*"
+  - "**/trpc/**"
+  - "packages/**"
+---
+
 # TypeScript 도구 생태계 & 스택
 
 ## 1. 실전 tsconfig.json 설정

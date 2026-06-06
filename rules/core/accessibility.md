@@ -1,3 +1,8 @@
+---
+paths:
+  - "**/*.{tsx,jsx}"
+---
+
 # 접근성(Accessibility) 규칙
 
 > WCAG 2.1 AA 기준 — React/Next.js 코드에 적용되는 공통 접근성 규칙

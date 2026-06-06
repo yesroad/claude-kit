@@ -178,7 +178,7 @@ export interface {Name}Props { ... }  // interface (스펙에 따라)
 
 **생성 중 패턴 참조가 필요한 경우:**
 - `ref` prop 또는 `ComponentProps` 사용 → `../../rules/references/typescript/ts-react-nextjs.md` 읽기 (React 19 방식)
-- Brand Types, Conditional Types 등 심화 타입 → `../../rules/references/typescript/ts-type-patterns.md` 읽기
+- Brand Types, Conditional Types 등 심화 타입 → `../../rules/references/typescript/ts-type-patterns-advanced.md` 읽기 (기초는 `ts-type-patterns-basics.md`)
 
 ---
 
@@ -226,4 +226,5 @@ export interface {Name}Props { ... }  // interface (스펙에 따라)
 | `@../../rules/core/coding-standards.md`         | TypeScript 표준      |
 | `../nextjs-scaffold/SKILL.md`        | 도메인 전체 스캐폴딩 (service + query + view) |
 | `../../rules/references/typescript/ts-react-nextjs.md` | React 19 ref 패턴, ComponentProps |
-| `../../rules/references/typescript/ts-type-patterns.md` | TS 타입 패턴 |
+| `../../rules/references/typescript/ts-type-patterns-basics.md` | TS 타입 패턴 (기초) |
+| `../../rules/references/typescript/ts-type-patterns-advanced.md` | TS 타입 패턴 (심화) |

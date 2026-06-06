@@ -88,8 +88,17 @@ UPDATE_DIRS="rules workflows agents skills commands hooks scripts"
 플러그인에 새로 추가된 파일 → **자동으로 복사**, 사용자에게 보고
 
 ```
-✅ 새로 추가: rules/optional/tailwindcss-v4.md
+✅ 새로 추가: skills/new-skill/SKILL.md
 ```
+
+> **예외 — `rules/optional/`·`rules/references/` 하위 신규 파일**: 이들은 `/setup`의 **선택 복사** 대상이다.
+> 설치본에 없는 것은 사용자가 선택하지 않은 스택의 rule일 수 있으므로 **자동 복사하지 않고 안내만** 한다:
+>
+> ```
+> ℹ️  사용 가능한 새 rule: rules/optional/xxx.md — 필요하면 /setup 재실행 또는 수동 복사
+> ```
+>
+> `rules/core/` 신규 파일과 그 외 디렉토리(`workflows`·`agents`·`skills`·`commands`·`hooks`·`scripts`)는 그대로 자동 복사한다.
 
 ### 케이스 B — 동일 (변경 없음)
 플러그인 파일과 설치본이 동일 → **건너뜀**, 보고 생략

@@ -5,17 +5,6 @@ description: cc-kit을 현재 프로젝트에 설치합니다. 프로젝트 기�
 
 현재 프로젝트에 cc-kit을 설치합니다.
 
-## 진행 상황 추적
-
-실행 시작 시 아래 항목을 TaskCreate로 등록한다. 각 단계 시작 시 `in_progress`, 완료 시 `completed`로 TaskUpdate한다.
-
-- 프로젝트 탐색 (자동 감지)
-- 기술 스택 인터뷰
-- 파일 설치
-- 알림 설정
-- CLAUDE.md 생성
-- 설치 완료
-
 ---
 
 ## 0단계: 프로젝트 탐색
@@ -150,14 +139,16 @@ ls tailwind.config.* 2>/dev/null || true
 
 **Q7. MCP 서버** (복수 선택 가능)
 
-| 번호 | 서버       | 용도                                               |
-| ---- | ---------- | -------------------------------------------------- |
-| 1    | Figma      | 피그마 디자인 파일 읽기 (API 키 필요)              |
-| 2    | Supabase   | DB 쿼리, 마이그레이션, Edge Function (API 키 필요) |
-| 3    | Playwright | 브라우저 자동화, E2E 테스트 (설정 불필요)          |
-| 4    | Atlassian  | Jira·Confluence 연동 (API 키 필요)                 |
-| 5    | shadcn     | shadcn/ui 컴포넌트 검색 및 설치 (설정 불필요)      |
-| 6    | 없음       |                                                    |
+| 번호 | 서버          | 용도                                               |
+| ---- | ------------- | -------------------------------------------------- |
+| 1    | Figma         | 피그마 디자인 파일 읽기 (API 키 필요)              |
+| 2    | Supabase      | DB 쿼리, 마이그레이션, Edge Function (API 키 필요) |
+| 3    | Playwright    | 브라우저 자동화, E2E 테스트 (설정 불필요)          |
+| 4    | Atlassian     | Jira·Confluence 연동 (API 키 필요)                 |
+| 5    | shadcn        | shadcn/ui 컴포넌트 검색 및 설치 (설정 불필요)      |
+| 6    | context7      | 라이브러리 공식 최신 문서 검색 (설정 불필요)       |
+| 7    | chrome-devtools | Chrome 브라우저 직접 제어, 성능 분석 (설정 불필요) |
+| 8    | 없음          |                                                    |
 
 예시: "1 3" → Figma + Playwright 설치
 
@@ -178,15 +169,17 @@ ls tailwind.config.* 2>/dev/null || true
 
 Q7 답변을 기반으로 스크립트 실행 전에 `SELECTED_MCP` 변수를 설정합니다:
 
-| Q7 선택         | SELECTED_MCP 값         |
-| --------------- | ----------------------- |
-| 1 (Figma)       | `Figma`                 |
-| 2 (Supabase)    | `supabase`              |
-| 3 (Playwright)  | `playwright`            |
-| 4 (Atlassian)   | `Atlassian`             |
-| 5 (shadcn)      | `shadcn`                |
-| 복수 선택 "1 3" | `Figma,playwright`      |
-| 6 또는 엔터     | (빈 문자열, 설치 안 함) |
+| Q7 선택              | SELECTED_MCP 값         |
+| -------------------- | ----------------------- |
+| 1 (Figma)            | `Figma`                 |
+| 2 (Supabase)         | `supabase`              |
+| 3 (Playwright)       | `playwright`            |
+| 4 (Atlassian)        | `Atlassian`             |
+| 5 (shadcn)           | `shadcn`                |
+| 6 (context7)         | `context7`              |
+| 7 (chrome-devtools)  | `chrome-devtools`       |
+| 복수 선택 "1 3"      | `Figma,playwright`      |
+| 8 또는 엔터          | (빈 문자열, 설치 안 함) |
 
 Q8 답변을 기반으로 `INSTALL_BASIC_MEMORY` 변수를 설정합니다:
 
@@ -194,6 +187,17 @@ Q8 답변을 기반으로 `INSTALL_BASIC_MEMORY` 변수를 설정합니다:
 | -------- | ----------------------- |
 | 1 (예)   | `y`                     |
 | 2 또는 엔터 | (빈 문자열)          |
+
+인터뷰 답변(Q1~Q6)을 기반으로 **rule 선택 복사 플래그**를 설정합니다 (해당하면 `y`, 아니면 빈 문자열):
+
+| 플래그       | 설정 조건                                                          |
+| ------------ | ------------------------------------------------------------------ |
+| `FRONTEND`   | Q1 = Next.js 또는 React → `y`                                      |
+| `STYLING`    | Q3 = Emotion → `emotion` / TailwindCSS → `tailwind` / 그 외 → `other` |
+| `ZOD`        | Q6 = Zod → `y`                                                     |
+| `TS`         | TypeScript 프로젝트 → `y` (Q1 = Next.js/React면 기본 `y`)          |
+
+> rules/는 전체 복사 후 이 플래그로 **미해당 파일만 정리(prune)**된다. `policies.md`·`unit-test-conventions.md`는 항상 유지.
 
 ```bash
 #!/bin/bash
@@ -218,6 +222,28 @@ mkdir -p .claude
 for dir in rules workflows agents skills commands hooks scripts; do
   [ -d "$PLUGIN_ROOT/$dir" ] && cp -r "$PLUGIN_ROOT/$dir/" ".claude/$dir/"
 done
+
+# ── rule 선택 정리 (선택 복사) ─────────────────────────────────────────────
+# rules/는 위에서 전체 복사된 뒤, 인터뷰 플래그(FRONTEND/STYLING/ZOD/TS)로 미해당 rule만 제거.
+# policies.md·unit-test-conventions.md는 항상 유지.
+# 에이전트/스킬이 @참조하는 core rule(react-*, nextjs-app-router, state-*, coding-standards,
+# accessibility, frontend-fundamentals, unit-test-conventions)은 FRONTEND이면 전부 유지된다.
+# 실제 로딩은 각 파일의 paths frontmatter가 제어하므로 @참조가 깨지지 않는다.
+RULES_DIR=".claude/rules"
+_prune() { [ -e "$RULES_DIR/$1" ] && rm -rf "$RULES_DIR/$1" && echo "  rule 제외: $1"; }
+
+if [ "$FRONTEND" != "y" ]; then
+  # Q1 = 기타: 프론트엔드 전용 core rule 제거
+  for f in core/coding-standards.md core/react-conventions.md core/react-hooks-patterns.md \
+           core/frontend-fundamentals.md core/accessibility.md core/nextjs-app-router.md \
+           core/state-and-server-state.md; do _prune "$f"; done
+fi
+[ "$STYLING" = "emotion" ]  || _prune optional/emotion.md       # 상호 배타 — 미선택 제거
+[ "$STYLING" = "tailwind" ] || _prune optional/tailwindcss-v4.md
+[ "$ZOD" = "y" ] || _prune optional/validation-patterns.md
+[ "$TS" = "y" ]  || _prune references/typescript                # 비-TS 프로젝트는 TS 레퍼런스 제거
+[ "$ZOD" = "y" ] || _prune references/zod                       # Zod 미사용 시 zod 레퍼런스 제거
+echo "📋 rule 선택 정리 완료 (선택 복사)"
 
 # hooks 실행 권한 부여
 [ -f ".claude/hooks/notify.sh" ] && chmod +x .claude/hooks/notify.sh
@@ -432,27 +458,28 @@ echo "✅ .claude/ 설치 완료"
 - 서버 상태: {Q4 답변}
 - 전역 상태: {Q5 답변}
 
-**포함할 @참조 (결정표 기반):**
+**CLAUDE.md에 포함할 @참조 (항상 로드되는 workflows 가이드만):**
 
-| 파일                                             | 위치                       | 포함 조건                            |
-| ------------------------------------------------ | -------------------------- | ------------------------------------ |
-| `model.md`                                       | `workflows/thinking/` | 항상                                     |
-| `required-patterns.md`                           | `workflows/quality-gates/` | 항상                                  |
-| `anti-patterns.md`                               | `workflows/quality-gates/` | 항상                                  |
-| `unit-test-conventions.md`                       | `rules/core/`              | 항상                                 |
-| `pr-guide.md`                                    | `workflows/git/`           | 항상                                 |
-| `policies.md`                                    | `rules/core/`              | 항상                                 |
-| `coding-standards.md`                            | `rules/core/`              | Q1 = Next.js 또는 React              |
-| `react-conventions.md`                           | `rules/core/`              | Q1 = Next.js 또는 React              |
-| `react-hooks-patterns.md`                        | `rules/core/`              | Q1 = Next.js 또는 React              |
-| `nextjs-app-router.md`                           | `rules/core/`              | Q1 = Next.js **AND** Q2 = App Router |
-| `state-and-server-state.md`                      | `rules/core/`              | Q4 = TanStack Query 또는 SWR         |
-| `accessibility.md`                               | `rules/core/`              | Q1 = Next.js 또는 React              |
-| `validation-patterns.md`                         | `rules/optional/`          | Q6 = Zod                             |
-| `tailwindcss-v4.md`                              | `rules/optional/`          | Q3 = TailwindCSS **AND** Q3-1 = v4   |
-| `emotion.md`                                     | `rules/optional/`          | Q3 = Emotion                         |
+| 파일                   | 위치                       | 포함 조건 |
+| ---------------------- | -------------------------- | --------- |
+| `model.md`             | `workflows/thinking/`      | 항상      |
+| `required-patterns.md` | `workflows/quality-gates/` | 항상      |
+| `anti-patterns.md`     | `workflows/quality-gates/` | 항상      |
+| `pr-guide.md`          | `workflows/git/`           | 항상      |
 
-> **Q1 = 기타**: `model.md`(`workflows/thinking/`), `required-patterns.md`, `anti-patterns.md`, `unit-test-conventions.md`, `pr-guide.md`(`workflows/git/`), `policies.md`만 포함. 프론트엔드 전용 rules (`coding-standards.md`, `react-*`, `nextjs-*`, `state-*`, `accessibility.md`)는 제외.
+> **rules는 `@참조`하지 않는다.** `.claude/rules/`는 Claude Code가 자동 발견하여 로드한다
+> (`paths` frontmatter 없으면 시작 시 항상, 있으면 일치 파일 작업 시). 어떤 rule이 설치되는지는
+> 2단계 **선택 복사**(FRONTEND/STYLING/ZOD/TS 플래그)가 결정한다. directive-generator는
+> rule을 CLAUDE.md에 `@참조`로 주입하지 않는다 — 자동발견과의 **이중 로드를 막기 위함**이다.
+>
+> 참고 — 2단계 선택 복사가 설치하는 rule:
+>
+> - **항상**: `policies.md`, `unit-test-conventions.md`
+> - **Q1 = Next.js/React**: `coding-standards`, `react-conventions`, `react-hooks-patterns`, `frontend-fundamentals`, `accessibility`, `nextjs-app-router`, `state-and-server-state`
+> - **Q3 = Emotion** → `optional/emotion.md` / **TailwindCSS v4** → `optional/tailwindcss-v4.md`
+> - **Q6 = Zod** → `optional/validation-patterns.md`
+> - **TypeScript** → `references/typescript/*` / **Zod** → `references/zod/*`
+> - **Q1 = 기타**: 프론트엔드 전용 core rule 전체 제외(위 항상 항목만 유지)
 
 **포함할 스킬 quick_ref (결정표 기반):**
 
