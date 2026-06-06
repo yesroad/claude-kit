@@ -42,6 +42,10 @@
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
     },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest"]
+    },
     "basic-memory": {
       "command": "uvx",
       "args": ["basic-memory", "mcp"]
