@@ -1,4 +1,4 @@
-# Instructions Index
+# Workflows Index
 
 > Claude Code 작업 효율화를 위한 가이드 모음
 
@@ -49,7 +49,7 @@
 
 | 문서                | 용도                                                         | 사용 시점    |
 | ------------------- | ------------------------------------------------------------ | ------------ |
-| `model.md` | READ→REACT→ANALYZE→…6단계 사고 모델 + 복잡도 판단 (SSOT)    | 모든 작업 시 |
+| `model.md` | SCAN→ANALYZE→PLAN→BUILD→CHECK 5단계 사고 모델 + 복잡도 판단 (SSOT)    | 모든 작업 시 |
 
 ### Git
 

@@ -1,6 +1,6 @@
 # cc-kit 파일 맵
 
-> 전체 파일 설명서 — 버전 1.1.0 (2026-04-05 기준)
+> 전체 파일 설명서 — 버전 1.4.0 (2026-06-06 기준)
 >
 > **이원화 구조**: 루트(`/`)와 `.claude/`에 동일 파일이 존재합니다.
 > 루트는 플러그인 배포용, `.claude/`는 설치된 프로젝트에서 사용됩니다.
@@ -15,7 +15,7 @@
 3. [Agents — 서브에이전트](#3-agents--서브에이전트)
 4. [Skills — 자동 트리거 스킬](#4-skills--자동-트리거-스킬)
 5. [Commands — 슬래시 커맨드](#5-commands--슬래시-커맨드)
-6. [Instructions — 작업 방식 가이드](#6-instructions--작업-방식-가이드)
+6. [Workflows — 작업 방식 가이드](#6-workflows--작업-방식-가이드)
 7. [Hooks & Scripts — 자동화](#7-hooks--scripts--자동화)
 8. [플러그인 메타데이터](#8-플러그인-메타데이터)
 9. [참조 체인 다이어그램](#9-참조-체인-다이어그램)
@@ -28,7 +28,7 @@
 |------|:-----:|------|
 | `CLAUDE.md` | ~25 | **플러그인 개발용 루트 지시문**. `model.md`, `required-patterns.md`, `anti-patterns.md`를 `<instructions>`로 로드. 플러그인 개발 시 참조 진입점. |
 | `README.md` | ~200 | **플러그인 사용 설명서**. 설치 방법, 인터뷰 항목, 커맨드/스킬 목록, 디렉토리 구조, MCP 서버 템플릿, 개발 사이클 설명. |
-| `CHANGELOG.md` | ~60 | **변경 이력**. Semantic Versioning 기반. 1.1.0 Basic Memory MCP·nextjs-reviewer·test 커맨드 추가, 1.0.2 cc-kit 리네임, 1.0.1 정합성 보정. |
+| `CHANGELOG.md` | ~90 | **변경 이력**. Semantic Versioning 기반. 최신 1.4.0(전면 정비·effort 2축·nextjs-reviewer 제거), 1.3.0 rules paths 조건부 로드, 1.2.0 /work 통합, 1.1.x FF 원칙·Basic Memory. |
 | `.mcp.json` | ~48 | **MCP 서버 설정 템플릿**. Atlassian(Jira/Confluence), Figma, Supabase, Playwright, shadcn(/ui 컴포넌트 검색), Basic Memory(세션 간 메모리) 연동 설정. `/setup` Q7에서 선택한 서버만 설치됨. |
 | `.gitignore` | ~21 | `settings.local.json`, `temp/`, `memory/` 등 로컬 전용 파일 제외. |
 
@@ -66,15 +66,14 @@
 
 ## 3. Agents — 서브에이전트
 
-`agents/` 하위 5개 파일. 각 에이전트는 특화된 역할과 기본 모델이 지정되어 있습니다.
+`agents/` 하위 4개 파일. 각 에이전트는 특화된 역할과 기본 모델·effort가 지정되어 있습니다.
 
-| 파일 | 줄 수 | 기본 모델 | 병렬 | 설명 |
-|------|:-----:|:---------:|:----:|------|
-| `explorer.md` | 131 | haiku | ✅ | **코드베이스 탐색 전문가**. Glob/Grep/Read로 파일·코드 패턴 검색. 절대 경로 사용, 3개 이상 도구 동시 호출로 탐색 속도 극대화. 탐색만 수행하고 코드 수정은 하지 않음. |
-| `code-reviewer.md` | 182 | sonnet | ✅ | **시니어 코드 리뷰어**. `git diff` 기반 변경사항 집중 분석. 보안/타입/상태관리/접근성 검사. 심각도별 분류(치명적/경고/제안)로 건설적 피드백. 포맷팅은 리뷰 대상 아님. |
-| `lint-fixer.md` | 97 | haiku | ✅ | **린트/타입 오류 자동 수정**. 간단한 오류(prefer-const, console.log)는 즉시 수정, 복잡한 타입 오류(TS2322)는 분석 후 수정. 하나씩 검사→수정→재검사 반복. |
-| `git-operator.md` | 143 | haiku | ❌ | **Git 관리 전문가**. 명시된 파일만 스테이징(`git add -A` 금지). 커밋 메시지 `{type}: {한글 설명}` 형식. 한 커밋 = 한 논리적 변경. 파괴적 명령(force push, reset --hard) 금지. |
-| `nextjs-reviewer.md` | - | sonnet | ✅ | **Next.js 레벨 진단 전문가**. Next.js 16 + React 19.2 기준 주니어/미들/시니어 레벨 판별. 파일 전체 분석 후 🟢🔵🔴 마커로 성장 포인트 제시. `/done`·`/refactor`·`component-creator` 후 호출. |
+| 파일 | 줄 수 | 모델 · effort | 병렬 | 설명 |
+|------|:-----:|:-------------:|:----:|------|
+| `explorer.md` | 131 | haiku · low | ✅ | **코드베이스 탐색 전문가**. Glob/Grep/Read로 파일·코드 패턴 검색. 절대 경로 사용, 3개 이상 도구 동시 호출로 탐색 속도 극대화. 탐색만 수행하고 코드 수정은 하지 않음. |
+| `code-reviewer.md` | 182 | sonnet · high | ✅ | **시니어 코드 리뷰어**. `git diff` 기반 변경사항 집중 분석. 보안/타입/상태관리/접근성 검사. 심각도별 분류(치명적/경고/제안)로 건설적 피드백. 포맷팅은 리뷰 대상 아님. |
+| `lint-fixer.md` | 97 | haiku · low | ✅ | **린트/타입 오류 자동 수정**. 간단한 오류(prefer-const, console.log)는 즉시 수정, 복잡한 타입 오류(TS2322)는 분석 후 수정. 하나씩 검사→수정→재검사 반복. |
+| `git-operator.md` | 143 | haiku · low | ❌ | **Git 관리 전문가**. 명시된 파일만 스테이징(`git add -A` 금지). 커밋 메시지 `{type}: {한글 설명}` 형식. 한 커밋 = 한 논리적 변경. 파괴적 명령(force push, reset --hard) 금지. |
 
 ---
 
@@ -155,7 +154,7 @@
 
 ---
 
-## 6. Instructions — 작업 방식 가이드
+## 6. Workflows — 작업 방식 가이드
 
 `workflows/` 하위 3개 카테고리. 에이전트 협업, 품질 검증, 워크플로우 패턴을 정의합니다.
 
@@ -163,7 +162,7 @@
 
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
-| `roster.md` | ~200 | **에이전트 카탈로그**. 6개 에이전트(explorer/code-reviewer/nextjs-reviewer/lint-fixer/Plan/git-operator)의 모델·병렬 여부·용도. 조합 패턴(탐색→구현, 구현→검증). 15개 스킬 카탈로그 및 연결 흐름. |
+| `roster.md` | ~180 | **에이전트 카탈로그**. 4개 에이전트(explorer/code-reviewer/lint-fixer/git-operator) + 빌트인 Plan의 모델·병렬 여부·용도. 조합 패턴(탐색→구현, 구현→검증). 15개 스킬 카탈로그 및 연결 흐름. |
 | `guide.md` | ~500 | **병렬 실행 원칙 + 실행 패턴 + 에러 복구 (SSOT)**. Agent Teams 우선(3개+ 에이전트 시), 일반 Task 병렬(폴백). 6가지 실행 패턴(Agent Teams, Single-Message Parallel, Fan-Out/Fan-In, Sequential Pipeline, Batching, Background). 에러 자동 재시도 프로토콜(3회차). |
 | `evaluation.md` | ~147 | **팀원 작업 평가 기준**. 10개 항목 100점 만점. 규칙 참조/코딩 표준/React 컨벤션/디자인 품질/테스트/Done 프로세스 등. A등급(90+) 목표. 팀 리드만 평가 수행. |
 | `done-process.md` | ~103 | **팀원 5단계 완료 프로세스**. 변경 분석 → 정책 키워드 탐지 → 린트 검증 → 커밋(Co-Authored-By 금지) → SendMessage 보고. 범위 밖 변경 금지, Skill 도구 사용 불가. |
@@ -209,8 +208,9 @@
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
 | `hooks/notify.sh` | ~33 | **크로스 플랫폼 알림 스크립트**. macOS: terminal-notifier(기본) → osascript(폴백). Linux: notify-send(libnotify). 환경변수 `NOTIFIER_TITLE`, `NOTIFIER_MESSAGE`로 커스텀. 터미널 벨(`printf '\a'`) 공통. |
-| `hooks/guard-check.sh` | ~45 | **코드 품질 가드레일 (PostToolUse)**. Write/Edit 후 자동 실행. `.ts/.tsx/.js/.jsx` 파일만 대상. 5가지 패턴 검사: any 타입, @ts-ignore, 하드코딩 자격증명, useState+fetch 조합, console.log. 위반 시 `exit 2`(경고, 블로킹 없음). |
-| `hooks/hooks.json` | ~30 | **훅 이벤트 설정**. `PermissionRequest`(notify.sh), `PostToolUse`(guard-check.sh, Write/Edit 후), `Stop`(notify.sh로 "응답 완료" 알림). `/setup` 시 설정된 경로로 `settings.json`에 자동 주입됨. |
+| `hooks/guard-check.sh` | ~55 | **코드 품질 best-effort 린트 (PostToolUse, 차단 아님)**. Write/Edit 후 `.ts/.tsx/.js/.jsx`에 8가지 패턴 검사: any, @ts-ignore, as any, 하드코딩 자격증명(키 prefix), useState+fetch, console.log, eslint-disable, useEffect([]). 주석 줄 제외. 위반 시 `exit 2`(경고). 정밀 검사는 ESLint/tsc/gitleaks에 위임. |
+| `hooks/guard-pretool.sh` | ~30 | **위험 Bash 차단 (PreToolUse)**. 도구 실행 전 STDIN 이벤트 JSON에서 명령 추출(jq), 광역 `rm -rf`·`git push --force`·`reset --hard`·포크밤·`mkfs`/`dd` 감지 시 `exit 2`로 실제 차단(PostToolUse와 달리 사전 차단 가능). |
+| `hooks/hooks.json` | ~40 | **훅 이벤트 설정**. `PreToolUse`(guard-pretool.sh, 위험 Bash 차단), `PermissionRequest`(notify.sh), `PostToolUse`(guard-check.sh, Write/Edit 후), `Stop`(notify.sh). `/setup` 시 `settings.json`에 자동 주입됨. |
 | `scripts/install-notifier.sh` | ~60 | **알림 의존성 설치 스크립트**. macOS: Homebrew + terminal-notifier 설치. Linux: apt-get/dnf/pacman으로 libnotify 설치. 훅 스크립트 실행 권한 부여(`chmod +x`). |
 
 ---
@@ -221,7 +221,7 @@
 
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
-| `plugin.json` | ~12 | **플러그인 메타데이터**. name: `cc-kit`, version: `1.0.1`, author: `yesroad`, license: MIT. |
+| `plugin.json` | ~12 | **플러그인 메타데이터**. name: `cc-kit`, version: `1.4.0`, author: `yesroad`, license: MIT. |
 | `marketplace.json` | ~24 | **마켓플레이스 등록 정보**. `yesroad` 마켓플레이스에 `cc-kit` 등록. 설치 명령: `/plugin install cc-kit@yesroad`. |
 
 ---
@@ -281,11 +281,11 @@ migration-helper  → test-unit 또는 test-integration (범위에 따라)
 | Rules (core) | 9 | 코딩 규칙 (프레임워크별 조건부 설치) |
 | Rules (optional) | 3 | emotion, tailwindcss-v4, validation-patterns |
 | Rules (references) | 9 | TypeScript 6 + Zod 3 |
-| Agents | 5 | 특화 서브에이전트 |
+| Agents | 4 | 특화 서브에이전트 |
 | Skills (SKILL.md) | 15 | 자동 트리거 |
 | Skills (references) | 12 | web-design 9 + nextjs-scaffold 3 |
-| Commands | 8 | 슬래시 커맨드 |
-| Instructions | 11 | 멀티에이전트 6 + 검증 3 + 워크플로우 3(thinking-model 포함) + git 1 + README |
+| Commands | 7 | 슬래시 커맨드 |
+| Workflows | 11 | 멀티에이전트 6 + 검증 3 + 워크플로우 3(thinking-model 포함) + git 1 + README |
 | Hooks & Scripts | 3 | 알림 자동화 |
 | 메타데이터 | 2 | plugin.json, marketplace.json |
 | **.claude/ 사본** | **선택 복사** | 스택별 부분 설치 (rules는 선택된 것만) |

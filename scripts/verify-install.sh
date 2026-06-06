@@ -68,7 +68,7 @@ echo "검증 경로: $(pwd)/.claude"
 # ---------------------------------------------------------------------------
 section "1. agents/"
 
-EXPECTED_AGENTS=("code-reviewer.md" "explore.md" "git-operator.md" "lint-fixer.md" "nextjs-reviewer.md")
+EXPECTED_AGENTS=("code-reviewer.md" "explorer.md" "git-operator.md" "lint-fixer.md")
 EXPECTED_AGENT_COUNT=${#EXPECTED_AGENTS[@]}
 
 if [ ! -d ".claude/agents" ]; then
@@ -98,16 +98,16 @@ fi
 section "2. skills/"
 
 EXPECTED_SKILLS=(
-  "agents-generator"
   "bug-fix"
+  "code-level-review"
   "code-quality"
   "commit-helper"
   "component-creator"
+  "directive-generator"
   "docs-creator"
   "migration-helper"
-  "next-project-structure"
-  "nextjs-coding-convention"
-  "pr-review-responder"
+  "nextjs-scaffold"
+  "pr-responder"
   "refactor"
   "test-e2e"
   "test-integration"

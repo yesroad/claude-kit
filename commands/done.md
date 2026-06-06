@@ -206,7 +206,7 @@ git reset HEAD {제외할 파일}
 
 ### 7. PR 생성 (GitHub)
 
-> PR 제목 형식, 섹션 작성 기준, 금지 사항: `@../instructions/git/pr-guide.md`
+> PR 제목 형식, 섹션 작성 기준, 금지 사항: `@../workflows/git/pr-guide.md`
 
 `pr-guide.md`의 템플릿과 규칙에 따라 PR을 생성한다.
 

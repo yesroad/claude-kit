@@ -213,8 +213,9 @@ fi
 
 if [ ! -d "$PLUGIN_ROOT" ]; then
   echo "GitHub에서 cc-kit을 가져옵니다..."
-  git clone --depth 1 https://github.com/yesroad/cc-kit.git /tmp/cc-kit_install
-  PLUGIN_ROOT="/tmp/cc-kit_install"
+  CCKIT_TMP=$(mktemp -d)  # 고정 /tmp 경로 대신 무작위 임시 디렉토리(symlink/race 방지)
+  git clone --depth 1 https://github.com/yesroad/cc-kit.git "$CCKIT_TMP"
+  PLUGIN_ROOT="$CCKIT_TMP"
 fi
 
 mkdir -p .claude
@@ -248,6 +249,7 @@ echo "📋 rule 선택 정리 완료 (선택 복사)"
 # hooks 실행 권한 부여
 [ -f ".claude/hooks/notify.sh" ] && chmod +x .claude/hooks/notify.sh
 [ -f ".claude/hooks/guard-check.sh" ] && chmod +x .claude/hooks/guard-check.sh
+[ -f ".claude/hooks/guard-pretool.sh" ] && chmod +x .claude/hooks/guard-pretool.sh
 
 # settings.json에 harness hooks 주입 (없으면 생성, 있으면 머지)
 python3 - <<'PYEOF'
@@ -260,6 +262,15 @@ if os.path.exists(settings_path):
         settings = json.load(f)
 
 hooks = settings.setdefault("hooks", {})
+
+# PreToolUse 훅 (guard-pretool, 위험 Bash 차단) — 이미 있으면 건드리지 않음
+if "PreToolUse" not in hooks:
+    hooks["PreToolUse"] = [{
+        "matcher": "Bash",
+        "hooks": [{"type": "command",
+                   "command": "bash \"./.claude/hooks/guard-pretool.sh\"",
+                   "timeout": 5}]
+    }]
 
 # PostToolUse 훅 (guard-check) — 이미 있으면 건드리지 않음
 if "PostToolUse" not in hooks:
@@ -421,12 +432,13 @@ with open(manifest_path, "w") as f:
 print(f"📋 manifest.json 생성 완료 — {len(files)}개 파일 기록")
 PYEOF
 
-[ "$PLUGIN_ROOT" = "/tmp/cc-kit_install" ] && rm -rf /tmp/cc-kit_install
+[ -n "$CCKIT_TMP" ] && [ -d "$CCKIT_TMP" ] && rm -rf "$CCKIT_TMP"
 
 # .mcp.json 보안 안내
 if [ -f ".mcp.json" ]; then
-  if ! grep -q ".mcp.json" .gitignore 2>/dev/null; then
-    echo "⚠️  .mcp.json에 API 키를 입력한 후 .gitignore에 추가하세요: echo '.mcp.json' >> .gitignore"
+  if ! grep -qx ".mcp.json" .gitignore 2>/dev/null; then
+    echo ".mcp.json" >> .gitignore
+    echo "🔒 .mcp.json을 .gitignore에 추가했습니다 — API 키 평문 커밋을 방지합니다."
   fi
 fi
 

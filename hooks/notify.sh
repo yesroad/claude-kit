@@ -18,7 +18,12 @@ case "$(uname -s)" in
       "$NOTIFIER" -title "$TITLE" -message "$MESSAGE" -sound Glass
     else
       # terminal-notifier 미설치 시 osascript 폴백
-      osascript -e "display notification \"$MESSAGE\" with title \"$TITLE\" sound name \"Glass\"" 2>/dev/null
+      # 값을 argv로 바인딩(문자열 보간 금지) — AppleScript 인젝션 방지
+      osascript - "$TITLE" "$MESSAGE" <<'OSA' 2>/dev/null
+on run argv
+  display notification (item 2 of argv) with title (item 1 of argv) sound name "Glass"
+end run
+OSA
     fi
     ;;
   Linux*)

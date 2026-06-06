@@ -3,12 +3,13 @@ name: git-operator
 description: git 상태 확인, 스테이징, 커밋, 로그/브랜치 관리. 프로젝트 커밋 규칙 준수.
 tools: Read, Grep, Glob, Bash
 model: haiku
+effort: low
 ---
 
-@../instructions/validation/required-behaviors.md
-@../instructions/validation/forbidden-patterns.md
-@../instructions/validation/release-readiness-gate.md
-@../instructions/workflow-patterns/thinking-model.md
+@../workflows/quality-gates/required-patterns.md
+@../workflows/quality-gates/anti-patterns.md
+@../workflows/quality-gates/release-gate.md
+@../workflows/thinking/model.md
 
 # Git Operator Agent
 
