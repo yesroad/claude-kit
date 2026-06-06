@@ -4,6 +4,29 @@
 
 ---
 
+## [1.4.0] - 2026-06-06
+
+### Changed
+
+- **플러그인 전면 정비**: 미완 리팩토링(`instructions/`→`workflows/`) 잔재 정리, 매니페스트·문서 드리프트 해소
+- **모델·effort 2축 라우팅 도입**: 복잡도 → 모델 + effort(`workflows/coordination/guide.md`·`workflows/thinking/model.md`·`agents/*.md` frontmatter). 별칭(`haiku`/`sonnet`/`opus`)은 최신 세대(Haiku 4.5/Sonnet 4.6/Opus 4.8)를 자동 추적 — 풀ID 핀하지 않음. `judgeComplexity`→`selectModelConfig`(복잡도→{model, effort}) 리팩토링
+- **보안**: `notify.sh` osascript AppleScript 인젝션 차단(argv 바인딩), `guard-check.sh` 자격증명 패턴 강화 + best-effort 린트로 명시, 설치 스크립트 `mktemp`·`curl|bash` 가드, `.mcp.json` 자동 `.gitignore`
+- **버전 통일 1.4.0**: `.claude-plugin/plugin.json`·`marketplace.json`·`FILE-MAP.md`(이전 1.0.0/1.0.1/1.1.0 불일치 해소)
+- **`verify-install.sh` 동기화**: EXPECTED 배열을 실제 파일명으로(`explore`→`explorer`, 구식 스킬명 4개 교정)
+- 깨진 `@참조` 5건 수정(`git-operator.md`·`done.md`의 `instructions/`→`workflows/`)
+
+### Added
+
+- **`hooks/guard-pretool.sh`**: PreToolUse 위험 Bash 차단 훅(광역 `rm -rf`·force push·hard reset → `exit 2`로 사전 차단)
+- **ultracode·Dynamic Workflows opt-in 안내**(`guide.md`), `start.md` HIGH 복잡도에 `/effort ultracode` 힌트, `ultracode`/`ultrathink`/`effort` 용어 구별
+
+### Removed
+
+- **루트 `plugin.json`·`marketplace.json`**: `.claude-plugin/` canonical만 유지(중복 매니페스트 제거)
+- **`agents/nextjs-reviewer.md`**: 어디서도 호출되지 않는 orphan — 레벨 진단은 `code-level-review` 스킬로 일원화
+
+---
+
 ## [1.3.0] - 2026-06-06
 
 ### Changed

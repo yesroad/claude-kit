@@ -53,39 +53,42 @@ SCAN → ANALYZE → PLAN → BUILD → CHECK
 | BUILD          | ✅  | ✅     | ✅   |
 | CHECK          | ✅  | ✅     | ✅   |
 
-### 에이전트/모델 연계
+### 에이전트/모델/effort 연계
 
-| 복잡도 | 에이전트            | 모델          |
-| ------ | ------------------- | ------------- |
-| LOW    | - (직접 처리)       | -             |
-| MEDIUM | explore, code-reviewer | haiku, sonnet |
-| HIGH   | Plan, code-reviewer | opus, sonnet  |
+| 복잡도 | 에이전트            | 모델          | effort                 |
+| ------ | ------------------- | ------------- | ---------------------- |
+| LOW    | - (직접 처리)       | -             | `low`                  |
+| MEDIUM | explore, code-reviewer | haiku, sonnet | `medium`               |
+| HIGH   | Plan, code-reviewer | opus, sonnet  | `high` (대규모 `xhigh`) |
+
+> 별칭은 최신 세대를 자동 추적한다(haiku 4.5 / sonnet 4.6 / opus 4.8). 모델이 능력을, effort가 그 안의 추론 깊이를 정한다. 상세: `@../coordination/guide.md`
 
 ### 병렬 실행 결합
 
 복잡도가 높아도 독립 작업은 병렬 실행:
 
 ```typescript
-// HIGH 복잡도에서도 탐색은 병렬
-Task((subagent_type = 'explore'), (model = 'haiku'), (prompt = '현재 구조 분석'));
-Task((subagent_type = 'explore'), (model = 'haiku'), (prompt = '의존성 파악'));
-Task((subagent_type = 'explore'), (model = 'haiku'), (prompt = '테스트 현황'));
+// HIGH 복잡도에서도 탐색은 병렬 — 탐색은 추론이 거의 불필요하므로 effort 최소
+Task((subagent_type = 'explore'), (model = 'haiku'), (effort = 'low'), (prompt = '현재 구조 분석'));
+Task((subagent_type = 'explore'), (model = 'haiku'), (effort = 'low'), (prompt = '의존성 파악'));
+Task((subagent_type = 'explore'), (model = 'haiku'), (effort = 'low'), (prompt = '테스트 현황'));
 
-// 결과 수집 후 순차적 계획
-Task((subagent_type = 'Plan'), (model = 'opus'), (prompt = '분석 결과 기반 계획'));
+// 결과 수집 후 순차적 계획 — 계획 수립은 최고 effort
+Task((subagent_type = 'Plan'), (model = 'opus'), (effort = 'xhigh'), (prompt = '분석 결과 기반 계획'));
 ```
 
-### 자동 복잡도 판단
+### 자동 복잡도 → 모델·effort 판단
 
 ```typescript
-const judgeComplexity = (task: string): 'LOW' | 'MEDIUM' | 'HIGH' => {
-  if (affectedFiles.length <= 1) return 'LOW';
-  if (affectedFiles.length <= 5) return 'MEDIUM';
-  return 'HIGH';
-  // 키워드 기반
-  if (task.includes('리팩토링') || task.includes('아키텍처')) return 'HIGH';
-  if (task.includes('추가') || task.includes('수정')) return 'MEDIUM';
-  return 'LOW';
+// 복잡도와 함께 model·effort를 반환한다.
+// 키워드를 먼저 평가해 '파일 수만으로는 놓치는' 고복잡도(리팩토링·아키텍처)를 잡는다.
+const selectModelConfig = (task: string, affectedFiles: string[]) => {
+  if (task.includes('리팩토링') || task.includes('아키텍처')) {
+    return { complexity: 'HIGH', model: 'opus', effort: 'xhigh' } as const;
+  }
+  if (affectedFiles.length <= 1) return { complexity: 'LOW', model: 'haiku', effort: 'low' } as const;
+  if (affectedFiles.length <= 5) return { complexity: 'MEDIUM', model: 'sonnet', effort: 'medium' } as const;
+  return { complexity: 'HIGH', model: 'opus', effort: 'high' } as const;
 };
 ```
 

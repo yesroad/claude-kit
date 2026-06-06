@@ -1,6 +1,6 @@
 ---
 name: docs-creator
-description: AI 코딩 도구 문서 작성. CLAUDE.md, AGENTS.md, SKILL.md, COMMAND.md, rules/*.md 작성/수정 요청 시 이 스킬을 활성화. 새 프로젝트 세팅, 스킬/커맨드 신규 작성, 규칙 추가 모두 포함.
+description: AI 코딩 도구 문서 작성 — SKILL.md, COMMAND.md, rules/*.md 등 메타문서 저작/수정 시 활성화. 스킬/커맨드 신규 작성, 규칙 추가 포함. 단, CLAUDE.md·AGENTS.md 루트 지시문의 신규 생성/업데이트는 directive-generator를 사용.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Write, Edit
 metadata:
@@ -44,7 +44,7 @@ metadata:
 | --------------- | ------------------------------ | ----------- |
 | **PARALLEL**    | 단일 메시지 여러 에이전트 호출 | 5-10배 속도 |
 | **DELEGATE**    | 전문 에이전트 즉시 위임        | 품질 향상   |
-| **SMART MODEL** | 작업 복잡도별 모델             | 비용 최적화 |
+| **SMART MODEL** | 작업 복잡도별 모델 · effort    | 비용 최적화 |
 
 ```typescript
 // ❌ 순차 (120초)
@@ -92,7 +92,7 @@ Task(subagent_type="explore", model="haiku", prompt="기존 규칙 분석")
 
 <instructions>
 @path/to/common.md
-@.claude/docs/library/[lib]/index.md
+@.claude/rules/references/[lib]/   # 라이브러리 레퍼런스가 설치된 경우만 (예: typescript, zod)
 </instructions>
 
 ---

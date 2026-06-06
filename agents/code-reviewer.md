@@ -3,6 +3,7 @@ name: code-reviewer
 description: 코드 품질, 규칙 준수, 보안, 유지보수성 검토. git diff 기반 변경사항 집중 분석.
 tools: Read, Grep, Glob, Bash
 model: sonnet
+effort: high
 ---
 
 @../workflows/coordination/guide.md

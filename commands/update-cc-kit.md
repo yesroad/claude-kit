@@ -47,8 +47,9 @@ fi
 
 if [ ! -d "$PLUGIN_ROOT" ]; then
   echo "GitHub에서 cc-kit 최신 버전을 가져옵니다..."
-  git clone --depth 1 https://github.com/yesroad/cc-kit.git /tmp/cc-kit_update
-  PLUGIN_ROOT="/tmp/cc-kit_update"
+  CCKIT_TMP=$(mktemp -d)  # 무작위 임시 디렉토리(symlink/race 방지)
+  git clone --depth 1 https://github.com/yesroad/cc-kit.git "$CCKIT_TMP"
+  PLUGIN_ROOT="$CCKIT_TMP"
 fi
 
 echo "📦 플러그인 소스: $PLUGIN_ROOT"
@@ -139,6 +140,7 @@ UPDATE_DIRS="rules workflows agents skills commands hooks scripts"
 
 ```bash
 [ -f ".claude/hooks/notify.sh" ] && chmod +x .claude/hooks/notify.sh
+[ -f ".claude/hooks/guard-check.sh" ] && chmod +x .claude/hooks/guard-check.sh
 ```
 
 ---
@@ -226,7 +228,7 @@ PYEOF
 ## 7단계: 임시 파일 정리
 
 ```bash
-[ "$PLUGIN_ROOT" = "/tmp/cc-kit_update" ] && rm -rf /tmp/cc-kit_update
+[ -n "$CCKIT_TMP" ] && [ -d "$CCKIT_TMP" ] && rm -rf "$CCKIT_TMP"
 ```
 
 ---

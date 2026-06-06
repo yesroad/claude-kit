@@ -9,8 +9,10 @@ case "$(uname -s)" in
   Darwin*)
     # macOS: Homebrew + terminal-notifier
     if ! command -v brew &>/dev/null; then
-      echo "Homebrew가 없습니다. 설치 중..."
-      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      echo "⚠️  Homebrew가 없습니다. 보안상 원격 스크립트를 자동 실행하지 않습니다."
+      echo "   https://brew.sh 에서 설치한 후 이 스크립트를 다시 실행하세요."
+      echo "   (수동 설치 명령: /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\")"
+      exit 1
     else
       echo "Homebrew 확인 완료"
     fi
@@ -44,12 +46,16 @@ case "$(uname -s)" in
     ;;
 esac
 
-# 훅 스크립트 실행 권한 부여
-chmod +x .claude/hooks/notify.sh
+# 훅 스크립트 실행 권한 부여 (존재할 때만 — set -e 하에서 안전)
+[ -f .claude/hooks/notify.sh ] && chmod +x .claude/hooks/notify.sh
+[ -f .claude/hooks/guard-check.sh ] && chmod +x .claude/hooks/guard-check.sh
+[ -f .claude/hooks/guard-pretool.sh ] && chmod +x .claude/hooks/guard-pretool.sh
 echo "훅 스크립트 권한 설정 완료"
 
-# 테스트 알림
-echo "테스트 알림 발송 중..."
-bash .claude/hooks/notify.sh
+# 테스트 알림 (훅이 설치된 경우만)
+if [ -f .claude/hooks/notify.sh ]; then
+  echo "테스트 알림 발송 중..."
+  bash .claude/hooks/notify.sh
+fi
 
 echo "설정 완료!"

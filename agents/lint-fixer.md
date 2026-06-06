@@ -3,6 +3,7 @@ name: lint-fixer
 description: tsc/eslint 오류 수정. 간단한 오류는 즉시 수정.
 tools: Read, Edit, Bash
 model: haiku
+effort: low
 ---
 
 @../workflows/coordination/guide.md

@@ -168,6 +168,7 @@ Task(
 Task(
   (subagent_type = "Plan"),
   (model = "opus"),
+  (effort = "xhigh"),
   (prompt = `
   작업: $ARGUMENTS
   요구사항: {요약된 요구사항}
@@ -178,6 +179,8 @@ Task(
 `),
 );
 ```
+
+> **대규모 작업**(다수 파일·도메인 리팩토링·전면 감사)이면 `/effort ultracode`를 고려한다 — `xhigh` 추론 + Dynamic Workflows 자동 오케스트레이션으로 확장된다. Opus는 Max/Team/Enterprise에서 1M context를 자동 활용하므로 대규모 계획도 컨텍스트 한계가 적다. (일반 작업은 `high`/`xhigh`로 유지해 비용을 관리한다.)
 
 ---
 

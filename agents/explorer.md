@@ -3,6 +3,7 @@ name: explore
 description: 코드베이스 빠른 탐색 전문가. 파일/코드 패턴 검색, 구현 위치 파악.
 tools: Read, Glob, Grep, Bash
 model: haiku
+effort: low
 ---
 
 @../workflows/coordination/guide.md
