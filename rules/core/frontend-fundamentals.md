@@ -24,8 +24,7 @@ function SubmitButton({ role }: { role: 'viewer' | 'admin' }) {
 }
 
 // ✅ 권한별로 완전 분리 — 각 컴포넌트가 하나의 맥락만 다룸
-function ViewerSubmitButton() { ... }
-function AdminSubmitButton() { ... }
+function ViewerSubmitButton() { ... }   function AdminSubmitButton() { ... }
 ```
 
 **구현 상세 추상화**
@@ -39,53 +38,41 @@ export default function DashboardPage() {
 }
 
 // ✅ AuthGuard로 추상화 — 페이지는 핵심 렌더링만 담당
-export default function DashboardPage() {
-  return (
-    <AuthGuard>
-      <Dashboard />
-    </AuthGuard>
-  );
-}
+const DashboardPage = () => <AuthGuard><Dashboard /></AuthGuard>;
 ```
 
 **로직 종류에 따라 Hook 쪼개기**
 
 ```typescript
-// ❌ usePageState()가 모든 파라미터를 한 번에 관리
+// ❌ usePageState()가 모든 파라미터(cardId, statementId, dateFrom...)를 한 번에 관리
 // → Hook이 커질수록 이해 어렵고, 어느 파라미터가 바뀌어도 모든 구독 컴포넌트 리렌더링
-function usePageState() {
-  // cardId, statementId, dateFrom, dateTo, statusList 전부 관리
-}
+function usePageState() { /* ... */ }
 
 // ✅ 파라미터별 독립 Hook으로 분리 → 명확한 이름, 좁은 영향 범위, 성능 향상
 function useCardIdQueryParam() { ... }
 function useStatementIdQueryParam() { ... }
-function useDateRangeQueryParam() { ... }
 ```
 
 ### 이름 붙이기
 
 **복잡한 조건에 이름 붙이기**
 
+이름이 필요한 때: 로직이 복잡하거나, 재사용·단위 테스트가 필요할 때.
+
 ```typescript
 // ❌ filter, some, &&가 중첩된 익명 조건
-const result = items.filter(item =>
-  categories.some(c => c.id === item.categoryId) &&
-  item.price >= minPrice && item.price <= maxPrice
-);
+items.filter(i => categories.some(c => c.id === i.categoryId) && i.price >= min && i.price <= max);
 
-// ✅ 의도를 담은 이름으로 분리 — 이름이 필요한 때: 로직 복잡, 재사용, 단위 테스트 필요
-const isSameCategory = (item: Item) => categories.some(c => c.id === item.categoryId);
-const isPriceInRange = (item: Item) => item.price >= minPrice && item.price <= maxPrice;
-const result = items.filter(item => isSameCategory(item) && isPriceInRange(item));
+// ✅ 의도를 담은 이름으로 분리
+const isSameCategory = (i: Item) => categories.some(c => c.id === i.categoryId);
+const isPriceInRange = (i: Item) => i.price >= min && i.price <= max;
+const result = items.filter(i => isSameCategory(i) && isPriceInRange(i));
 ```
 
 **매직 넘버에 이름 붙이기**
 
 ```typescript
-// ❌ 300이 애니메이션 대기인지, API 지연인지, 테스트 코드인지 모름
-await delay(300);
-
+// ❌ 300이 애니메이션 대기인지, API 지연인지, 테스트 코드인지 모름  →  await delay(300);
 // ✅ 의도 명확화
 const ANIMATION_DELAY_MS = 300;
 await delay(ANIMATION_DELAY_MS);
@@ -115,15 +102,7 @@ const label = (() => {
 })();
 ```
 
-**왼쪽에서 오른쪽으로 읽히게 하기**
-
-```typescript
-// ❌ a를 두 번 확인해야 인지 부담 증가
-a >= b && a <= c
-
-// ✅ 수학 부등식 b ≤ a ≤ c 처럼 자연스럽게
-b <= a && a <= c
-```
+**왼쪽에서 오른쪽으로 읽히게 하기** — `a >= b && a <= c` 대신 수학 부등식처럼 `b <= a && a <= c` (a를 한 번만 인지).
 
 ---
 
@@ -138,8 +117,7 @@ b <= a && a <= c
 import http from './http';
 
 // ✅ 기능을 명시하는 고유한 이름 → 이름만 보고 인증 요청임을 파악 가능
-import httpService from './httpService';
-httpService.getWithAuth(url);
+import httpService from './httpService';   // httpService.getWithAuth(url)
 ```
 
 **규칙**: 커스텀 모듈이 외부 라이브러리(axios, http, fetch 등)와 동일한 이름을 사용하면 안 된다.
@@ -150,15 +128,9 @@ httpService.getWithAuth(url);
 // ❌ API 관련 Hook 반환 타입 불일치 → 사용법을 매번 확인해야 함
 function useUser() { return useQuery(...) }           // Query 객체
 function useServerTime() { return useQuery(...).data } // data만
+// ✅ API 관련 Hook은 일관되게 Query 객체 반환 (둘 다 useQuery(...) 그대로 반환)
 
-// ✅ API 관련 Hook은 일관되게 Query 객체 반환
-function useUser() { return useQuery(...) }
-function useServerTime() { return useQuery(...) }
-
-// ❌ 유효성 검사 함수 반환 타입 불일치 → 조건문 오동작 위험
-function checkIsNameValid(name: string): boolean { ... }
-function checkIsAgeValid(age: number): { ok: boolean; reason?: string } { ... }
-
+// ❌ 유효성 검사 함수 반환 타입 불일치(boolean vs 객체) → 조건문 오동작 위험
 // ✅ Discriminated Union으로 통일
 type ValidationResult = { ok: true } | { ok: false; reason: string };
 function checkIsNameValid(name: string): ValidationResult { ... }
@@ -175,7 +147,7 @@ async function fetchBalance(userId: string) {
   return balance;
 }
 
-// ✅ 함수가 이름 그대로만 동작 — 로깅은 호출부에서 명시적으로
+// ✅ 함수는 이름 그대로만 동작 — 로깅은 호출부에서 명시적으로
 async function fetchBalance(userId: string) {
   return api.get(`/balance/${userId}`);
 }
@@ -194,22 +166,11 @@ logging.log("balance_fetched");
 
 ```
 // ❌ 종류별 분류만 — 의존 관계 파악 어렵고 기능 삭제 시 관련 파일이 남겨짐
-src/
-├── components/  (모든 컴포넌트)
-├── hooks/       (모든 훅)
-└── constants/   (모든 상수)
+src/{components,hooks,constants}/  (모든 컴포넌트·훅·상수를 종류별로)
 
 // ✅ 도메인별 하위 디렉토리 — 비정상적인 cross-domain import가 눈에 띔
-src/
-├── components/  (전체 공유)
-├── hooks/       (전체 공유)
-└── domains/
-    ├── payment/
-    │   ├── components/
-    │   └── hooks/
-    └── order/
-        ├── components/
-        └── hooks/
+src/{components,hooks}/  (전체 공유)
+src/domains/{payment,order}/{components,hooks}/  (도메인별)
 ```
 
 > `nextjs-scaffold` 스킬의 App Router 폴더 구조 패턴과 동일 원칙.
@@ -241,13 +202,11 @@ await delay(ANIMATION_DELAY_MS);
 ### 책임을 하나씩 관리하기
 
 ```typescript
-// ❌ usePageState()가 모든 쿼리 파라미터 담당
-// → 수정 시 이 Hook을 사용하는 모든 컴포넌트에 영향
+// ❌ usePageState()가 모든 쿼리 파라미터 담당 → 수정 시 사용하는 모든 컴포넌트에 영향
 function usePageState() { /* cardId, statementId, dateFrom... */ }
 
 // ✅ 파라미터별 단일 책임 Hook → 수정 영향 범위 최소화
-function useCardIdQueryParam() { ... }
-function useStatementIdQueryParam() { ... }
+function useCardIdQueryParam() { ... }   function useStatementIdQueryParam() { ... }
 ```
 
 ### 중복 코드 허용하기
@@ -269,10 +228,8 @@ Props Drilling은 부모-자식 간 불필요한 결합의 신호. prop 이름�
 
 ```tsx
 // ✅ 1순위: 조합(Composition) 패턴 — children으로 직접 구성
-function Layout({ children }: { children: React.ReactNode }) {
-  return <div className="layout">{children}</div>;
-}
-// userId를 Layout을 통해 drilling하지 않아도 됨
+// Layout을 통해 userId를 drilling하지 않아도 됨
+function Layout({ children }: { children: React.ReactNode }) { ... }
 <Layout><UserProfile userId={userId} /></Layout>
 
 // ✅ 2순위: Context API — 트리가 깊고 조합으로 해결 안 될 때만 (최후 수단)

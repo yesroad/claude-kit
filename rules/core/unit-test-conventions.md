@@ -1,3 +1,9 @@
+---
+paths:
+  - "**/*.{test,spec}.{ts,tsx}"
+  - "**/__tests__/**/*.{ts,tsx}"
+---
+
 # 순수 함수 유닛 테스트 규칙
 
 순수 함수(utils, helpers, lib, adapters)에 대한 유닛 테스트 작성 규칙입니다.
@@ -41,14 +47,11 @@
 import { 함수명 } from '../파일명';
 
 describe('함수명', () => {
-  // 날짜/시간 의존 함수는 필수
+  // 날짜/시간 의존 함수만 아래 타이머 고정 추가 (불필요하면 생략)
   beforeAll(() => {
     jest.useFakeTimers().setSystemTime(new Date('2024-01-15T00:00:00.000Z'));
   });
-
-  afterAll(() => {
-    jest.useRealTimers();
-  });
+  afterAll(() => jest.useRealTimers());
 
   describe('정상 케이스', () => {
     it('일반적인 입력에 대해 올바른 결과 반환', () => {
@@ -83,19 +86,17 @@ describe('함수명', () => {
 
 ---
 
-## 날짜 함수 필수 케이스
+## 함수 유형별 필수 케이스
 
-날짜 계산 함수는 반드시 `jest.useFakeTimers()`로 시간을 고정하고 다음 케이스를 포함합니다:
+아래는 **날짜 함수** 대표 예시입니다. 계산·매핑 함수도 동일한 구조(정상 → 경계값 → 에러)를 따르며, 차이점만 아래에 정리합니다.
 
 ```typescript
 describe('formatDate', () => {
+  // 날짜 함수는 반드시 타이머 고정
   beforeAll(() => {
     jest.useFakeTimers().setSystemTime(new Date('2024-01-15T00:00:00.000Z'));
   });
-
-  afterAll(() => {
-    jest.useRealTimers();
-  });
+  afterAll(() => jest.useRealTimers());
 
   it('유효한 날짜를 지정 포맷으로 반환', () => {
     expect(formatDate(new Date('2024-01-15'))).toBe('2024-01-15');
@@ -111,51 +112,19 @@ describe('formatDate', () => {
 });
 ```
 
----
-
-## 계산 함수 필수 케이스
-
-```typescript
-describe('clamp', () => {
-  it('범위 내 값은 그대로 반환', () => {
-    expect(clamp(5, 0, 10)).toBe(5);
-  });
-
-  it('최솟값 미만이면 최솟값 반환', () => {
-    expect(clamp(-1, 0, 10)).toBe(0);
-  });
-
-  it('최댓값 초과면 최댓값 반환', () => {
-    expect(clamp(11, 0, 10)).toBe(10);
-  });
-
-  it('소수점 입력 처리', () => {
-    expect(clamp(5.5, 0, 10)).toBe(5.5);
-  });
-});
-```
-
----
-
-## 매핑/변환 함수 필수 케이스
-
-```typescript
-describe('mapUserToDto', () => {
-  it('모든 필드가 있는 경우 올바르게 변환', () => {
-    const user = { id: '1', name: 'Alice', age: 30 };
-    expect(mapUserToDto(user)).toEqual({ userId: '1', displayName: 'Alice' });
-  });
-
-  it('optional 필드가 없는 경우 기본값 적용', () => {
-    const user = { id: '1', name: 'Alice' };
-    expect(mapUserToDto(user)).toEqual({ userId: '1', displayName: 'Alice' });
-  });
-
-  it('null 입력 시 기본 DTO 반환', () => {
-    expect(mapUserToDto(null)).toEqual(DEFAULT_USER_DTO);
-  });
-});
-```
+- **날짜 함수**: `jest.useFakeTimers()`로 시간 고정 필수. 정상 포맷 / `null` / 잘못된 문자열을 커버.
+- **계산 함수** (`clamp` 등): 범위 내 그대로 반환 / 최솟값 미만 → 최솟값 / 최댓값 초과 → 최댓값 / 소수점 처리를 커버. 타이머 불필요.
+  ```typescript
+  expect(clamp(5, 0, 10)).toBe(5);
+  expect(clamp(-1, 0, 10)).toBe(0);
+  expect(clamp(11, 0, 10)).toBe(10);
+  ```
+- **매핑/변환 함수** (`mapUserToDto` 등): 모든 필드 존재 시 정상 변환 / optional 필드 누락 시 기본값 / `null` 입력 시 기본 DTO 반환을 커버. 타이머 불필요.
+  ```typescript
+  expect(mapUserToDto({ id: '1', name: 'Alice', age: 30 }))
+    .toEqual({ userId: '1', displayName: 'Alice' });
+  expect(mapUserToDto(null)).toEqual(DEFAULT_USER_DTO);
+  ```
 
 ---
 

@@ -36,31 +36,31 @@
 
 ## 2. Rules — 코딩 규칙
 
-`rules/core/` 하위 8개 파일. 프로젝트에 설치되면 `.claude/rules/core/`로 자동 로드되어 모든 코드 작성에 적용됩니다.
+`rules/core/` 하위 9개 파일. `/setup` **선택 복사**로 스택에 맞는 것만 `.claude/rules/core/`에 설치되며, 각 파일의 `paths` frontmatter에 따라 **조건부 로드**된다(`paths` 없으면 항상 로드).
 
 ### 핵심 사고 모델
 
 | 파일 | 줄 수 | 적용 대상 | 설명 |
 |------|:-----:|-----------|------|
-| `policies.md` | ~80 | 모든 프로젝트 | **정책(Policy) 정의 기준**. 날짜/기간 계산, 가격/할인, 상태 전이, 필터 기본값, disabled 조건, 권한 규칙을 "정책"으로 분류. 정책 변경 시 탐색→확인→테스트→변경 4단계 프로세스. 텍스트/스타일/변수명은 정책이 아님. |
+| `policies.md` | ~80 | 항상 로드 | **정책(Policy) 정의 기준**. 날짜/기간 계산, 가격/할인, 상태 전이, 필터 기본값, disabled 조건, 권한 규칙을 "정책"으로 분류. 정책 변경 시 탐색→확인→테스트→변경 4단계 프로세스. 텍스트/스타일/변수명은 정책이 아님. |
 
 ### TypeScript / 공통
 
 | 파일 | 줄 수 | 적용 대상 | 설명 |
 |------|:-----:|-----------|------|
-| `frontend-fundamentals.md` | ~120 | 모든 프로젝트 | **FF 4가지 설계 원칙**. 가독성(맥락 줄이기/이름 붙이기/위에서 아래로), 예측 가능성(이름 충돌 방지/반환 타입 통일/숨은 로직 금지), 응집도(도메인 폴더/매직 넘버/폼 설계), 결합도(단일 책임 Hook/중복 허용 판단/Props Drilling 해소). 4가지 기준 간 트레이드오프 포함. |
-| `coding-standards.md` | ~310 | 모든 프로젝트 | **TypeScript 코딩 표준**. KISS/DRY/YAGNI/Readability 원칙. 변수·함수 네이밍, Immutability(`toSorted()` 사용), 에러 처리(`Promise.all` 병렬), null 처리(optional chaining), 조건부 렌더링, Early Return, 매직 넘버 상수화, 배럴 export(`index.ts`), services/queries 폴더 구조, enum 호환성 규칙. |
-| `unit-test-conventions.md` | ~180 | 모든 프로젝트 | **순수 함수 유닛 테스트 규칙**. jest/vitest 러너 자동 감지. `__tests__/{파일명}.test.ts` 위치. 정상/경계값/에러/정책 4가지 케이스 필수. 날짜 함수는 `useFakeTimers()` 필수. 정책 보호(회귀 방지) 테스트 패턴. |
+| `frontend-fundamentals.md` | ~250 | 항상 로드 | **FF 4가지 설계 원칙**. 가독성(맥락 줄이기/이름 붙이기/위에서 아래로), 예측 가능성(이름 충돌 방지/반환 타입 통일/숨은 로직 금지), 응집도(도메인 폴더/매직 넘버/폼 설계), 결합도(단일 책임 Hook/중복 허용 판단/Props Drilling 해소). 4가지 기준 간 트레이드오프 포함. |
+| `coding-standards.md` | ~240 | 항상 로드 | **TypeScript 코딩 표준**. KISS/DRY/YAGNI/Readability 원칙. 변수·함수 네이밍, Immutability(`toSorted()` 사용), 에러 처리(`Promise.all` 병렬), null 처리(optional chaining), 조건부 렌더링, Early Return, 매직 넘버 상수화, 배럴 export(`index.ts`), services/queries 폴더 구조, enum 호환성 규칙. |
+| `unit-test-conventions.md` | ~190 | 테스트 파일 작업 시 | **순수 함수 유닛 테스트 규칙**. jest/vitest 러너 자동 감지. `__tests__/{파일명}.test.ts` 위치. 정상/경계값/에러/정책 4가지 케이스 필수. 날짜 함수는 `useFakeTimers()` 필수. 정책 보호(회귀 방지) 테스트 패턴. |
 
 ### React / Next.js
 
 | 파일 | 줄 수 | 적용 대상 | 설명 |
 |------|:-----:|-----------|------|
-| `react-conventions.md` | ~210 | React / Next.js | **React/Next.js 컨벤션**. Import 순서(외부→내부→상대경로), Props 타입 정의, Emotion 스타일링(styled.ts 분리), 기존 코드 패턴 참조 규칙, 파일 명명 규칙(PascalCase 컴포넌트, camelCase 훅). |
-| `react-hooks-patterns.md` | ~100 | React | **Hook 성능 패턴**. useMemo 과용 금지(단순 primitive엔 불필요), useState 지연 초기화(`() => expensiveFn()`), useRef(리렌더 불필요 값 — 타이머 ID, 이전 값, 이벤트 핸들러 ref). |
-| `nextjs-app-router.md` | ~130 | Next.js 13+ App Router | **App Router 전용 규칙**. Suspense 경계 전략(독립 로딩), Server Actions 인증 검증 필수, RSC Props 직렬화 최소화, Component Composition 병렬 데이터 패칭, `React.cache()` 중복 제거, `after()` 비차단 사이드 이펙트. |
-| `state-and-server-state.md` | ~280 | React / Next.js | **상태 관리 경계**. TanStack Query(서버 상태), Jotai(전역 UI), React Hook Form(폼), useState(로컬). 쿼리 키 팩토리 패턴, 캐시 무효화 도메인 훅, 5가지 안티패턴(useEffect 데이터 패칭, 파생 상태 useEffect, atom 과다 생성, 불안정 쿼리 키, 서버/클라이언트 혼합). |
-| `accessibility.md` | ~130 | 프론트엔드 전체 | **WCAG 2.1 AA 접근성**. 색상 대비 4.5:1, 터치 타깃 44×44px, aria-label(아이콘 버튼), label-input 연결, 모달 포커스 트랩, 동적 콘텐츠 `aria-live`, 애니메이션 `prefers-reduced-motion`. |
+| `react-conventions.md` | ~245 | 항상 로드 | **React/Next.js 컨벤션**. Import 순서(외부→내부→상대경로), Props 타입 정의, Emotion 스타일링(styled.ts 분리), 기존 코드 패턴 참조 규칙, 파일 명명 규칙(PascalCase 컴포넌트, camelCase 훅). |
+| `react-hooks-patterns.md` | ~135 | 항상 로드 | **Hook 성능 패턴**. useMemo 과용 금지(단순 primitive엔 불필요), useState 지연 초기화(`() => expensiveFn()`), useRef(리렌더 불필요 값 — 타이머 ID, 이전 값, 이벤트 핸들러 ref). |
+| `nextjs-app-router.md` | ~285 | App Router(app/**) 작업 시 | **App Router 전용 규칙**. Suspense 경계 전략(독립 로딩), Server Actions 인증 검증 필수, RSC Props 직렬화 최소화, Component Composition 병렬 데이터 패칭, `React.cache()` 중복 제거, `after()` 비차단 사이드 이펙트. |
+| `state-and-server-state.md` | ~310 | 데이터 레이어(queries/stores 등) 작업 시 | **상태 관리 경계**. TanStack Query(서버 상태), Zustand(전역 UI), React Hook Form(폼), useState(로컬). 쿼리 키 팩토리 패턴, 캐시 무효화 도메인 훅, 5가지 안티패턴(useEffect 데이터 패칭, 파생 상태 useEffect, Store 남용, 불안정 쿼리 키, 서버/클라이언트 혼합). |
+| `accessibility.md` | ~160 | UI 파일(tsx/jsx) 작업 시 | **WCAG 2.1 AA 접근성**. 색상 대비 4.5:1, 터치 타깃 44×44px, aria-label(아이콘 버튼), label-input 연결, 모달 포커스 트랩, 동적 콘텐츠 `aria-live`, 애니메이션 `prefers-reduced-motion`. |
 
 ---
 
@@ -247,6 +247,8 @@ CLAUDE.md
     └── rules/core/unit-test-conventions.md
 ```
 
+> **참고**: 생성 CLAUDE.md는 더 이상 `rules/`를 직접 `@참조`하지 않는다. `.claude/rules/`의 `paths` frontmatter 자동발견으로 로드되며(없으면 항상 로드), 위 다이어그램의 `rules/*` 가지는 `workflows/quality-gates/*` 가이드가 보조적으로 참조하는 관계를 나타낸다.
+
 ### 커맨드 → 스킬 → 에이전트 호출 흐름
 
 ```
@@ -277,8 +279,8 @@ migration-helper  → test-unit 또는 test-integration (범위에 따라)
 |----------|:-------:|------|
 | 루트 파일 | 5 | CLAUDE.md, README.md, CHANGELOG.md, .mcp.json, .gitignore |
 | Rules (core) | 9 | 코딩 규칙 (프레임워크별 조건부 설치) |
-| Rules (optional) | 2 | tailwindcss-v4, validation-patterns |
-| Rules (references) | 8 | TypeScript 5 + Zod 3 |
+| Rules (optional) | 3 | emotion, tailwindcss-v4, validation-patterns |
+| Rules (references) | 9 | TypeScript 6 + Zod 3 |
 | Agents | 5 | 특화 서브에이전트 |
 | Skills (SKILL.md) | 15 | 자동 트리거 |
 | Skills (references) | 12 | web-design 9 + nextjs-scaffold 3 |
@@ -286,5 +288,5 @@ migration-helper  → test-unit 또는 test-integration (범위에 따라)
 | Instructions | 11 | 멀티에이전트 6 + 검증 3 + 워크플로우 3(thinking-model 포함) + git 1 + README |
 | Hooks & Scripts | 3 | 알림 자동화 |
 | 메타데이터 | 2 | plugin.json, marketplace.json |
-| **.claude/ 사본** | **동일** | 루트와 100% 동기화 |
-| **합계 (고유 파일)** | **~80** | |
+| **.claude/ 사본** | **선택 복사** | 스택별 부분 설치 (rules는 선택된 것만) |
+| **합계 (고유 파일)** | **~81** | |

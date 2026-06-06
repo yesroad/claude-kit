@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/*.tsx"
+  - "**/app/**/*.{ts,tsx}"
+  - "**/hooks/**/*.{ts,tsx}"
+---
+
 # TypeScript × React / Next.js 패턴
 
 ## 1. 컴포넌트 Props 타입 추출 — ComponentProps

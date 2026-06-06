@@ -1,3 +1,9 @@
+---
+paths:
+  - "app/**/*.{ts,tsx}"
+  - "src/app/**/*.{ts,tsx}"
+---
+
 # Next.js App Router 규칙
 
 > App Router (Next.js 13+) 프로젝트 전용 규칙
@@ -7,13 +13,7 @@
 
 ## 적용 조건 확인
 
-```bash
-# package.json에서 Next.js 버전 확인
-cat package.json | grep next
-
-# App Router 사용 여부: app/ 디렉토리 존재 확인
-ls src/app 또는 ls app
-```
+`app/`(또는 `src/app/`) 디렉토리가 있고 `package.json`의 Next.js가 13+ 인 프로젝트에 적용한다.
 
 ---
 
@@ -21,31 +21,18 @@ ls src/app 또는 ls app
 
 데이터 로딩이 필요한 컴포넌트를 Suspense로 격리하면 나머지 UI를 먼저 렌더링할 수 있다.
 
-```typescript
-// ❌ 안티패턴: 최상위에서 await → 전체 UI 블로킹
-// app/dashboard/page.tsx
-export default async function Page() {
-  const data = await fetchSlowData(); // 전체 페이지 대기
-  return <Dashboard data={data} />;
-}
+최상위에서 `await fetchSlowData()`하면 전체 UI가 블로킹된다. await를 하위 컴포넌트로 내리고 Suspense로 격리한다.
 
-// ✅ Suspense로 격리 → 빠른 부분 먼저 표시
-// app/dashboard/page.tsx
+```typescript
 export default function Page() {
   return (
     <main>
       <Header /> {/* 즉시 렌더링 */}
       <Suspense fallback={<Skeleton />}>
-        <SlowDataComponent /> {/* 독립적으로 로딩 */}
+        <SlowDataComponent /> {/* 내부에서 await fetchSlowData() → 독립 로딩 */}
       </Suspense>
     </main>
   );
-}
-
-// SlowDataComponent.tsx (Server Component)
-async function SlowDataComponent() {
-  const data = await fetchSlowData();
-  return <Dashboard data={data} />;
 }
 ```
 
@@ -56,24 +43,14 @@ async function SlowDataComponent() {
 Server Action은 클라이언트에서 직접 호출 가능하므로 **각 Action 내부에서** 인증을 반드시 검증한다.
 미들웨어나 레이아웃의 인증 처리에 의존하지 않는다.
 
-```typescript
-// ❌ 금지: 인증 없이 바로 처리
-'use server';
-export async function updateUserProfile(data: FormData) {
-  await db.user.update({ ... }); // 누구나 호출 가능!
-}
+인증 없이 바로 처리하면 누구나 호출 가능하다. Action 내부에서 인증 + 권한을 직접 검증한다.
 
-// ✅ 필수: Action 내부에서 직접 인증 검증
+```typescript
 'use server';
 export async function updateUserProfile(data: FormData) {
   const session = await getServerSession();
-  if (!session?.user) {
-    throw new Error('인증이 필요합니다');
-  }
-  // 추가로 권한 확인
-  if (!canUpdateProfile(session.user, data)) {
-    throw new Error('권한이 없습니다');
-  }
+  if (!session?.user) throw new Error('인증이 필요합니다');
+  if (!canUpdateProfile(session.user, data)) throw new Error('권한이 없습니다');
   await db.user.update({ ... });
 }
 ```
@@ -86,22 +63,12 @@ RSC(서버 컴포넌트)에서 클라이언트 컴포넌트로 전달하는 prop
 클라이언트에서 사용하지 않는 필드는 전달하지 않는다.
 
 ```typescript
-// ❌ 금지: 전체 객체를 그대로 전달 (불필요한 필드 포함)
-// ServerComponent.tsx
 export async function UserCard() {
   const user = await db.user.findFirst(); // id, name, email, password, internalMeta, ...
-  return <UserCardClient user={user} />; // 민감 정보 포함 가능성
-}
 
-// ✅ 필요한 필드만 선택해서 전달
-export async function UserCard() {
-  const user = await db.user.findFirst();
-  return (
-    <UserCardClient
-      userId={user.id}
-      displayName={user.name}
-    />
-  );
+  // ❌ <UserCardClient user={user} />  → 전체 객체 전달, 민감 정보 노출 가능성
+  // ✅ 필요한 필드만 선택해서 전달
+  return <UserCardClient userId={user.id} displayName={user.name} />;
 }
 ```
 
@@ -109,18 +76,9 @@ export async function UserCard() {
 
 ## Component Composition으로 병렬 데이터 패칭
 
-React Server Component 트리 내 `await`은 순차 실행된다.
-독립적인 데이터 패칭은 **컴포넌트 분리**로 병렬화한다.
+한 컴포넌트에서 연속 `await`하면 순차 실행(A + B)된다. 독립적인 데이터 패칭은 **컴포넌트 분리**로 병렬 실행(max(A, B))한다.
 
 ```typescript
-// ❌ 안티패턴: 순차 실행 (총 소요 시간 = A + B)
-export default async function Page() {
-  const userProfile = await fetchUserProfile(); // 500ms
-  const userPosts = await fetchUserPosts();     // 300ms
-  return <Layout profile={userProfile} posts={userPosts} />;
-}
-
-// ✅ 컴포넌트 분리로 병렬 실행 (총 소요 시간 = max(A, B))
 export default function Page() {
   return (
     <Layout>
@@ -142,25 +100,15 @@ export default function Page() {
 동일한 요청 내에서 같은 데이터를 여러 컴포넌트가 필요로 할 때 `React.cache()`로 중복을 제거한다.
 
 ```typescript
-// data/user.ts
+// data/user.ts — cache로 감싸면 동일 요청 내 중복 호출 시 캐시 반환
 import { cache } from 'react';
 
-// 동일 요청 내에서 중복 호출 시 캐시 반환
 export const getUser = cache(async (userId: string) => {
   return await db.user.findUnique({ where: { id: userId } });
 });
 
-// UserProfile.tsx
-async function UserProfile({ userId }: { userId: string }) {
-  const user = await getUser(userId); // DB 호출
-  return <Profile user={user} />;
-}
-
-// UserPosts.tsx
-async function UserPosts({ userId }: { userId: string }) {
-  const user = await getUser(userId); // 캐시 반환 (DB 재호출 없음)
-  return <Posts authorName={user.name} />;
-}
+// 여러 컴포넌트가 같은 userId로 getUser()를 호출해도 DB는 1회만 조회된다.
+// (첫 호출만 DB, 이후는 캐시 반환 — props 드릴링 없이 중복 제거)
 ```
 
 ---
@@ -172,21 +120,14 @@ async function UserPosts({ userId }: { userId: string }) {
 ```typescript
 import { after } from 'next/server';
 
-// ❌ 안티패턴: 사이드 이펙트가 응답을 차단
-export async function POST(req: Request) {
-  const data = await req.json();
-  await db.event.create({ data }); // 핵심 처리
-  await sendAnalyticsEvent(data);  // 로깅 때문에 응답 지연
-  return Response.json({ success: true });
-}
-
-// ✅ after()로 응답 후 비동기 처리
 export async function POST(req: Request) {
   const data = await req.json();
   await db.event.create({ data }); // 핵심 처리
 
+  // ❌ await sendAnalyticsEvent(data) → 로깅 때문에 응답 지연
+  // ✅ after()로 응답 후 비동기 실행
   after(async () => {
-    await sendAnalyticsEvent(data); // 응답 후 실행
+    await sendAnalyticsEvent(data);
   });
 
   return Response.json({ success: true }); // 즉시 응답
@@ -200,23 +141,34 @@ export async function POST(req: Request) {
 컴포넌트 단위로 캐시 생명주기를 제어한다. 페이지 단위 SSR/SSG 구분 시대에서 컴포넌트 단위 캐시 전략으로 이동.
 
 ```tsx
-// ✅ 컴포넌트 레벨 캐싱
+// ✅ 컴포넌트 레벨 캐싱 + 온디맨드 무효화 + PPR
+import { revalidateTag } from 'next/cache'
+
 async function BlogPosts() {
   'use cache'
   cacheLife('hours')   // 1시간 캐시
   cacheTag('posts')    // 태그 기반 무효화
-
   const posts = await db.post.findMany()
   return <PostList posts={posts} />
 }
-
-// ✅ 온디맨드 무효화 (Server Action에서)
-import { revalidateTag } from 'next/cache'
 
 export async function createPostAction(formData: FormData) {
   'use server'
   await db.post.create({ data: parsed.data })
   revalidateTag('posts')  // 'posts' 태그 캐시 전체 무효화
+}
+
+// PPR: 정적 shell + 동적 스트리밍 혼합
+export default function Page() {
+  return (
+    <>
+      <StaticHeader />  {/* 빌드 시 prerender */}
+      <BlogPosts />     {/* use cache — 정적 shell 포함 */}
+      <Suspense fallback={<Skeleton />}>
+        <UserPersonalized />  {/* 요청 시 스트리밍 */}
+      </Suspense>
+    </>
+  )
 }
 ```
 
@@ -228,39 +180,17 @@ export async function createPostAction(formData: FormData) {
 | `'hours'` | 1시간 | 일반 컨텐츠 |
 | `'days'` | 1일 | 정적에 가까운 데이터 |
 
-**PPR 렌더링 전략:**
-```tsx
-// 정적 shell + 동적 스트리밍 혼합
-export default function Page() {
-  return (
-    <>
-      <StaticHeader />  {/* 빌드 시 prerender */}
-      <CachedPosts />   {/* use cache — 정적 shell 포함 */}
-      <Suspense fallback={<Skeleton />}>
-        <UserPersonalized />  {/* 요청 시 스트리밍 */}
-      </Suspense>
-    </>
-  )
-}
-```
-
 ---
 
 ## useEffectEvent — Effect 의존성 버그 해결 (React 19.2+)
 
 Effect 내부에서 항상 최신 값을 참조해야 하지만, 의존성 배열에 포함하면 불필요한 재실행이 발생할 때 사용.
 
+`[roomId, theme]`처럼 theme을 의존성에 넣으면 theme 변경마다 불필요하게 재연결된다. `useEffectEvent`로 분리.
+
 ```tsx
 import { useEffectEvent } from 'react'
 
-// ❌ 기존 방식: theme 변경마다 채팅방 재연결 버그
-useEffect(() => {
-  const conn = connect(roomId)
-  conn.on('connected', () => showNotification('연결됨', theme))
-  return () => conn.disconnect()
-}, [roomId, theme]) // theme 변경 시 불필요한 재연결
-
-// ✅ useEffectEvent: theme을 의존성에서 분리
 function ChatRoom({ roomId, theme }) {
   const onConnected = useEffectEvent(() => {
     showNotification('연결됨', theme) // 항상 최신 theme 참조
@@ -270,7 +200,7 @@ function ChatRoom({ roomId, theme }) {
     const conn = connect(roomId)
     conn.on('connected', onConnected)
     return () => conn.disconnect()
-  }, [roomId]) // roomId만 의존성 ✅
+  }, [roomId]) // roomId만 의존성 ✅ (theme 변경 시 재연결 없음)
 }
 ```
 
@@ -287,10 +217,10 @@ function TabLayout({ activeTab }: { activeTab: string }) {
   return (
     <>
       <Activity mode={activeTab === 'home' ? 'visible' : 'hidden'}>
-        <HomePage />
+        <HomePage /> {/* 탭 전환 시 입력값·스크롤 등 상태 유지 */}
       </Activity>
       <Activity mode={activeTab === 'profile' ? 'visible' : 'hidden'}>
-        <ProfilePage /> {/* 탭 전환 시 입력값 등 상태 유지 */}
+        <ProfilePage />
       </Activity>
     </>
   )
@@ -303,33 +233,16 @@ function TabLayout({ activeTab }: { activeTab: string }) {
 
 수동 메모이제이션(`useMemo`, `useCallback`, `React.memo`)을 빌드 타임에 자동화. 단, 전체 코드베이스에 한 번에 적용하지 않는다.
 
-```ts
-// next.config.ts
-const nextConfig = {
-  experimental: {
-    reactCompiler: true,
-  },
-}
-```
-
-**점진적 도입 전략:**
 ```tsx
-// 컴파일러 적용할 컴포넌트 (opt-in)
-function SafeComponent() {
-  'use memo'
-}
+// next.config.ts
+const nextConfig = { experimental: { reactCompiler: true } }
 
-// 문제가 생긴 컴포넌트 즉시 제외 (opt-out)
-function ProblematicComponent() {
-  'use no memo'
-}
+// 점진적 도입: 컴포넌트 단위 opt-in / opt-out
+function SafeComponent() { 'use memo' }            // opt-in
+function ProblematicComponent() { 'use no memo' }  // opt-out (문제 시 즉시 제외)
 ```
 
-**알려진 이슈 (2026.04 기준):**
-- `eslint-plugin-react-hooks`의 `exhaustive-deps`와 충돌 가능
-- `try/finally` 패턴 최적화 미지원
-- Rules of React 위반 코드가 있으면 무한 렌더 루프 발생 가능
-- 기존 프로젝트: ESLint로 Rules of React 위반 먼저 정리 후 도입 권장
+**알려진 이슈 (2026.04 기준):** Rules of React 위반 코드는 무한 렌더 루프를 유발할 수 있으므로 기존 프로젝트는 ESLint로 먼저 정리 후 도입한다. `exhaustive-deps` 충돌·`try/finally` 최적화 미지원도 확인.
 
 ---
 
@@ -337,35 +250,13 @@ function ProblematicComponent() {
 
 > Next.js 16은 LLM 훈련 데이터의 Next.js와 다르다. 아래 항목은 추측으로 작성하지 말고 먼저 확인한다.
 
-### 코드 작성 전 공식 문서 확인
-
-Next.js 16 관련 코드를 작성하기 전, 프로젝트 내 문서를 먼저 읽는다:
-
-```bash
-# App Router 관련 변경사항 확인
-ls node_modules/next/dist/docs/01-app/
-```
-
-특히 새로운 API·옵션·동작 변경이 의심될 때는 추측으로 코드를 작성하지 말고
-`node_modules/next/dist/docs/` 하위 관련 `.mdx` 파일을 읽은 후 작성한다.
-
-### 느린 클라이언트 사이드 네비게이션
-
-`<Suspense>`만으로는 해결되지 않을 수 있다. 수정 전 반드시 공식 가이드를 읽고 적용한다:
+- **코드 작성 전 공식 문서 확인:** 새 API·옵션·동작 변경이 의심되면 추측하지 말고 `node_modules/next/dist/docs/` 하위 `.mdx`를 먼저 읽는다.
+- **느린 클라이언트 네비게이션:** `<Suspense>`만으로 해결되지 않을 수 있다. API명·설정 방식은 버전마다 다르므로 `instant-navigation.mdx` 가이드를 읽고 적용한다.
+- **deprecated 경고:** Next.js 16에서는 경고가 실제 동작 변경으로 이어진다. 무시하지 말고 즉시 수정한다.
 
 ```bash
-cat node_modules/next/dist/docs/01-app/02-guides/instant-navigation.mdx
-```
-
-> API명과 설정 방식은 버전마다 다르므로 추측으로 작성하지 말 것.
-
-### deprecated API 경고
-
-Next.js 16에서는 `deprecated` 경고가 실제 동작 변경으로 이어진다. 무시하지 말고 즉시 수정한다.
-
-```bash
-# 경고 발생 시 확인
-grep -r "deprecated" node_modules/next/dist/docs/ | grep -i "해당API명"
+ls node_modules/next/dist/docs/01-app/                                 # 변경사항 확인
+cat node_modules/next/dist/docs/01-app/02-guides/instant-navigation.mdx # 네비게이션 가이드
 ```
 
 ---
@@ -374,18 +265,14 @@ grep -r "deprecated" node_modules/next/dist/docs/ | grep -i "해당API명"
 
 App Router 코드 작성 시:
 
-- [ ] Server Component vs Client Component 구분이 명확한가?
+- [ ] Server Component vs Client Component 구분이 명확하고, Suspense로 느린 컴포넌트를 격리했는가?
 - [ ] 독립적인 데이터 패칭은 컴포넌트 분리로 병렬화했는가?
-- [ ] Server Action 내부에 인증 검증이 있는가?
+- [ ] Server Action 내부에 인증·권한 검증이 있는가?
 - [ ] RSC props에 불필요한 필드가 포함되지 않았는가?
-- [ ] 동일 요청 내 반복 호출은 React.cache()로 중복 제거했는가?
-- [ ] 로깅/분석 등 사이드 이펙트는 after()로 분리했는가?
+- [ ] 동일 요청 내 반복 호출은 React.cache()로 중복 제거하고, 사이드 이펙트는 after()로 분리했는가?
 - [ ] 캐시가 필요한 Server Component에 `use cache` + `cacheLife`/`cacheTag`를 적용했는가?
-- [ ] `useEffectEvent`로 해결 가능한 Effect 의존성 버그가 없는가?
-- [ ] React Compiler 도입 시 문제 컴포넌트에 `"use no memo"`를 적용했는가?
-- [ ] Next.js 16 신규 API 사용 시 `node_modules/next/dist/docs/` 먼저 읽었는가?
-- [ ] `deprecated` 경고가 있으면 즉시 수정했는가?
-- [ ] 클라이언트 네비게이션이 느리면 `instant-navigation.mdx` 가이드를 읽고 적용했는가?
+- [ ] `useEffectEvent`로 해결 가능한 Effect 의존성 버그가 없고, React Compiler 도입 시 문제 컴포넌트에 `"use no memo"`를 적용했는가?
+- [ ] Next.js 16 신규 API·`deprecated` 경고는 `node_modules/next/dist/docs/`를 먼저 읽고 처리했는가?
 
 ---
 

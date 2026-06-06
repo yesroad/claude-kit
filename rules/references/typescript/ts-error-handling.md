@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/services/**/*.{ts,tsx}"
+  - "**/api/**/*.{ts,tsx}"
+  - "**/lib/**/*.{ts,tsx}"
+---
+
 # TypeScript 에러 처리 패턴
 
 ## 1. Result 타입 패턴 — try/catch 탈출

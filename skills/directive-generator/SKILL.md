@@ -40,7 +40,7 @@ metadata:
 - **디렉토리 구조 전체** — 에이전트가 직접 탐색 가능
 - **기술 스택 목록** — package.json, requirements.txt에서 알 수 있음
 - **README와 동일한 내용** — 중복은 신뢰를 떨어트림
-- **일반적인 코딩 스타일 가이드** — rules/core/ 파일로 분리하거나 별도 @참조로 처리
+- **일반적인 코딩 스타일 가이드** — `.claude/rules/`로 분리하고 `paths` frontmatter 자동발견에 위임한다. CLAUDE.md에 rule을 `@참조`로 주입하지 않는다(자동발견과의 **이중 로드 방지**). CLAUDE.md `@참조`는 자동발견되지 않는 `workflows/` 가이드(model·required-patterns·anti-patterns·pr-guide)에만 사용한다.
 
 ## 실행 프로토콜
 

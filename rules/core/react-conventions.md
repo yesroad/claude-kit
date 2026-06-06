@@ -64,47 +64,30 @@ import axios from 'axios'
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 })
 
 export default api
 ```
 
-### 인터셉터 패턴 (토큰 자동 주입 + 에러 중앙 처리)
+### 인터셉터
+
+요청 인터셉터로 토큰을 자동 주입하고, 응답 인터셉터로 에러 코드(예: 401)를 중앙에서 처리한다.
 
 ```typescript
-// lib/axios.ts
-import axios from 'axios'
-
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: 10000,
-})
-
-// 요청 인터셉터: 토큰 자동 주입
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
 
-// 응답 인터셉터: 에러 코드별 중앙 처리
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // 인증 만료 처리
-      window.location.href = '/login'
-    }
+    if (error.response?.status === 401) window.location.href = '/login'
     return Promise.reject(error)
   }
 )
-
-export default api
 ```
 
 ### 사용 방법
@@ -112,26 +95,17 @@ export default api
 ```typescript
 // services/api/order.ts — axios 인스턴스 사용
 import api from '@/lib/axios'
-import type { Order } from '@/types/api/order'
 
 export const orderService = {
-  getOrder: (id: string) =>
-    api.get<Order>(`/orders/${id}`).then(r => r.data),
-  createOrder: (body: CreateOrderDto) =>
-    api.post<Order>('/orders', body).then(r => r.data),
+  getOrder: (id: string) => api.get<Order>(`/orders/${id}`).then(r => r.data),
+  createOrder: (body: CreateOrderDto) => api.post<Order>('/orders', body).then(r => r.data),
 }
 ```
 
 **금지 패턴:**
 ```typescript
-// ❌ 컴포넌트에서 axios 직접 호출
-import axios from 'axios'
-
-function OrderCard() {
-  useEffect(() => {
-    axios.get('https://api.example.com/orders')  // 인스턴스 없이 직접 호출
-  }, [])
-}
+// ❌ 컴포넌트에서 인스턴스 없이 axios 직접 호출
+useEffect(() => { axios.get('https://api.example.com/orders') }, [])
 ```
 
 ---
@@ -142,6 +116,7 @@ function OrderCard() {
 
 - `@emotion/styled` 또는 `css` prop을 사용한다
 - 프로젝트의 디자인 시스템 컴포넌트를 우선 사용한다
+- 오버레이 UI(모달, 토스트, 다이얼로그)는 프로젝트에서 지정한 Portal을 사용한다. 임의의 Portal을 추가하지 않는다.
 
 ### 스타일 컴포넌트 위치
 
@@ -149,19 +124,12 @@ function OrderCard() {
 - 복잡한 스타일: `styled.ts` 파일로 분리
 
 ```typescript
-// 좋은 예: 컴포넌트 파일 하단
-const Container = styled.div`
-  padding: 16px;
-`;
+// 간단: 컴포넌트 파일 하단
+const Container = styled.div`padding: 16px;`;
 
-// 복잡한 경우: 별도 파일 (styled.ts)
-// components/OrderCard/styled.ts
-export const Container = styled.div`...`;
-export const Header = styled.div`...`;
-
-// 사용 (index.tsx) - named import 사용 (프로젝트 기존 패턴)
+// 복잡: 별도 파일(styled.ts)에 정의 후 named import (프로젝트 기존 패턴)
+// components/OrderCard/styled.ts → export const Container = styled.div`...`;
 import { Container, Header } from './styled';
-// <Container>...</Container>
 ```
 
 ---
@@ -182,11 +150,7 @@ import { Container, Header } from './styled';
 // ✅ 좋은 예: 기존 타입 재사용
 import { Status, Item } from '../types';
 
-// ❌ 나쁜 예: 중복 타입 정의
-interface MyStatus {
-  code: string;
-  label: string;
-}
+// ❌ 나쁜 예: 동일 의미 타입 중복 정의 (interface MyStatus { code; label; })
 ```
 
 ### 패턴 참조 체크리스트
@@ -206,24 +170,8 @@ interface MyStatus {
 > Pages Router 예시. App Router는 `nextjs-app-router.md` 참조. **원칙은 동일**: 페이지는 얇게, 로직은 Container로 분리.
 
 ```typescript
-// ❌ 나쁜 예: 페이지에 로직이 모두 포함됨
-// pages/order/[orderId].tsx (Pages Router)
-const OrderPage = () => {
-  const { orderId } = useRouter().query;
-  const { data } = useQuery(...);
-  const [state, setState] = useState(...);
+// ❌ 나쁜 예: 페이지에 로직(useQuery, useState, 핸들러, 수백 줄 JSX)이 모두 포함됨
 
-  const handleSubmit = async () => { ... };
-
-  return (
-    <div>
-      {/* 수백 줄의 JSX */}
-    </div>
-  );
-};
-```
-
-```typescript
 // ✅ 좋은 예: 페이지는 얇게, 로직은 Container로 분리
 // pages/order/[orderId].tsx (Pages Router)
 import { OrderContainer } from '@/order/containers/OrderContainer';
@@ -240,14 +188,8 @@ export default OrderPage;
 ### 예시 2: Import 순서
 
 ```typescript
-// ❌ 나쁜 예: 순서가 뒤섞임
-import { OrderHeader } from './OrderHeader';
-import { useState } from 'react';
-import { Button } from '@/components';
-import axios from 'axios';
-```
+// ❌ 나쁜 예: 순서가 뒤섞임 (상대경로 → react → 내부 → 외부)
 
-```typescript
 // ✅ 좋은 예: 외부 → 내부 패키지 → 상대경로
 import { useState } from 'react';
 import axios from 'axios';
@@ -262,26 +204,17 @@ import { OrderHeader } from './OrderHeader';
 ### 예시 3: 컴포넌트 Props 처리
 
 ```typescript
-// ❌ 나쁜 예: any 사용, 타입 정의 없음
-const OrderCard = (props: any) => {
-  return <div>{props.data.title}</div>;
-};
-```
+// ❌ 나쁜 예: any 사용 — const OrderCard = (props: any) => ...
 
-```typescript
-// ✅ 좋은 예: 명시적 타입 정의
+// ✅ 좋은 예: 명시적 타입 정의 + 기본값 구조분해
 interface OrderCardProps {
   order: Order;
   isSelected?: boolean;
 }
 
-const OrderCard = ({ order, isSelected = false }: OrderCardProps) => {
-  return (
-    <Container isSelected={isSelected}>
-      {order.title}
-    </Container>
-  );
-};
+const OrderCard = ({ order, isSelected = false }: OrderCardProps) => (
+  <Container isSelected={isSelected}>{order.title}</Container>
+);
 ```
 
 ---
@@ -291,11 +224,8 @@ const OrderCard = ({ order, isSelected = false }: OrderCardProps) => {
 ```typescript
 // ❌ 나쁜 예: 프론트엔드에서 직접 외부 API 호출
 const data = await axios.get('https://api.example.com/orders');
-```
 
-```typescript
-// ✅ 좋은 예: /api 프록시 경유 (Next.js API Routes)
-// 설정된 프록시가 NEXT_PUBLIC_API_URL로 전달
+// ✅ 좋은 예: /api 프록시 경유 (Next.js API Routes, NEXT_PUBLIC_API_URL로 전달)
 const data = await api.get('/api/orders');
 ```
 
@@ -311,9 +241,3 @@ const data = await api.get('/api/orders');
 | 유틸리티 | camelCase                | `formatDate.ts`                   |
 | 타입     | PascalCase, types 접미사 | `order.types.ts`                  |
 | 스타일   | styled                   | `styled.ts`                       |
-
----
-
-## Portal 사용
-
-오버레이 UI(모달, 토스트, 다이얼로그)는 프로젝트에서 지정한 Portal을 사용한다. 임의의 Portal을 추가하지 않는다.

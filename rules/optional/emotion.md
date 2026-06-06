@@ -1,3 +1,9 @@
+---
+paths:
+  - "**/*.{tsx,jsx}"
+  - "**/styled.{ts,tsx}"
+---
+
 # Emotion 스타일링 규칙
 
 > @emotion/styled + @emotion/react 사용 시 적용. 설정(Q3=Emotion)에 따라 CLAUDE.md에 자동 주입됨.

@@ -1,3 +1,8 @@
+---
+paths:
+  - "**/*.{tsx,jsx,css}"
+---
+
 # TailwindCSS v4 패턴
 
 > `tailwindcss@^4` 의존성이 있는 프로젝트에만 적용한다.

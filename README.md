@@ -119,15 +119,16 @@ brew install gh && gh auth login
 
 ```
 cc-kit/
-├── rules/core/                 # 코딩 규칙
+├── rules/core/                 # 코딩 규칙 (paths frontmatter 기반 조건부 로드)
+│   ├── policies.md                 # 정책(Policy) 정의 기준
 │   ├── coding-standards.md         # TypeScript 표준, 에러 처리, React 패턴
-│   ├── react-conventions.md        # React/Next.js 컨벤션, Import 순서
+│   ├── frontend-fundamentals.md    # 좋은 코드 4원칙 (가독성/예측가능성/응집도/결합도)
+│   ├── react-conventions.md        # React/Next.js 컨벤션, Import 순서, Axios
 │   ├── react-hooks-patterns.md     # Hook 성능 패턴 (useMemo, useRef 등)
 │   ├── nextjs-app-router.md        # App Router 전용 규칙
-│   ├── state-and-server-state.md   # TanStack Query v5 + Jotai 상태 경계
+│   ├── state-and-server-state.md   # TanStack Query + Zustand 상태 경계
 │   ├── unit-test-conventions.md    # 순수 함수 유닛 테스트 규칙
-│   ├── accessibility.md            # WCAG 2.1 AA 접근성 규칙
-│   └── policies.md                 # 정책(Policy) 정의 기준
+│   └── accessibility.md            # WCAG 2.1 AA 접근성 규칙
 │
 ├── agents/                     # 전문화된 서브에이전트
 │   ├── explorer.md                 # 코드베이스 탐색

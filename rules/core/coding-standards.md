@@ -21,14 +21,10 @@
 
 ```typescript
 // ✅ 좋은 예: 설명적 이름
-const marketSearchQuery = "election";
 const isUserAuthenticated = true;
-const totalRevenue = 1000;
 
 // ❌ 나쁜 예: 불명확한 이름
-const q = "election";
 const flag = true;
-const x = 1000;
 ```
 
 ### 함수 네이밍
@@ -36,35 +32,27 @@ const x = 1000;
 ```typescript
 // ✅ 좋은 예: 동사-명사 패턴
 async function fetchOrderData(orderId: string) {}
-function calculateDiscountPrice(price: number, rate: number) {}
-function isValidOrderStatus(status: string): boolean {}
 
 // ❌ 나쁜 예: 불명확하거나 명사만
 async function order(id: string) {}
-function discount(a, b) {}
-function status(s) {}
 ```
 
 ### Immutability (필수)
 
 ```typescript
-// ✅ 항상 spread 연산자 사용
-const updatedOrder = {
-  ...order,
-  status: "completed",
-};
-
+// ✅ 항상 spread 연산자 사용 (직접 변형 금지)
+const updatedOrder = { ...order, status: "completed" };
 const updatedItems = [...items, newItem];
 
 // ❌ 직접 변형 금지
-order.status = "completed"; // 금지
-items.push(newItem); // 금지
+order.status = "completed";
+items.push(newItem);
 
 // ✅ 불변 정렬: toSorted() 사용 (원본 배열 유지)
 const sorted = items.toSorted((a, b) => a.name.localeCompare(b.name));
 
 // ❌ sort()는 원본 배열을 변형함
-const sorted = items.sort((a, b) => a.name.localeCompare(b.name)); // 금지
+items.sort((a, b) => a.name.localeCompare(b.name)); // 금지
 ```
 
 ---
@@ -74,43 +62,30 @@ const sorted = items.sort((a, b) => a.name.localeCompare(b.name)); // 금지
 ### API 호출
 
 ```typescript
-// ✅ 좋은 예: 포괄적 에러 처리
+// ✅ 좋은 예: 포괄적 에러 처리 (없으면 ❌)
 async function fetchOrderDetail(orderId: string) {
   try {
     const response = await api.get(`/api/orders/${orderId}`);
-
     if (!response.data.success) {
       throw new Error(response.data.message);
     }
-
     return response.data;
   } catch (error) {
     console.error("Order fetch failed:", error);
     throw new Error("주문 정보를 불러올 수 없습니다");
   }
 }
-
-// ❌ 나쁜 예: 에러 처리 없음
-async function fetchOrderDetail(orderId: string) {
-  const response = await api.get(`/api/orders/${orderId}`);
-  return response.data;
-}
 ```
 
 ### Async/Await
 
 ```typescript
-// ✅ 좋은 예: 병렬 실행
+// ✅ 좋은 예: 병렬 실행 (독립 호출은 순차 await 금지)
 const [orders, affiliates, stats] = await Promise.all([
   fetchOrders(),
   fetchAffiliates(),
   fetchStats(),
 ]);
-
-// ❌ 나쁜 예: 불필요한 순차 실행
-const orders = await fetchOrders();
-const affiliates = await fetchAffiliates();
-const stats = await fetchStats();
 ```
 
 ---
@@ -121,21 +96,10 @@ const stats = await fetchStats();
 
 ```typescript
 // ✅ 좋은 예: 적절한 타입
-interface Order {
-  id: string;
-  status: "pending" | "active" | "completed" | "cancelled";
-  createdAt: Date;
-  items: OrderItem[];
-}
-
-function getOrder(id: string): Promise<Order> {
-  // 구현
-}
+function getOrder(id: string): Promise<Order> {}
 
 // ❌ 나쁜 예: any 사용
-function getOrder(id: any): Promise<any> {
-  // 구현
-}
+function getOrder(id: any): Promise<any> {}
 ```
 
 ### null/undefined 처리
@@ -166,36 +130,20 @@ setCount(count + 1);
 ### 조건부 렌더링
 
 ```typescript
-// ✅ 좋은 예: 명확한 조건
+// ✅ 좋은 예: 명확한 조건 (삼항 중첩 금지)
 {isLoading && <Loading />}
 {error && <ErrorMessage error={error} />}
-{data && <DataDisplay data={data} />}
-
-// ❌ 나쁜 예: 삼항 지옥
-{isLoading ? <Loading /> : error ? <ErrorMessage error={error} /> : data ? <DataDisplay data={data} /> : null}
 ```
 
 ### Early Return
 
 ```typescript
-// ✅ 좋은 예: Early return
+// ✅ 좋은 예: Early return (깊은 중첩 대신)
 function OrderCard({ order }: Props) {
   if (!order) return null;
   if (order.status === 'cancelled') return <CancelledBadge />;
 
   return <ActiveOrderCard order={order} />;
-}
-
-// ❌ 나쁜 예: 깊은 중첩
-function OrderCard({ order }: Props) {
-  if (order) {
-    if (order.status !== 'cancelled') {
-      return <ActiveOrderCard order={order} />;
-    } else {
-      return <CancelledBadge />;
-    }
-  }
-  return null;
 }
 ```
 
@@ -221,15 +169,11 @@ function OrderCard({ order }: Props) {
 // ❌ 나쁜 예: 설명 없는 숫자
 if (retryCount > 3) {
 }
-setTimeout(callback, 500);
 
 // ✅ 좋은 예: 명명된 상수
 const MAX_RETRIES = 3;
-const DEBOUNCE_DELAY_MS = 500;
-
 if (retryCount > MAX_RETRIES) {
 }
-setTimeout(callback, DEBOUNCE_DELAY_MS);
 ```
 
 ---
@@ -242,8 +186,6 @@ setTimeout(callback, DEBOUNCE_DELAY_MS);
 // ✅ 좋은 예: src/components/index.ts
 export { default as SearchBar } from "./SearchBar";
 export { default as VideoCard } from "./VideoCard";
-export { default as RecipeModal } from "./RecipeModal";
-export { default as IngredientChip } from "./IngredientChip";
 
 // 사용하는 곳에서 깔끔하게 import
 import { SearchBar, VideoCard } from "@/components";
@@ -251,7 +193,6 @@ import { SearchBar, VideoCard } from "@/components";
 // ❌ 나쁜 예: 개별 경로로 분산 import
 import SearchBar from "@/components/SearchBar";
 import VideoCard from "@/components/VideoCard";
-import RecipeModal from "@/components/RecipeModal";
 ```
 
 **적용 대상 폴더:**
@@ -280,13 +221,10 @@ import RecipeModal from "@/components/RecipeModal";
 
 ## enum 타입 호환성
 
-### 다중 모듈 enum 충돌
-
-같은 이름의 enum이 여러 모듈에 정의되어 있을 수 있다. TypeScript는 이름이 같아도 다른 모듈의 enum을 호환하지 않는다.
+TypeScript는 이름이 같아도 다른 모듈의 enum을 호환하지 않는다. 실제 사용 모듈에서 직접 import한다.
 
 ```typescript
 // ❌ 금지: 잘못된 모듈에서 import
-// payment/types.ts에서 PaymentMethodType을 사용하는 코드인데
 import { PaymentMethodType } from "@/shared/constants/order"; // 다른 모듈의 enum
 
 // ✅ 올바른 방법: 서비스/타입이 정의된 모듈에서 직접 import
@@ -295,18 +233,6 @@ import { PaymentMethodType } from "@/payment/types"; // 실제 사용 모듈
 
 **규칙**:
 
-- 서비스 타입(`*Service.ts`, `types.ts`)에서 정의한 enum을 사용할 때는 해당 파일에서 직접 import
-- 같은 이름의 enum이 여럿 존재할 경우, IDE 자동완성 import에 의존하지 말고 import 경로를 명시적으로 확인
-- 새 enum 정의 전에 기존 동일 이름 enum이 있는지 `rg "enum PaymentMethodType"` 으로 검색
-
----
-
-## 참조
-
-| 문서                          | 용도               |
-| ----------------------------- | ------------------ |
-| `react-conventions.md`        | React/Next.js 규칙 |
-| `react-hooks-patterns.md`     | Hook 성능 패턴     |
-| `state-and-server-state.md`   | 상태 관리 경계     |
-| `anti-patterns.md`            | 금지 패턴          |
-| `frontend-fundamentals.md`    | FF 4가지 설계 원칙 (가독성/예측가능성/응집도/결합도) |
+- 서비스 타입(`*Service.ts`, `types.ts`)에서 정의한 enum은 해당 파일에서 직접 import
+- IDE 자동완성 import에 의존하지 말고 경로를 명시적으로 확인
+- 새 enum 정의 전 `rg "enum PaymentMethodType"` 으로 기존 동일 이름 검색

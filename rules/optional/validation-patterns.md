@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/actions/**/*.{ts,tsx}"
+  - "**/*.form.{ts,tsx}"
+  - "**/schemas/**"
+---
+
 # 검증 패턴 (Zod)
 
 > `package.json`에 `zod` 의존성이 있는 프로젝트에만 적용한다.
@@ -74,29 +81,15 @@ const createOrderSchema = z.object({
 
 ### 2. React Hook Form 연동
 
+`zodResolver`로 스키마를 연결하고, 제네릭에는 `z.infer` 타입을 넘긴다.
+
 ```typescript
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { createOrderSchema, type CreateOrderInput } from '@/schemas/order';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createOrderSchema, type CreateOrderInput } from "@/schemas/order";
 
-function OrderForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CreateOrderInput>({
-    resolver: zodResolver(createOrderSchema),
-  });
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register('productName')} />
-      {errors.productName && (
-        <p role="alert">{errors.productName.message}</p>
-      )}
-    </form>
-  );
-}
+const form = useForm<CreateOrderInput>({
+  resolver: zodResolver(createOrderSchema),
+});
 ```
 
 ### 3. Server Action 입력 검증 (App Router)
@@ -106,19 +99,14 @@ Server Action은 클라이언트에서 직접 호출 가능하므로 입력을 �
 
 ```typescript
 "use server";
-
 import { createOrderSchema } from "@/schemas/order";
 
 export async function createOrder(formData: FormData) {
-  const raw = Object.fromEntries(formData);
-  const parsed = createOrderSchema.safeParse(raw);
-
+  const parsed = createOrderSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
     return { error: parsed.error.flatten().fieldErrors };
   }
-
-  // parsed.data는 타입 안전함
-  await db.order.create({ data: parsed.data });
+  await db.order.create({ data: parsed.data }); // parsed.data는 타입 안전함
 }
 ```
 
@@ -129,24 +117,12 @@ export async function createOrder(formData: FormData) {
 
 ```typescript
 // ✅ 외부 API 응답 검증 — 신뢰할 수 없는 데이터
-const externalResponseSchema = z.object({
-  id: z.string(),
-  status: z.enum(["active", "inactive"]),
-});
+const externalSchema = z.object({ id: z.string(), status: z.enum(["active", "inactive"]) });
+const json = await (await fetch("https://external-api.com/data")).json();
+externalSchema.parse(json); // 형태 불일치 시 즉시 에러
 
-export async function fetchExternalData() {
-  const res = await fetch("https://external-api.com/data");
-  const json = await res.json();
-  return externalResponseSchema.parse(json); // 형태 불일치 시 즉시 에러
-}
-```
-
-```typescript
-// ❌ 과잉: 내부 함수 반환값까지 Zod로 검증
-function calculateTotal(items: OrderItem[]): number {
-  const total = items.reduce((sum, item) => sum + item.price, 0);
-  return z.number().parse(total); // 불필요 — TypeScript가 이미 보장
-}
+// ❌ 과잉: 내부 함수 반환값까지 Zod로 검증 — TypeScript가 이미 보장
+return z.number().parse(calculateTotal(items));
 ```
 
 ---
@@ -164,26 +140,14 @@ const schema = z.object({
 
 ### 공통 스키마 재사용
 
+`schemas/common.ts`의 공통 스키마를 `.merge()` / `.extend()`로 합성한다.
+
 ```typescript
-// schemas/common.ts
-export const paginationSchema = z.object({
-  page: z.number().int().min(1).default(1),
-  limit: z.number().int().min(1).max(100).default(20),
-});
-
-export const dateRangeSchema = z.object({
-  startDate: z.string().date(),
-  endDate: z.string().date(),
-});
-
-// schemas/ — 공통 스키마 합성
 import { paginationSchema, dateRangeSchema } from "./common";
 
 export const orderListParamsSchema = paginationSchema
   .merge(dateRangeSchema)
-  .extend({
-    status: z.enum(["pending", "active", "completed"]).optional(),
-  });
+  .extend({ status: z.enum(["pending", "active", "completed"]).optional() });
 ```
 
 ### update 스키마는 create에서 파생
@@ -216,11 +180,9 @@ export type UpdateOrderInput = z.infer<typeof updateOrderSchema>;
 
 ## 체크리스트
 
-- [ ] 스키마 파일이 `src/schemas/`에 있는가?
-- [ ] 타입이 `z.infer`로 도출되었는가?
+- [ ] 스키마가 `src/schemas/`에 있고 타입이 `z.infer`로 도출되었는가?
 - [ ] Server Action 입력에 `safeParse` 검증이 있는가?
 - [ ] 에러 메시지가 한글로 작성되었는가?
-- [ ] 배럴 `index.ts`가 업데이트되었는가?
 
 ---
 

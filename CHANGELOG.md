@@ -4,6 +4,30 @@
 
 ---
 
+## [1.3.0] - 2026-06-06
+
+### Changed
+
+- **rules 로딩 방식 전면 개편**: `.claude/rules/`가 Claude Code의 `paths` frontmatter 자동발견으로 **조건부 로드**되도록 전환. 매 세션 전량 로드(약 2,800줄+) → 핵심 철학 rule만 항상 로드 + 나머지는 일치 파일 작업 시 로드.
+  - `commands/setup.md`: rules 전체 복사(`cp -r`) → **선택 복사**(`FRONTEND`/`STYLING`/`ZOD`/`TS` 플래그로 미해당 rule prune). 생성 CLAUDE.md의 rule `@참조` 제거 — `workflows/` 가이드(model·required-patterns·anti-patterns·pr-guide)만 `@참조`
+  - `skills/directive-generator/SKILL.md`: rule을 `@참조`하지 않고 `paths` 자동발견에 위임하도록 명시(이중 로드 방지)
+  - `commands/update-cc-kit.md`: `rules/optional`·`rules/references` 신규 파일 자동 복사 제외(선택 상태 존중)
+- **rule 전반 `paths` frontmatter 부여**: 조건부 rule(nextjs-app-router, unit-test-conventions, state-and-server-state, accessibility, emotion, tailwindcss-v4, validation-patterns, references 전체)에 `paths` 추가. 항상-로드 철학 rule(policies, coding-standards, frontend-fundamentals, react-conventions, react-hooks-patterns)은 생략
+- **rule 분량 축소(trim)**: 중복·장황한 코드 예시 정리(규칙·표·예시 1개씩은 보존). coding-standards 312→238, react-conventions 319→243, frontend-fundamentals 294→251, nextjs-app-router 397→284, state-and-server-state 411→308, validation-patterns 234→196, unit-test-conventions 222→191
+- **`commands/setup.md` Q7(MCP)**: context7·chrome-devtools 옵션 추가, 진행 상황 추적(TaskCreate) 블록 제거
+
+### Added
+
+- **`rules/references/typescript/ts-type-patterns-basics.md`**·**`ts-type-patterns-advanced.md`**: 기존 `ts-type-patterns.md`(333줄)를 기초/심화로 분할
+
+### Removed
+
+- **`rules/references/typescript/ts-type-patterns.md`**: 위 2개로 분할되며 제거. coding-standards와 중복되던 "현업 실수" 섹션 삭제
+
+> 일부 rule(coding-standards 238, react-conventions 243, frontend-fundamentals 251, nextjs-app-router 284, state-and-server-state 308)은 200줄 권장을 초과한다. 규칙·표·예시 보존이 우선이며, nextjs-app-router·state-and-server-state는 `paths`로 조건부 로드된다.
+
+---
+
 ## [1.2.0] - 2026-05-21
 
 ### Changed

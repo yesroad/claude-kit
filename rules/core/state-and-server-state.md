@@ -1,3 +1,11 @@
+---
+paths:
+  - "**/queries/**"
+  - "**/services/**"
+  - "**/stores/**"
+  - "**/hooks/**/*.{ts,tsx}"
+---
+
 # 상태 관리 경계 규칙
 
 이 프로젝트는 세 가지 상태 관리 도구를 **명확한 경계**로 분리하여 사용한다.
@@ -27,15 +35,8 @@
 ### 디렉토리 구조
 
 ```
-src/
-├── queries/
-│   └── {도메인}/
-│       ├── index.ts       # useXxxQuery, useXxxMutation 훅
-│       └── queryKeys.ts   # 쿼리 키 정의
-└── services/
-    └── {도메인}/
-        ├── index.ts       # API 호출 함수
-        └── types.ts       # 요청/응답 타입
+src/queries/{도메인}/   → index.ts(훅), queryKeys.ts(쿼리 키)
+src/services/{도메인}/  → index.ts(API 함수), types.ts(요청/응답 타입)
 ```
 
 ### 쿼리 키 패턴
@@ -57,26 +58,16 @@ export const orderKeys = {
 // queries/order/index.ts
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { orderKeys } from './queryKeys';
 import { orderService } from '@/services/order';
 
-export const useOrderQuery = (orderId: string) => {
-  return useQuery({
-    queryKey: orderKeys.detail(orderId),
-    queryFn: () => orderService.getOrder(orderId),
-  });
-};
-
 export const useUpdateOrderMutation = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: orderService.updateOrder,
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: orderKeys.detail(variables.orderId),
-      });
+      queryClient.invalidateQueries({ queryKey: orderKeys.detail(variables.orderId) });
     },
   });
 };
@@ -90,7 +81,7 @@ export const useUpdateOrderMutation = () => {
 
 ### queryOptions API (v5 권장)
 
-타입 안전하게 쿼리 옵션을 중앙 관리하고 재사용한다.
+타입 안전하게 쿼리 옵션을 중앙 관리하고 재사용한다. `useQuery`, `prefetchQuery`, `useSuspenseQuery` 어디서든 그대로 넘긴다.
 
 ```typescript
 // queries/order/index.ts
@@ -102,35 +93,27 @@ export const orderQueries = {
     queryFn: () => orderService.getOrder(id),
     staleTime: 10 * 60 * 1000,
   }),
-  list: (filters: OrderFilters) => queryOptions({
-    queryKey: orderKeys.list(filters),
-    queryFn: () => orderService.getOrders(filters),
-  }),
 }
 
-// 어디서든 타입 안전하게 재사용
 const { data } = useQuery(orderQueries.detail(orderId))
 queryClient.prefetchQuery(orderQueries.detail(orderId))  // 라우터 프리패치
 ```
 
 ### useSuspenseQuery
 
-data가 항상 defined — undefined 체크 불필요.
+`data`가 항상 defined — undefined 체크 불필요. 상위에서 `ErrorBoundary` + `Suspense` 필수.
 
 ```typescript
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 function OrderDetail({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(orderQueries.detail(id))
-  return <div>{data.title}</div>  // data는 항상 defined
+  const { data } = useSuspenseQuery(orderQueries.detail(id))  // data는 항상 defined
+  return <div>{data.title}</div>
 }
 
-// 상위에서 Suspense + ErrorBoundary 필수
-<ErrorBoundary fallback={<ErrorFallback />}>
-  <Suspense fallback={<Skeleton />}>
-    <OrderDetail id={orderId} />
-  </Suspense>
-</ErrorBoundary>
+// <ErrorBoundary fallback={<ErrorFallback />}>
+//   <Suspense fallback={<Skeleton />}><OrderDetail id={orderId} /></Suspense>
+// </ErrorBoundary>
 ```
 
 ---
@@ -153,18 +136,14 @@ import { devtools } from 'zustand/middleware'
 
 interface UIStore {
   sidebarOpen: boolean
-  selectedTab: TabType
   toggleSidebar: () => void
-  setSelectedTab: (tab: TabType) => void
 }
 
 export const useUIStore = create<UIStore>()(
   devtools(
     (set) => ({
       sidebarOpen: false,
-      selectedTab: 'all',
       toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
-      setSelectedTab: (tab) => set({ selectedTab: tab }),
     }),
     { name: 'ui-store' }
   )
@@ -201,17 +180,11 @@ export const useCartStore = create<CartStore>()(...)  // 장바구니
 ```typescript
 import { useForm } from 'react-hook-form';
 
-interface OrderFormData {
-  productName: string;
-  quantity: number;
-}
+interface OrderFormData { productName: string; quantity: number }
 
 const OrderForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<OrderFormData>();
-
-  const onSubmit = (data: OrderFormData) => {
-    // mutation 호출
-  };
+  const onSubmit = (data: OrderFormData) => { /* mutation 호출 */ };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -228,28 +201,18 @@ const OrderForm = () => {
 
 ### 도메인별 캐시 정리 훅 사용
 
+`queryClient`를 컴포넌트에서 직접 조작하지 않고, 도메인 훅으로 캡슐화한다.
+
 ```typescript
 // ✅ 좋은 예: 도메인 훅 사용
 import { useClearListCache } from '@/queries/order';
 
 const Component = () => {
   const clearCache = useClearListCache();
-
-  const handleRefresh = () => {
-    clearCache();
-  };
+  const handleRefresh = () => clearCache();
 };
-```
 
-```typescript
-// ❌ 나쁜 예: queryClient 직접 조작
-const Component = () => {
-  const queryClient = useQueryClient();
-
-  const handleRefresh = () => {
-    queryClient.invalidateQueries({ queryKey: ['order', 'list'] });
-  };
-};
+// ❌ 나쁜 예: queryClient.invalidateQueries({ queryKey: ['order', 'list'] }) 직접 호출
 ```
 
 ### 캐시 정리 훅 작성
@@ -258,11 +221,8 @@ const Component = () => {
 // queries/order/index.ts
 export const useClearListCache = () => {
   const queryClient = useQueryClient();
-
   return useCallback(() => {
-    queryClient.invalidateQueries({
-      queryKey: orderKeys.lists(),
-    });
+    queryClient.invalidateQueries({ queryKey: orderKeys.lists() });
   }, [queryClient]);
 };
 ```
@@ -273,107 +233,48 @@ export const useClearListCache = () => {
 
 ### 1. useEffect 남용
 
-```typescript
-// ❌ 안티패턴: useEffect로 데이터 페칭
-const [data, setData] = useState(null);
-const [loading, setLoading] = useState(true);
-
-useEffect(() => {
-  fetchData()
-    .then(setData)
-    .finally(() => setLoading(false));
-}, []);
-```
+useEffect로 데이터 페칭하지 않고 React Query를 사용한다.
 
 ```typescript
-// ✅ 대안: React Query 사용
-const { data, isLoading } = useQuery({
-  queryKey: ['data'],
-  queryFn: fetchData,
-});
+// ❌ useEffect로 페칭 → ✅ React Query
+const { data, isLoading } = useQuery({ queryKey: ['data'], queryFn: fetchData });
 ```
-
----
 
 ### 2. 파생 상태를 위한 useEffect
 
-```typescript
-// ❌ 안티패턴: 파생 상태에 useEffect 사용
-const [items, setItems] = useState([]);
-const [filteredItems, setFilteredItems] = useState([]);
-
-useEffect(() => {
-  setFilteredItems(items.filter((item) => item.active));
-}, [items]);
-```
+파생 상태를 별도 state + useEffect로 동기화하지 않고 useMemo로 계산한다.
 
 ```typescript
-// ✅ 대안: useMemo로 파생 계산
+// ❌ useEffect로 setFilteredItems → ✅ useMemo
 const filteredItems = useMemo(() => items.filter((item) => item.active), [items]);
 ```
 
----
-
 ### 3. Store 남용 — 관련 없는 상태 몰아넣기
 
-```typescript
-// ❌ 안티패턴: 관련 없는 상태를 하나의 store에
-export const useAppStore = create((set) => ({
-  user: null,
-  posts: [],
-  theme: 'light',
-  cart: [],
-}))
-```
+`user/posts/theme/cart`를 하나의 store에 몰아넣지 않고 도메인별로 분리한다.
 
 ```typescript
-// ✅ 대안: 도메인별 store 분리
+// ❌ 단일 useAppStore → ✅ 도메인별 분리
 export const useUIStore = create<UIStore>()(...)
 export const useCartStore = create<CartStore>()(...)
 ```
 
----
-
 ### 4. 불안정한 쿼리 키
 
-```typescript
-// ❌ 안티패턴: 인라인 객체로 쿼리 키 생성 (매번 새 참조)
-useQuery({
-  queryKey: ['order', { id: orderId, options: { includeDetails: true } }],
-  queryFn: ...,
-});
-```
+인라인 객체로 쿼리 키를 만들면 매번 새 참조가 되어 캐시가 깨진다. queryKeys 팩토리를 쓴다.
 
 ```typescript
-// ✅ 대안: queryKeys 파일의 팩토리 함수 사용
-useQuery({
-  queryKey: orderKeys.detail(orderId),
-  queryFn: ...,
-});
+// ❌ queryKey: ['order', { id, options: {...} }] → ✅ 팩토리 함수
+useQuery({ queryKey: orderKeys.detail(orderId), queryFn: ... });
 ```
-
----
 
 ### 5. 서버 상태와 클라이언트 상태 혼합
 
-```typescript
-// ❌ 안티패턴: 서버 데이터를 store에 동기화
-const useOrdersStore = create((set) => ({ orders: [] }))
-
-// 컴포넌트에서
-const { data } = useItemListQuery();
-const setOrders = useOrdersStore((s) => s.setOrders);
-
-useEffect(() => {
-  if (data) setOrders(data);
-}, [data]);
-```
+서버 데이터를 store에 동기화하지 않고 React Query를 단일 진실 공급원으로 둔다.
 
 ```typescript
-// ✅ 대안: React Query를 단일 진실 공급원으로
+// ❌ useEffect로 data → store 동기화 → ✅ React Query를 단일 소스로
 const { data: orders } = useItemListQuery();
-
-// 필터링이 필요하면 컴포넌트에서 직접 처리
 const activeOrders = useMemo(() => orders?.filter((o) => o.status === 'active'), [orders]);
 ```
 
@@ -401,11 +302,7 @@ const queryClient = new QueryClient({
 새로운 상태를 추가할 때 아래를 확인한다:
 
 - [ ] 이 데이터는 서버에서 오는가? → React Query
-- [ ] 여러 컴포넌트에서 공유되는가?
-  - 서버 데이터 → React Query (이미 전역)
-  - UI 상태 → Zustand
-- [ ] 폼 입력인가? → React Hook Form
-- [ ] 이 컴포넌트에서만 쓰이는가? → useState
+- [ ] 공유되는 UI 상태인가? → Zustand (서버 데이터는 React Query가 이미 전역)
+- [ ] 폼 입력인가? → React Hook Form / 컴포넌트 전용이면 useState
 - [ ] 쿼리 키가 queryKeys 파일에 정의되어 있는가?
-- [ ] 캐시 무효화 로직이 도메인 훅으로 캡슐화되어 있는가?
-- [ ] Zustand store가 도메인별로 분리되어 있는가?
+- [ ] 캐시 무효화가 도메인 훅으로 캡슐화되어 있는가?

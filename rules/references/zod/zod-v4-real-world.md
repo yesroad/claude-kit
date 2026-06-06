@@ -1,3 +1,11 @@
+---
+paths:
+  - "**/schemas/**"
+  - "**/*.form.{ts,tsx}"
+  - "**/actions/**/*.{ts,tsx}"
+  - "**/api/**/*.{ts,tsx}"
+---
+
 # Zod v4 실전 패턴
 
 ## 폼 검증 (React Hook Form + Zod)
