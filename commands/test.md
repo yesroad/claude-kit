@@ -22,6 +22,8 @@ description: 단위 → 통합 → E2E 테스트를 순서대로 실행. "테스
 
 실행 시작 시 아래 항목을 TaskCreate로 등록한다. 각 Step 시작 시 `in_progress`, 완료 시 `completed`로 TaskUpdate한다.
 
+> **종료 규칙**: 플로우가 끝나면 모든 항목을 `completed`로 닫는다. 미완료(`pending`/`in_progress`) 항목이 하나라도 남으면 진행 표시가 화면에 계속 유지된다. 스킵한 단계도 `completed`로 처리한다.
+
 - 단위 테스트
 - 통합 테스트
 - E2E 테스트
