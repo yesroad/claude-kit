@@ -55,6 +55,8 @@ description: 작업 완료 후 검증 → 커밋 → PR 생성까지 전체 플�
 - 정리 & 메모리
 - 최종 요약
 
+> **⚠️ 종료 규칙**: 플로우가 끝나면 모든 Task가 반드시 `completed` 상태여야 한다. 미완료(`pending`/`in_progress`) Task가 하나라도 남으면 진행 표시가 화면에 계속 유지된다. 마지막 단계(최종 요약)를 출력한 직후 해당 Task를 `completed`로 TaskUpdate하여 목록을 닫는다. 스킵된 단계(테스트 스킵 등)도 `completed`로 닫는다.
+
 ---
 
 ## 수행 작업
@@ -266,6 +268,8 @@ gh pr create --title "{type}: {제목}" --body "{pr-guide.md 템플릿에 따라
 1. 코드 리뷰 반영
 2. 머지
 ```
+
+**요약 출력 직후 반드시 `최종 요약` Task를 `completed`로 TaskUpdate한다.** 이 시점에 모든 Task가 `completed`여야 하며, 미완료 Task가 남아 있으면 진행 표시가 사라지지 않으므로 남은 항목을 모두 닫는다.
 
 ---
 
