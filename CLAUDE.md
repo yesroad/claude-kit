@@ -1,7 +1,7 @@
-# Claude Kit
+# claude-front
 
 <tech_stack>
-cc-kit은 Claude Code용 AI 코딩 워크플로우 플러그인입니다.
+claude-front는 프론트엔드 개발을 위한 개인 Claude Code 하네스입니다.
 주요 구성: rules, agents, skills, commands, workflows
 주요 의존성: terminal-notifier, gh CLI
 </tech_stack>
@@ -17,12 +17,13 @@ cc-kit은 Claude Code용 AI 코딩 워크플로우 플러그인입니다.
 
 | 문서                                 | 업데이트 내용                        |
 | ------------------------------------ | ------------------------------------ |
-| `commands/setup.md`                  | 결정표, quick_ref 예시               |
+| `commands/setup.md`                  | quick_ref 예시, MCP 매핑, clone·심링크 로직 |
 | `workflows/coordination/roster.md`   | 에이전트/스킬 카탈로그, 연결 흐름    |
-| `README.md`                          | 목록 테이블, 디렉토리 구조           |
-| `FILE-MAP.md`                        | 섹션별 항목, 흐름 다이어그램         |
-| `scripts/verify-install.sh`          | 파일 수·이름 배열                    |
+| `README.md`                          | 목록 테이블, 구성 요약               |
+| `FILE-MAP.md`                        | 섹션별 항목, 파일 수, 흐름 다이어그램 |
+| `scripts/verify-install.sh`          | 파일 수·이름 배열, 심링크 검사       |
 | `CHANGELOG.md`                       | 버전·변경 이력 추가                  |
+| `.gitignore`                         | 무시 패턴 변경 시 설명 동기화        |
 
 ## 릴리즈 시 버전 동기화 필수
 
@@ -37,6 +38,7 @@ cc-kit은 Claude Code용 AI 코딩 워크플로우 플러그인입니다.
 
 - **매니페스트**: `.claude-plugin/`만 canonical(루트 `plugin.json`/`marketplace.json` 금지). skills/commands/agents/hooks는 자동발견되므로 배열 명시 불필요.
 - **훅**: 차단이 필요한 검사는 `PreToolUse`(`exit 2`). `PostToolUse`는 도구 실행 후라 차단 불가(경고만, `exit 1`은 비블로킹).
+- **설치**: `/setup`은 소스를 `~/.claude-front`(`CLAUDE_FRONT_HOME`)에 git clone하고 프로젝트 `.claude/`가 이를 **심링크**하게 한다(복사 아님). `git pull` 한 번이면 전 프로젝트 반영, 세션 시작 시 `hooks/auto-pull.sh`(전역 SessionStart)가 throttle pull. rule은 전부 심링크 + `paths` 조건부 로드(prune 없음).
 - **모델**: 별칭(`haiku`/`sonnet`/`opus`)을 쓴다 — 최신 세대를 자동 추적하므로 풀ID 핀 금지. 깊이/비용은 `effort`(frontmatter 또는 `/effort`)로 조절. 단일 진실 공급원은 `workflows/coordination/guide.md`.
 - **SKILL.md frontmatter**: `name`·`description`·`user-invocable` 필수, `allowed-tools` 권장, `metadata.version`은 따옴표 문자열(`"1.0.0"`).
 

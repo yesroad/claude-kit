@@ -1,9 +1,9 @@
 ---
 name: setup
-description: cc-kit을 현재 프로젝트에 설치합니다. 프로젝트 기술 스택을 입력받아 맞춤형 CLAUDE.md와 .claude/ 설정을 생성합니다.
+description: claude-front를 현재 프로젝트에 설치합니다. 프로젝트 기술 스택을 입력받아 맞춤형 CLAUDE.md와 .claude/ 설정을 생성합니다.
 ---
 
-현재 프로젝트에 cc-kit을 설치합니다.
+현재 프로젝트에 claude-front를 설치합니다.
 
 ---
 
@@ -188,68 +188,39 @@ Q8 답변을 기반으로 `INSTALL_BASIC_MEMORY` 변수를 설정합니다:
 | 1 (예)   | `y`                     |
 | 2 또는 엔터 | (빈 문자열)          |
 
-인터뷰 답변(Q1~Q6)을 기반으로 **rule 선택 복사 플래그**를 설정합니다 (해당하면 `y`, 아니면 빈 문자열):
-
-| 플래그       | 설정 조건                                                          |
-| ------------ | ------------------------------------------------------------------ |
-| `FRONTEND`   | Q1 = Next.js 또는 React → `y`                                      |
-| `STYLING`    | Q3 = Emotion → `emotion` / TailwindCSS → `tailwind` / 그 외 → `other` |
-| `ZOD`        | Q6 = Zod → `y`                                                     |
-| `TS`         | TypeScript 프로젝트 → `y` (Q1 = Next.js/React면 기본 `y`)          |
-
-> rules/는 전체 복사 후 이 플래그로 **미해당 파일만 정리(prune)**된다. `policies.md`·`unit-test-conventions.md`는 항상 유지.
+설치 스크립트를 실행합니다. (인터뷰 답변 Q1~Q6은 **rule 설치를 결정하지 않는다** — 모든 rule이 심링크로 존재하고 각 파일의 `paths` frontmatter가 로딩을 제어한다. 인터뷰는 5단계 CLAUDE.md 생성·quick_ref·MCP 선택에만 쓰인다.)
 
 ```bash
 #!/bin/bash
 set -e
 
-command -v python3 >/dev/null 2>&1 || { echo "❌ python3가 필요합니다. (settings.json 주입 및 MCP 설정에 사용, MCP 미선택 시에도 필요)"; exit 1; }
+command -v python3 >/dev/null 2>&1 || { echo "❌ python3가 필요합니다. (settings.json 주입·MCP 설정에 사용)"; exit 1; }
+command -v git >/dev/null 2>&1 || { echo "❌ git이 필요합니다."; exit 1; }
 
-PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-}"
+# ── 소스 준비: 고정 경로에 git clone(첫 1회) 후 pull ───────────────────────────
+# 프로젝트 .claude/ 는 이 한 벌의 소스를 심링크한다 → `git pull` 한 번이면 모든 프로젝트가 자동 최신.
+FRONT_HOME="${CLAUDE_FRONT_HOME:-$HOME/.claude-front}"
+REPO_URL="https://github.com/yesroad/claude-front.git"
 
-if [ -z "$PLUGIN_ROOT" ] || [ ! -d "$PLUGIN_ROOT" ]; then
-  PLUGIN_ROOT="$HOME/.claude/plugins/cache/cc-kit"
+if [ ! -d "$FRONT_HOME/.git" ]; then
+  echo "첫 설치 — $FRONT_HOME 에 클론합니다..."
+  git clone --depth 1 "$REPO_URL" "$FRONT_HOME"
+else
+  git -C "$FRONT_HOME" pull --ff-only 2>/dev/null || echo "⚠️  pull 실패(오프라인/충돌) — 기존 상태로 진행합니다."
 fi
 
-if [ ! -d "$PLUGIN_ROOT" ]; then
-  echo "GitHub에서 cc-kit을 가져옵니다..."
-  CCKIT_TMP=$(mktemp -d)  # 고정 /tmp 경로 대신 무작위 임시 디렉토리(symlink/race 방지)
-  git clone --depth 1 https://github.com/yesroad/cc-kit.git "$CCKIT_TMP"
-  PLUGIN_ROOT="$CCKIT_TMP"
-fi
+[ -d "$FRONT_HOME/rules" ] || { echo "❌ 소스가 올바르지 않습니다: $FRONT_HOME"; exit 1; }
 
+# ── 심링크: .claude/ 가 고정 소스를 가리킨다 (디렉토리 통째 → 소스 변경 자동 반영) ──
 mkdir -p .claude
-
 for dir in rules workflows agents skills commands hooks scripts; do
-  [ -d "$PLUGIN_ROOT/$dir" ] && cp -r "$PLUGIN_ROOT/$dir/" ".claude/$dir/"
+  [ -e "$FRONT_HOME/$dir" ] || continue
+  rm -rf ".claude/$dir"                      # 기존 심링크/구 복사본 제거(개인용 — 백업 불필요)
+  ln -s "$FRONT_HOME/$dir" ".claude/$dir"     # 절대경로 심링크
 done
+echo "🔗 .claude/ → $FRONT_HOME 심링크 완료"
 
-# ── rule 선택 정리 (선택 복사) ─────────────────────────────────────────────
-# rules/는 위에서 전체 복사된 뒤, 인터뷰 플래그(FRONTEND/STYLING/ZOD/TS)로 미해당 rule만 제거.
-# policies.md·unit-test-conventions.md는 항상 유지.
-# 에이전트/스킬이 @참조하는 core rule(react-*, nextjs-app-router, state-*, coding-standards,
-# accessibility, frontend-fundamentals, unit-test-conventions)은 FRONTEND이면 전부 유지된다.
-# 실제 로딩은 각 파일의 paths frontmatter가 제어하므로 @참조가 깨지지 않는다.
-RULES_DIR=".claude/rules"
-_prune() { [ -e "$RULES_DIR/$1" ] && rm -rf "$RULES_DIR/$1" && echo "  rule 제외: $1"; }
-
-if [ "$FRONTEND" != "y" ]; then
-  # Q1 = 기타: 프론트엔드 전용 core rule 제거
-  for f in core/coding-standards.md core/react-conventions.md core/react-hooks-patterns.md \
-           core/frontend-fundamentals.md core/accessibility.md core/nextjs-app-router.md \
-           core/state-and-server-state.md; do _prune "$f"; done
-fi
-[ "$STYLING" = "emotion" ]  || _prune optional/emotion.md       # 상호 배타 — 미선택 제거
-[ "$STYLING" = "tailwind" ] || _prune optional/tailwindcss-v4.md
-[ "$ZOD" = "y" ] || _prune optional/validation-patterns.md
-[ "$TS" = "y" ]  || _prune references/typescript                # 비-TS 프로젝트는 TS 레퍼런스 제거
-[ "$ZOD" = "y" ] || _prune references/zod                       # Zod 미사용 시 zod 레퍼런스 제거
-echo "📋 rule 선택 정리 완료 (선택 복사)"
-
-# hooks 실행 권한 부여
-[ -f ".claude/hooks/notify.sh" ] && chmod +x .claude/hooks/notify.sh
-[ -f ".claude/hooks/guard-check.sh" ] && chmod +x .claude/hooks/guard-check.sh
-[ -f ".claude/hooks/guard-pretool.sh" ] && chmod +x .claude/hooks/guard-pretool.sh
+# 심링크라 hooks 실행권한은 소스 파일 그대로 사용된다 (chmod 불필요)
 
 # settings.json에 harness hooks 주입 (없으면 생성, 있으면 머지)
 python3 - <<'PYEOF'
@@ -286,7 +257,7 @@ if "Stop" not in hooks:
     hooks["Stop"] = [{
         "matcher": "",
         "hooks": [{"type": "command",
-                   "command": "NOTIFIER_TITLE='CC-Kit' NOTIFIER_MESSAGE='응답 완료 — /done으로 검증하세요' bash \"./.claude/hooks/notify.sh\"",
+                   "command": "NOTIFIER_TITLE='claude-front' NOTIFIER_MESSAGE='응답 완료 — /done으로 검증하세요' bash \"./.claude/hooks/notify.sh\"",
                    "timeout": 5}]
     }]
 
@@ -305,12 +276,51 @@ with open(settings_path, "w") as f:
 print("📋 settings.json harness hooks 주입 완료")
 PYEOF
 
+# ── 전역 ~/.claude/settings.json 에 SessionStart 자동 pull 훅 주입 (멱등) ──────────
+# pull은 FRONT_HOME 한 곳을 갱신하므로 프로젝트마다가 아니라 전역 1개면 충분하다.
+# 세션 시작/재개 때 auto-pull.sh가 throttle(기본 12h)로 백그라운드 pull → 모든 프로젝트 자동 최신.
+FRONT_HOME="$FRONT_HOME" python3 - <<'PYEOF'
+import json, os
+
+front_home = os.environ["FRONT_HOME"]
+gpath = os.path.expanduser("~/.claude/settings.json")
+os.makedirs(os.path.dirname(gpath), exist_ok=True)
+
+settings = {}
+if os.path.exists(gpath):
+    with open(gpath) as f:
+        try:
+            settings = json.load(f)
+        except Exception:
+            settings = {}
+
+hooks = settings.setdefault("hooks", {})
+ss = hooks.setdefault("SessionStart", [])
+
+cmd = f'bash "{front_home}/hooks/auto-pull.sh"'
+already = any(
+    any(h.get("command") == cmd for h in entry.get("hooks", []))
+    for entry in ss
+)
+if not already:
+    ss.append({
+        "matcher": "startup|resume",
+        "hooks": [{"type": "command", "command": cmd, "timeout": 10}],
+    })
+    with open(gpath, "w") as f:
+        json.dump(settings, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    print("📋 전역 SessionStart 자동 pull 훅 등록 완료")
+else:
+    print("📋 전역 SessionStart 자동 pull 훅 이미 등록됨")
+PYEOF
+
 # .mcp.json: Q7 선택 서버만 추가 (없으면 새로 생성, 있으면 선택 항목만 머지)
 # SELECTED_MCP: Q7 답변 기반으로 Claude가 설정 — 쉼표 구분 서버 키 목록
 # 예) SELECTED_MCP="Figma,playwright" 또는 SELECTED_MCP="" (없음)
 # 서버 키 매핑: 1=Figma, 2=supabase, 3=playwright, 4=Atlassian, 5=shadcn
-if [ -n "$SELECTED_MCP" ] && [ -f "$PLUGIN_ROOT/.mcp.json" ]; then
-  MCP_TEMPLATE="$PLUGIN_ROOT/.mcp.json" MCP_SELECTED="$SELECTED_MCP" python3 - <<'PYEOF'
+if [ -n "$SELECTED_MCP" ] && [ -f "$FRONT_HOME/.mcp.json" ]; then
+  MCP_TEMPLATE="$FRONT_HOME/.mcp.json" MCP_SELECTED="$SELECTED_MCP" python3 - <<'PYEOF'
 import json, os
 
 template_path = os.environ["MCP_TEMPLATE"]
@@ -355,8 +365,8 @@ fi
 
 # Basic Memory MCP: Q8 y/n 기반으로 Claude가 설정
 # INSTALL_BASIC_MEMORY="y" 또는 "" (설치 안 함)
-if [ "$INSTALL_BASIC_MEMORY" = "y" ] && [ -f "$PLUGIN_ROOT/.mcp.json" ]; then
-  MCP_TEMPLATE="$PLUGIN_ROOT/.mcp.json" python3 - <<'PYEOF'
+if [ "$INSTALL_BASIC_MEMORY" = "y" ] && [ -f "$FRONT_HOME/.mcp.json" ]; then
+  MCP_TEMPLATE="$FRONT_HOME/.mcp.json" python3 - <<'PYEOF'
 import json, os
 
 template_path = os.environ["MCP_TEMPLATE"]
@@ -387,52 +397,41 @@ else:
 PYEOF
 fi
 
-# manifest.json 생성/갱신 (.claude/manifest.json에 cc-kit 키로 기록)
-PLUGIN_ROOT="$PLUGIN_ROOT" python3 - <<'PYEOF'
+# manifest.json 기록 (.claude/manifest.json — 심링크 모드 메타)
+FRONT_HOME="$FRONT_HOME" python3 - <<'PYEOF'
 import json, os
 from datetime import date
-from pathlib import Path
 
-plugin_root = os.environ["PLUGIN_ROOT"]
+front_home = os.environ["FRONT_HOME"]
 
-# plugin.json에서 버전 읽기
-plugin_json_path = os.path.join(plugin_root, "plugin.json")
+# plugin.json에서 버전 읽기 (.claude-plugin/ 우선)
 version = "unknown"
-if os.path.exists(plugin_json_path):
-    with open(plugin_json_path) as f:
-        version = json.load(f).get("version", "unknown")
+for cand in (os.path.join(front_home, ".claude-plugin", "plugin.json"),
+             os.path.join(front_home, "plugin.json")):
+    if os.path.exists(cand):
+        with open(cand) as f:
+            version = json.load(f).get("version", "unknown")
+        break
 
-# 설치된 파일 목록 수집
-managed_dirs = ["rules", "workflows", "agents", "skills", "commands", "hooks", "scripts", "references"]
-files = []
-for d in managed_dirs:
-    dir_path = Path(".claude") / d
-    if dir_path.exists():
-        for p in sorted(dir_path.rglob("*")):
-            if p.is_file():
-                files.append(str(p.relative_to(".claude")))
-
-# 기존 manifest.json 로드 또는 빈 구조 생성
 manifest_path = ".claude/manifest.json"
 manifest = {}
 if os.path.exists(manifest_path):
     with open(manifest_path) as f:
         manifest = json.load(f)
 
-manifest["cc-kit"] = {
+manifest["claude-front"] = {
     "version": version,
     "installedAt": str(date.today()),
-    "files": files
+    "mode": "symlink",
+    "frontHome": front_home,
 }
 
 with open(manifest_path, "w") as f:
     json.dump(manifest, f, indent=2, ensure_ascii=False)
     f.write("\n")
 
-print(f"📋 manifest.json 생성 완료 — {len(files)}개 파일 기록")
+print(f"📋 manifest.json 기록 완료 (symlink → {front_home})")
 PYEOF
-
-[ -n "$CCKIT_TMP" ] && [ -d "$CCKIT_TMP" ] && rm -rf "$CCKIT_TMP"
 
 # .mcp.json 보안 안내
 if [ -f ".mcp.json" ]; then
@@ -480,18 +479,10 @@ echo "✅ .claude/ 설치 완료"
 | `pr-guide.md`          | `workflows/git/`           | 항상      |
 
 > **rules는 `@참조`하지 않는다.** `.claude/rules/`는 Claude Code가 자동 발견하여 로드한다
-> (`paths` frontmatter 없으면 시작 시 항상, 있으면 일치 파일 작업 시). 어떤 rule이 설치되는지는
-> 2단계 **선택 복사**(FRONTEND/STYLING/ZOD/TS 플래그)가 결정한다. directive-generator는
-> rule을 CLAUDE.md에 `@참조`로 주입하지 않는다 — 자동발견과의 **이중 로드를 막기 위함**이다.
->
-> 참고 — 2단계 선택 복사가 설치하는 rule:
->
-> - **항상**: `policies.md`, `unit-test-conventions.md`
-> - **Q1 = Next.js/React**: `coding-standards`, `react-conventions`, `react-hooks-patterns`, `frontend-fundamentals`, `accessibility`, `nextjs-app-router`, `state-and-server-state`
-> - **Q3 = Emotion** → `optional/emotion.md` / **TailwindCSS v4** → `optional/tailwindcss-v4.md`
-> - **Q6 = Zod** → `optional/validation-patterns.md`
-> - **TypeScript** → `references/typescript/*` / **Zod** → `references/zod/*`
-> - **Q1 = 기타**: 프론트엔드 전용 core rule 전체 제외(위 항상 항목만 유지)
+> (`paths` frontmatter 없으면 시작 시 항상, 있으면 일치 파일 작업 시). 모든 rule이 심링크로 존재하며
+> 어떤 rule이 로드되는지는 각 파일의 `paths` frontmatter가 제어한다 — 무관한 rule은 해당 경로를
+> 작업할 때만 로드되므로 컨텍스트 낭비가 없다. directive-generator는 rule을 CLAUDE.md에 `@참조`로
+> 주입하지 않는다 — 자동발견과의 **이중 로드를 막기 위함**이다.
 
 **포함할 스킬 quick_ref (결정표 기반):**
 
@@ -564,10 +555,10 @@ directive-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 
 설치된 항목, 백업 여부, 생성된 CLAUDE.md 내용을 사용자에게 보여주고 아래 형식으로 안내합니다:
 
 ```
-✅ cc-kit 설치 완료
+✅ claude-front 설치 완료
 
 📁 설치된 항목:
-  .claude/rules/        — 코딩 규칙 (프레임워크별 선별 적용)
+  .claude/rules/        — 코딩 규칙 (소스 심링크 · paths 조건부 로드)
   .claude/agents/       — 전문화된 서브에이전트
   .claude/skills/       — 자동 트리거 스킬
   .claude/commands/     — 슬래시 커맨드
@@ -595,3 +586,8 @@ directive-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 
 ```
 
 > CLAUDE.md가 백업된 경우: `.claude/CLAUDE.back.md`에서 이전 내용을 확인할 수 있습니다.
+>
+> 📌 `.claude/`의 rules·agents·skills·commands·workflows·hooks는 `$HOME/.claude-front`(고정 클론)를
+> 가리키는 **심링크**입니다. `cd ~/.claude-front && git pull` 한 번이면 이 머신의 모든 프로젝트가 자동
+> 최신이 되고, 세션 시작 시에도 자동 pull(기본 12h 간격)이 돌아 보통은 신경 쓸 필요가 없습니다.
+> **새 프로젝트에서만 `/setup`을 한 번** 더 실행하세요.

@@ -1,7 +1,7 @@
 #!/bin/bash
-# cc-kit 설치 검증 스크립트
-# /setup 또는 /update-cc-kit 실행 후 대상 프로젝트 루트에서 실행
-# 사용법: bash <path-to-cc-kit>/scripts/verify-install.sh
+# claude-front 설치 검증 스크립트
+# /setup 실행 후 대상 프로젝트 루트에서 실행
+# 사용법: bash <path-to-claude-front>/scripts/verify-install.sh
 
 # ---------------------------------------------------------------------------
 # 색상 코드 (터미널 지원 여부에 따라 비활성화)
@@ -60,8 +60,27 @@ if [ ! -d ".claude" ]; then
 fi
 
 echo ""
-echo -e "${BOLD}cc-kit 설치 검증${RESET}"
+echo -e "${BOLD}claude-front 설치 검증${RESET}"
 echo "검증 경로: $(pwd)/.claude"
+
+# ---------------------------------------------------------------------------
+# 0. 심링크 무결성 (.claude/* → ~/.claude-front)
+# ---------------------------------------------------------------------------
+section "0. 심링크 무결성"
+
+for d in rules workflows agents skills commands hooks scripts; do
+  if [ -L ".claude/$d" ]; then
+    if [ -e ".claude/$d" ]; then
+      pass ".claude/$d → $(readlink ".claude/$d")"
+    else
+      fail ".claude/$d 심링크 끊김(dangling) — /setup 재실행"
+    fi
+  elif [ -d ".claude/$d" ]; then
+    warn ".claude/$d 가 실제 디렉토리(구 복사본일 수 있음) — /setup 재실행 권장"
+  else
+    fail ".claude/$d 없음"
+  fi
+done
 
 # ---------------------------------------------------------------------------
 # 1. .claude/agents/ 검사
@@ -74,7 +93,7 @@ EXPECTED_AGENT_COUNT=${#EXPECTED_AGENTS[@]}
 if [ ! -d ".claude/agents" ]; then
   fail ".claude/agents/ 디렉토리가 없습니다"
 else
-  ACTUAL_AGENT_COUNT=$(find .claude/agents -maxdepth 1 -name "*.md" | wc -l | tr -d ' ')
+  ACTUAL_AGENT_COUNT=$(find -L .claude/agents -maxdepth 1 -name "*.md" | wc -l | tr -d ' ')
 
   if [ "$ACTUAL_AGENT_COUNT" -eq "$EXPECTED_AGENT_COUNT" ]; then
     pass ".claude/agents/ 존재 (파일 수: ${ACTUAL_AGENT_COUNT}/${EXPECTED_AGENT_COUNT})"
@@ -119,7 +138,7 @@ EXPECTED_SKILL_COUNT=${#EXPECTED_SKILLS[@]}
 if [ ! -d ".claude/skills" ]; then
   fail ".claude/skills/ 디렉토리가 없습니다"
 else
-  ACTUAL_SKILL_COUNT=$(find .claude/skills -maxdepth 1 -mindepth 1 -type d | wc -l | tr -d ' ')
+  ACTUAL_SKILL_COUNT=$(find -L .claude/skills -maxdepth 1 -mindepth 1 -type d | wc -l | tr -d ' ')
 
   if [ "$ACTUAL_SKILL_COUNT" -eq "$EXPECTED_SKILL_COUNT" ]; then
     pass ".claude/skills/ 존재 (디렉토리 수: ${ACTUAL_SKILL_COUNT}/${EXPECTED_SKILL_COUNT})"
@@ -199,7 +218,7 @@ HOOKS_DIR_EXISTS=false
 HOOKS_IN_SETTINGS=false
 
 if [ -d ".claude/hooks" ]; then
-  HOOK_FILE_COUNT=$(find .claude/hooks -maxdepth 1 -type f | wc -l | tr -d ' ')
+  HOOK_FILE_COUNT=$(find -L .claude/hooks -maxdepth 1 -type f | wc -l | tr -d ' ')
   if [ "$HOOK_FILE_COUNT" -gt 0 ]; then
     HOOKS_DIR_EXISTS=true
   fi
@@ -246,13 +265,13 @@ fi
 # ---------------------------------------------------------------------------
 section "6. commands/"
 
-EXPECTED_COMMANDS=("commit.md" "done.md" "setup.md" "setup-notifier.md" "start.md" "test.md" "update-cc-kit.md")
+EXPECTED_COMMANDS=("commit.md" "done.md" "setup.md" "setup-notifier.md" "start.md" "test.md")
 EXPECTED_COMMAND_COUNT=${#EXPECTED_COMMANDS[@]}
 
 if [ ! -d ".claude/commands" ]; then
   fail ".claude/commands/ 디렉토리가 없습니다"
 else
-  ACTUAL_COMMAND_COUNT=$(find .claude/commands -maxdepth 1 -name "*.md" | wc -l | tr -d ' ')
+  ACTUAL_COMMAND_COUNT=$(find -L .claude/commands -maxdepth 1 -name "*.md" | wc -l | tr -d ' ')
 
   if [ "$ACTUAL_COMMAND_COUNT" -eq "$EXPECTED_COMMAND_COUNT" ]; then
     pass ".claude/commands/ 존재 (파일 수: ${ACTUAL_COMMAND_COUNT}/${EXPECTED_COMMAND_COUNT})"
@@ -283,7 +302,7 @@ echo -e "${BOLD}─────────────────────�
 echo ""
 
 if [ "$FAIL" -gt 0 ]; then
-  echo -e "${RED}설치가 불완전합니다. FAIL 항목을 확인 후 /setup 또는 /update-cc-kit을 다시 실행하세요.${RESET}"
+  echo -e "${RED}설치가 불완전합니다. FAIL 항목을 확인 후 /setup을 다시 실행하세요.${RESET}"
   echo ""
   exit 1
 elif [ "$WARN" -gt 0 ]; then
@@ -291,7 +310,7 @@ elif [ "$WARN" -gt 0 ]; then
   echo ""
   exit 0
 else
-  echo -e "${GREEN}모든 검증 통과. cc-kit 설치가 정상입니다.${RESET}"
+  echo -e "${GREEN}모든 검증 통과. claude-front 설치가 정상입니다.${RESET}"
   echo ""
   exit 0
 fi

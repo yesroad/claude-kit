@@ -4,20 +4,20 @@
     "name": "yesroad"
   },
   "metadata": {
-    "description": "AI 코딩 워크플로우 보일러플레이트 마켓플레이스",
-    "version": "1.4.0"
+    "description": "개인 Claude Code 하네스",
+    "version": "1.0.0"
   },
   "plugins": [
     {
-      "name": "cc-kit",
+      "name": "claude-front",
       "source": "./",
-      "description": "rules, skills, agents, commands를 포함한 Claude Code 확장 키트. /setup으로 프로젝트에 설치",
-      "version": "1.4.0",
+      "description": "프론트엔드 개발을 위한 개인 Claude Code 하네스",
+      "version": "1.0.0",
       "author": {
         "name": "yesroad"
       },
-      "homepage": "https://github.com/yesroad/cc-kit",
-      "repository": "https://github.com/yesroad/cc-kit",
+      "homepage": "https://github.com/yesroad/claude-front",
+      "repository": "https://github.com/yesroad/claude-front",
       "license": "MIT"
     }
   ]

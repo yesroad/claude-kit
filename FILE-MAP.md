@@ -1,10 +1,10 @@
-# cc-kit 파일 맵
+# claude-front 파일 맵
 
-> 전체 파일 설명서 — 버전 1.4.0 (2026-06-06 기준)
+> 전체 파일 설명서 — 버전 1.0.0 (2026-06-28 기준)
 >
-> **이원화 구조**: 루트(`/`)와 `.claude/`에 동일 파일이 존재합니다.
-> 루트는 플러그인 배포용, `.claude/`는 설치된 프로젝트에서 사용됩니다.
-> 아래 설명은 루트 기준이며, `.claude/` 사본은 내용이 100% 동일합니다.
+> **심링크 구조**: 소스 한 벌(`~/.claude-front` 클론)을 각 프로젝트의 `.claude/`가 심링크로 가리킨다.
+> 즉 소스 파일이 곧 프로젝트가 보는 파일이며 별도 사본이 없다 — `git pull` 한 번이면 모든 프로젝트에 반영된다.
+> 아래 설명은 소스 기준이다.
 
 ---
 
@@ -27,16 +27,16 @@
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
 | `CLAUDE.md` | ~25 | **플러그인 개발용 루트 지시문**. `model.md`, `required-patterns.md`, `anti-patterns.md`를 `<instructions>`로 로드. 플러그인 개발 시 참조 진입점. |
-| `README.md` | ~200 | **플러그인 사용 설명서**. 설치 방법, 인터뷰 항목, 커맨드/스킬 목록, 디렉토리 구조, MCP 서버 템플릿, 개발 사이클 설명. |
-| `CHANGELOG.md` | ~90 | **변경 이력**. Semantic Versioning 기반. 최신 1.4.0(전면 정비·effort 2축·nextjs-reviewer 제거), 1.3.0 rules paths 조건부 로드, 1.2.0 /work 통합, 1.1.x FF 원칙·Basic Memory. |
+| `README.md` | ~70 | **사용 설명서**. 설치(플러그인 → `/setup`), 커맨드·스킬 목록, 구성 요약. |
+| `CHANGELOG.md` | ~20 | **변경 이력**. Semantic Versioning. claude-front 1.0.0 첫 릴리즈(git clone + 심링크 설치, 자동 pull, rules 조건부 로드). |
 | `.mcp.json` | ~48 | **MCP 서버 설정 템플릿**. Atlassian(Jira/Confluence), Figma, Supabase, Playwright, shadcn(/ui 컴포넌트 검색), Basic Memory(세션 간 메모리) 연동 설정. `/setup` Q7에서 선택한 서버만 설치됨. |
-| `.gitignore` | ~21 | `settings.local.json`, `temp/`, `memory/` 등 로컬 전용 파일 제외. |
+| `.gitignore` | ~14 | `.claude/`, `.DS_Store`, `.env*`, `docs/`(로컬 리서치 노트) 제외. |
 
 ---
 
 ## 2. Rules — 코딩 규칙
 
-`rules/core/` 하위 9개 파일. `/setup` **선택 복사**로 스택에 맞는 것만 `.claude/rules/core/`에 설치되며, 각 파일의 `paths` frontmatter에 따라 **조건부 로드**된다(`paths` 없으면 항상 로드).
+`rules/core/` 하위 9개 파일. 전부 심링크로 존재하며, 각 파일의 `paths` frontmatter에 따라 **조건부 로드**된다(`paths` 없으면 항상 로드 — 무관한 rule은 해당 경로 작업 시에만 로드되어 컨텍스트 낭비가 없다).
 
 ### 핵심 사고 모델
 
@@ -87,6 +87,7 @@
 |------|:-----:|--------|------|
 | `commit-helper/SKILL.md` | 243 | "커밋 메시지" | **커밋 메시지 자동 생성**. 기존 커밋 컨벤션 감지 → staged 변경 분석 → 타입 결정 → Scope 추론 → Body 포함 여부 판단. 프리픽스 영어, 제목/Body 한글. 3가지 옵션(기본/간결/상세) 제시. |
 | `code-quality/SKILL.md` | 155 | "린트", "포맷", "타입체크" | **포맷/린트/타입 통합 검사**. 패키지 매니저·실행 경로 자동 감지(모노레포 포함). Prettier → ESLint `--fix` → TypeScript `--noEmit` 순서 실행. `--format-only`, `--lint-only`, `--type-only`, `--no-fix` 옵션. |
+| `code-level-review/SKILL.md` | - | "코드 리뷰", "컨벤션", "시니어 패턴" | **Next.js/React 코드 레벨 진단**. 시니어 기준 컨벤션 적용 + 레벨(주니어/미들/시니어) 진단 + 개선 포인트 제시. code-level-review 루브릭 기반. `references/`에 axios-react-query·code-examples·level-rubric 보유. |
 
 ### 개발 스킬
 
@@ -140,7 +141,7 @@
 
 ## 5. Commands — 슬래시 커맨드
 
-`commands/` 하위 7개 파일. 사용자가 `/커맨드명`으로 명시적으로 호출합니다.
+`commands/` 하위 6개 파일. 사용자가 `/커맨드명`으로 명시적으로 호출합니다.
 
 | 파일 | 줄 수 | 커맨드 | 설명 |
 |------|:-----:|--------|------|
@@ -149,7 +150,6 @@
 | `done.md` | ~170 | `/done` | **작업 완료 → PR**. 변경 분석 → 코드 검증(`code-quality`) → 코드 리뷰(code-reviewer) → 출시 게이트 → 선별 커밋(`commit-helper`) → PR 생성(`pr-guide.md` 템플릿) → 정리 → Basic Memory 저장(설치 시) → 최종 요약. `--no-review`, `--draft` 옵션. |
 | `commit.md` | ~90 | `/commit` | **Git 플로우 자동화**. main 최신화 → 작업 브랜치 생성(`{type}/{description}`) → 커밋(`commit-helper` 스킬) → 푸시 → main 머지 → 브랜치 삭제 → main 최신화. staged 변경만 처리(`git add .` 금지). `--branch`, `--no-gate` 옵션. |
 | `test.md` | - | `/test` | **테스트 전체 실행**. 단위 → 통합 → E2E 순서로 실행. 실패 시 원인 분석 및 수정 안내. |
-| `update-cc-kit.md` | - | `/update-cc-kit` | **플러그인 파일 최신화**. CLAUDE.md·커스텀 파일 보존. manifest.json 기반으로 변경된 파일만 업데이트. 충돌 시 사용자 확인. |
 | `setup-notifier.md` | ~76 | `/setup-notifier` | **macOS 알림 환경 설정**. terminal-notifier 설치 확인 → `install-notifier.sh` 실행 → `.claude/settings.local.json` 훅 설정 병합(PermissionRequest 이벤트에 notify.sh 연결). 최초 1회. |
 
 ---
@@ -210,8 +210,10 @@
 | `hooks/notify.sh` | ~33 | **크로스 플랫폼 알림 스크립트**. macOS: terminal-notifier(기본) → osascript(폴백). Linux: notify-send(libnotify). 환경변수 `NOTIFIER_TITLE`, `NOTIFIER_MESSAGE`로 커스텀. 터미널 벨(`printf '\a'`) 공통. |
 | `hooks/guard-check.sh` | ~55 | **코드 품질 best-effort 린트 (PostToolUse, 차단 아님)**. Write/Edit 후 `.ts/.tsx/.js/.jsx`에 8가지 패턴 검사: any, @ts-ignore, as any, 하드코딩 자격증명(키 prefix), useState+fetch, console.log, eslint-disable, useEffect([]). 주석 줄 제외. 위반 시 `exit 2`(경고). 정밀 검사는 ESLint/tsc/gitleaks에 위임. |
 | `hooks/guard-pretool.sh` | ~30 | **위험 Bash 차단 (PreToolUse)**. 도구 실행 전 STDIN 이벤트 JSON에서 명령 추출(jq), 광역 `rm -rf`·`git push --force`·`reset --hard`·포크밤·`mkfs`/`dd` 감지 시 `exit 2`로 실제 차단(PostToolUse와 달리 사전 차단 가능). |
-| `hooks/hooks.json` | ~40 | **훅 이벤트 설정**. `PreToolUse`(guard-pretool.sh, 위험 Bash 차단), `PermissionRequest`(notify.sh), `PostToolUse`(guard-check.sh, Write/Edit 후), `Stop`(notify.sh). `/setup` 시 `settings.json`에 자동 주입됨. |
+| `hooks/auto-pull.sh` | ~25 | **소스 자동 업데이트 (SessionStart)**. `~/.claude-front`를 throttle(기본 12h)로 백그라운드 `git pull`. `/setup`이 전역 `~/.claude/settings.json`의 SessionStart에 등록. 오프라인·충돌 시 조용히 통과. |
+| `hooks/hooks.json` | ~40 | **훅 이벤트 설정**. `PreToolUse`(guard-pretool.sh, 위험 Bash 차단), `PermissionRequest`(notify.sh), `PostToolUse`(guard-check.sh, Write/Edit 후), `Stop`(notify.sh). 플러그인으로 설치한 경우의 폴백(주 등록은 `/setup`의 settings.json 주입). |
 | `scripts/install-notifier.sh` | ~60 | **알림 의존성 설치 스크립트**. macOS: Homebrew + terminal-notifier 설치. Linux: apt-get/dnf/pacman으로 libnotify 설치. 훅 스크립트 실행 권한 부여(`chmod +x`). |
+| `scripts/verify-install.sh` | ~310 | **설치 검증 스크립트**. 심링크 무결성(dangling 감지) → agents/skills/commands 수 → settings.json·hooks 확인. `/setup` 후 프로젝트 루트에서 실행. |
 
 ---
 
@@ -221,8 +223,8 @@
 
 | 파일 | 줄 수 | 설명 |
 |------|:-----:|------|
-| `plugin.json` | ~12 | **플러그인 메타데이터**. name: `cc-kit`, version: `1.4.0`, author: `yesroad`, license: MIT. |
-| `marketplace.json` | ~24 | **마켓플레이스 등록 정보**. `yesroad` 마켓플레이스에 `cc-kit` 등록. 설치 명령: `/plugin install cc-kit@yesroad`. |
+| `plugin.json` | ~12 | **플러그인 메타데이터**. name: `claude-front`, version: `1.0.0`, author: `yesroad`, license: MIT. |
+| `marketplace.json` | ~24 | **마켓플레이스 등록 정보**. `yesroad` 마켓플레이스에 `claude-front` 등록. 설치 명령: `/plugin install claude-front@yesroad`. |
 
 ---
 
@@ -283,10 +285,9 @@ migration-helper  → test-unit 또는 test-integration (범위에 따라)
 | Rules (references) | 9 | TypeScript 6 + Zod 3 |
 | Agents | 4 | 특화 서브에이전트 |
 | Skills (SKILL.md) | 15 | 자동 트리거 |
-| Skills (references) | 12 | web-design 9 + nextjs-scaffold 3 |
-| Commands | 7 | 슬래시 커맨드 |
-| Workflows | 11 | 멀티에이전트 6 + 검증 3 + 워크플로우 3(thinking-model 포함) + git 1 + README |
-| Hooks & Scripts | 3 | 알림 자동화 |
+| Skills (references) | 16 | web-design 9 + nextjs-scaffold 4 + code-level-review 3 |
+| Commands | 6 | 슬래시 커맨드 |
+| Workflows | 10 | coordination 4 + quality-gates 3 + thinking 1 + git 1 + README 1 |
+| Hooks & Scripts | 7 | hooks 5(notify·guard-check·guard-pretool·auto-pull·hooks.json) + scripts 2 |
 | 메타데이터 | 2 | plugin.json, marketplace.json |
-| **.claude/ 사본** | **선택 복사** | 스택별 부분 설치 (rules는 선택된 것만) |
-| **합계 (고유 파일)** | **~81** | |
+| **합계 (git ls-files 기준)** | **87** | `.claude/`는 위 소스를 가리키는 심링크라 별도 카운트 없음 |
