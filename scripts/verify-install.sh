@@ -68,7 +68,9 @@ echo "검증 경로: $(pwd)/.claude"
 # ---------------------------------------------------------------------------
 section "0. 심링크 무결성"
 
-for d in rules workflows agents skills commands hooks scripts; do
+# rules는 core·references만 디렉토리 심링크(optional은 스택에 맞는 것만 선택 심링크)이므로
+# rules 자체가 아니라 rules/core·rules/references를 검사한다.
+for d in workflows agents skills commands hooks scripts rules/core rules/references; do
   if [ -L ".claude/$d" ]; then
     if [ -e ".claude/$d" ]; then
       pass ".claude/$d → $(readlink ".claude/$d")"

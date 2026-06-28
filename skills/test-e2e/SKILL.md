@@ -1,6 +1,6 @@
 ---
 name: test-e2e
-description: Playwright 기반 E2E(End-to-End) 테스트 생성. "e2e 테스트", "playwright", "end-to-end", "사용자 시나리오 테스트", "브라우저 테스트", "전체 흐름 테스트" 언급 시 반드시 이 스킬을 활성화. async Server Component, 미들웨어, 인증 플로우 등 단위/통합 테스트로 커버 불가한 영역 담당.
+description: Playwright 기반 E2E(End-to-End) 테스트 생성. "e2e 테스트", "playwright", "end-to-end", "사용자 시나리오", "사용자 여정", "로그인부터 구매까지", "브라우저 테스트", "전체 흐름 테스트" 언급 시 반드시 이 스킬을 활성화. async Server Component, 미들웨어, 인증 플로우 등 단위/통합 테스트로 커버 불가한 영역 담당.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Write, Bash
 metadata:

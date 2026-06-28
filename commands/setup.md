@@ -102,7 +102,7 @@ ls tailwind.config.* 2>/dev/null || true
 
 1. TailwindCSS
 2. Emotion
-3. CSS Modules
+3. SCSS Modules
 4. 기타
 
 **Q3-1. TailwindCSS 버전** (Q3 = TailwindCSS일 때만, 미감지 시 질문)
@@ -188,7 +188,14 @@ Q8 답변을 기반으로 `INSTALL_BASIC_MEMORY` 변수를 설정합니다:
 | 1 (예)   | `y`                     |
 | 2 또는 엔터 | (빈 문자열)          |
 
-설치 스크립트를 실행합니다. (인터뷰 답변 Q1~Q6은 **rule 설치를 결정하지 않는다** — 모든 rule이 심링크로 존재하고 각 파일의 `paths` frontmatter가 로딩을 제어한다. 인터뷰는 5단계 CLAUDE.md 생성·quick_ref·MCP 선택에만 쓰인다.)
+Q3(스타일링)·Q6(검증)을 기반으로 **상호배타 optional 룰 선택 변수**를 설정합니다:
+
+| 변수      | 설정 조건                                                              |
+| --------- | --------------------------------------------------------------------- |
+| `STYLING` | Q3 = Emotion → `emotion` / TailwindCSS → `tailwind` / 그 외 → (빈 문자열) |
+| `ZOD`     | Q6 = Zod → `y` / 그 외 → (빈 문자열)                                   |
+
+설치 스크립트를 실행합니다. 대부분의 rule은 전부 심링크 + `paths` 조건부 로드이지만, **서로 배타적인 스타일 룰(Emotion/Tailwind)과 Zod 룰만은 프로젝트에 맞는 것만 심링크**한다 — 무관한 스타일 룰이 모든 `*.tsx`에 동시에 로드되는 것을 막기 위함이다.
 
 ```bash
 #!/bin/bash
@@ -213,12 +220,22 @@ fi
 
 # ── 심링크: .claude/ 가 고정 소스를 가리킨다 (디렉토리 통째 → 소스 변경 자동 반영) ──
 mkdir -p .claude
-for dir in rules workflows agents skills commands hooks scripts; do
+for dir in workflows agents skills commands hooks scripts; do
   [ -e "$FRONT_HOME/$dir" ] || continue
   rm -rf ".claude/$dir"                      # 기존 심링크/구 복사본 제거(개인용 — 백업 불필요)
   ln -s "$FRONT_HOME/$dir" ".claude/$dir"     # 절대경로 심링크
 done
-echo "🔗 .claude/ → $FRONT_HOME 심링크 완료"
+
+# rules: core·references는 디렉토리 심링크(소스 변경 자동 반영),
+# optional은 상호배타라 프로젝트 스택에 맞는 것만 개별 심링크(무관 스타일 룰 동시 로드 방지).
+rm -rf .claude/rules
+mkdir -p .claude/rules/optional
+ln -s "$FRONT_HOME/rules/core"       ".claude/rules/core"
+ln -s "$FRONT_HOME/rules/references" ".claude/rules/references"
+[ "$STYLING" = "emotion" ]  && ln -s "$FRONT_HOME/rules/optional/emotion.md"            ".claude/rules/optional/emotion.md"
+[ "$STYLING" = "tailwind" ] && ln -s "$FRONT_HOME/rules/optional/tailwindcss-v4.md"      ".claude/rules/optional/tailwindcss-v4.md"
+[ "$ZOD" = "y" ]            && ln -s "$FRONT_HOME/rules/optional/validation-patterns.md" ".claude/rules/optional/validation-patterns.md"
+echo "🔗 .claude/ → $FRONT_HOME 심링크 완료 (rules/optional은 스택에 맞는 것만)"
 
 # 심링크라 hooks 실행권한은 소스 파일 그대로 사용된다 (chmod 불필요)
 
@@ -443,6 +460,36 @@ fi
 
 echo "✅ .claude/ 설치 완료"
 ```
+
+## 2.5단계: 패키지 설치 (선택 스택 미설치 시)
+
+신규 프로젝트라 인터뷰에서 고른 스택이 아직 설치 안 됐을 수 있다. 선택을 패키지로 매핑해 **미설치만 골라 설치를 제안**한다.
+
+| 선택(인터뷰)             | 패키지                                                |
+| ------------------------ | ----------------------------------------------------- |
+| Q3 Emotion               | `@emotion/react @emotion/styled`                      |
+| Q3 TailwindCSS v4        | `tailwindcss @tailwindcss/postcss`                    |
+| Q3 TailwindCSS v3        | `tailwindcss postcss autoprefixer`                    |
+| Q3 SCSS Modules          | `sass`                                                |
+| Q4 TanStack Query        | `@tanstack/react-query @tanstack/react-query-devtools` |
+| Q4 SWR                   | `swr`                                                 |
+| Q5 Zustand/Jotai/Redux   | `zustand` / `jotai` / `@reduxjs/toolkit react-redux`  |
+| Q6 Zod/Yup               | `zod` / `yup`                                          |
+
+진행:
+
+1. `package.json`의 `dependencies`·`devDependencies`와 대조해 **미설치 패키지만** 추린다(이미 있으면 건너뜀). `package.json`이 없는 비-JS 프로젝트면 이 단계를 스킵.
+2. 패키지 매니저 감지 — `pnpm-lock.yaml`→pnpm, `yarn.lock`→yarn, `bun.lockb`→bun, 그 외 npm.
+3. 미설치 목록을 보여주고 설치 여부를 **한 번** 묻는다:
+   ```
+   다음 패키지가 없습니다. 설치할까요? (Y/n)
+     - @tanstack/react-query @tanstack/react-query-devtools
+     - sass
+   ```
+4. 동의(Y/엔터) 시 감지된 매니저로 **최신 버전** 설치 — pnpm/yarn/bun은 `add`, npm은 `install`, 버전 핀 없이 `@latest`. **React Query는 devtools를 항상 함께** 설치한다.
+5. `n`이면 설치 명령만 출력하고 넘어간다.
+
+---
 
 ## 3단계: 기존 CLAUDE.md 백업
 

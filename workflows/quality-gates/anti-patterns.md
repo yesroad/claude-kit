@@ -194,7 +194,7 @@ const res = await api.get('/api/orders');
 ## 스타일링 (Emotion 사용 시)
 
 > 아래 규칙은 **Emotion(`@emotion/styled`, `@emotion/react`)을 사용하는 프로젝트에 적용**한다.
-> TailwindCSS, CSS Modules 등 다른 스타일링 시스템을 사용하는 프로젝트에는 해당 시스템의 컨벤션을 따른다.
+> TailwindCSS, SCSS Modules 등 다른 스타일링 시스템을 사용하는 프로젝트에는 해당 시스템의 컨벤션을 따른다.
 
 | 금지              | 대안                       |
 | ----------------- | -------------------------- |

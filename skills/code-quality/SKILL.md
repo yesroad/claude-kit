@@ -1,6 +1,6 @@
 ---
 name: code-quality
-description: 린트, 포맷, 타입 체크 실행 및 자동 수정. "린트", "포맷", "타입체크", "code quality" 입력 시 사용.
+description: 린트, 포맷, 타입 체크 실행 및 자동 수정. "린트", "포맷", "타입체크", "코드 정리", "경고 제거", "lint 에러", "code quality" 입력 시 사용.
 user-invocable: true
 allowed-tools: Bash(*)
 metadata:

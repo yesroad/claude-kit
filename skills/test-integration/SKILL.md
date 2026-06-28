@@ -1,6 +1,6 @@
 ---
 name: test-integration
-description: Route Handler, Server Actions 통합 테스트 생성. "통합 테스트", "API 테스트", "Route Handler 테스트", "Server Action 테스트", "integration test" 언급 시 반드시 이 스킬을 활성화. node 환경, BDD(Given-When-Then) 방식.
+description: Route Handler, Server Actions 통합 테스트 생성. "통합 테스트", "API 테스트", "백엔드 테스트", "API 엔드포인트 검증", "Route Handler 테스트", "Server Action 테스트", "integration test" 언급 시 반드시 이 스킬을 활성화. node 환경, BDD(Given-When-Then) 방식.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Write, Bash
 metadata:

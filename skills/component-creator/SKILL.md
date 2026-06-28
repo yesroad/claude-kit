@@ -2,7 +2,7 @@
 name: component-creator
 description: >
   React/Next.js 단일 컴포넌트 또는 훅을 신규 생성. 기존 프로젝트 패턴(스타일링 방식, export 형태, props 타입 위치)을 분석하여 일관된 보일러플레이트 생성.
-  "컴포넌트 만들어", "새 컴포넌트", "훅 만들어", "페이지 추가" 가 언급될 때 사용.
+  "컴포넌트 만들어", "새 컴포넌트", "훅 만들어", "페이지 추가", "버튼·카드·모달 만들어", "스타일 입혀" 가 언급될 때 사용.
   단, service+query+view를 함께 만드는 도메인 전체 스캐폴딩이나 "어디에 파일 만들어야 해?" 같은 폴더 구조 질문은 nextjs-scaffold를 사용.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Write, Edit, Bash
@@ -109,7 +109,7 @@ Task(
 | 항목              | 확인 방법                                                          |
 | ----------------- | ------------------------------------------------------------------ |
 | **파일 분리**     | `index.tsx`만 있나? `styled.ts`, `types.ts` 분리되나?              |
-| **스타일링**      | import 문에서 `@emotion`, `styled-components`, `*.module.css` 확인 |
+| **스타일링**      | import·className에서 `@emotion`/`styled-components`/`*.module.scss`/**Tailwind className** 확인. 모호하면 `.claude/rules/optional/`에 로드된 스타일 룰(emotion vs tailwindcss-v4)을 기준 삼는다 |
 | **Props 타입**    | `interface` vs `type`, 같은 파일인지 `types.ts` 분리인지           |
 | **export**        | `export function` (named) vs `export default`                      |
 | **'use client'**  | 기존 컴포넌트에 있나? 없나?                                        |
@@ -132,7 +132,7 @@ Phase 1에서 확정된 패턴 스펙을 포함해서 출력한다:
 ### 적용할 패턴 스펙
 
 - 파일 구조: {index.tsx 단일 / index.tsx + styled.ts / index.tsx + styled.ts + types.ts}
-- 스타일링: {@emotion/styled / styled-components / css modules / 없음}
+- 스타일링: {@emotion/styled / styled-components / Tailwind className / scss modules / 없음}
 - Props 타입: {interface / type} → {같은 파일 / types.ts 분리}
 - export: {named / default}
 - 'use client': {있음 / 없음}

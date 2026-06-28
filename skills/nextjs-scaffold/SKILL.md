@@ -5,8 +5,8 @@ description: >
   Next.js 프로젝트에서 여러 레이어를 아우르는 도메인 전체를 스캐폴딩하거나, 파일 위치/폴더 구조를 안내할 때 사용.
   단일 컴포넌트·훅 생성은 component-creator를 사용. 이 스킬은 다음 상황에만 사용:
   "전체 도메인 추가" (service + query 훅 + view 한 번에),
-  "API 서비스 파일 만들어" / "axios 인스턴스" / "서비스 레이어",
-  "TanStack Query 훅 구조" / "queryOptions" / "useQuery 어디에 만들어",
+  "API 서비스 파일 만들어" / "API 엔드포인트 추가" / "axios 인스턴스" / "서비스 레이어",
+  "TanStack Query 훅 구조" / "queryOptions" / "데이터 페칭·쿼리 구조" / "useQuery 어디에 만들어",
   "views 폴더 구조" / "어디에 파일 만들어야 해?" / "폴더 구조 어떻게?",
   "view + hook 분리 패턴" / "도메인 스캐폴딩" / "모노레포 구조".
   CLAUDE.md 없는 새 프로젝트나 문서가 부족한 프로젝트에서 특히 유용하다.
