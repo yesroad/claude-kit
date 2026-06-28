@@ -1,6 +1,6 @@
 # PR 작성 가이드
 
-> PR 본문 품질 기준 — `done.md`와 `git-operator.md`에서 참조
+> PR 본문 품질 기준 - `done.md`와 `git-operator.md`에서 참조
 
 ---
 

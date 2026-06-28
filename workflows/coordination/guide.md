@@ -14,7 +14,7 @@
 | **DELEGATE**   | 전문 에이전트에 즉시 위임             | 품질 향상          |
 
 ```typescript
-// ✅ 병렬 실행 — 단일 메시지에서 동시 호출
+// ✅ 병렬 실행 - 단일 메시지에서 동시 호출
 Task(subagent_type="explore", model="haiku", prompt="파일 구조 분석");
 Task(subagent_type="explore", model="haiku", prompt="API 패턴 분석");
 ```
@@ -39,10 +39,10 @@ Task(subagent_type="explore", model="haiku", prompt="API 패턴 분석");
 | 옵션 | 무엇 | 언제 |
 | ---- | ---- | ---- |
 | **Dynamic Workflows** | Claude가 JS 스크립트로 서브에이전트를 대규모 오케스트레이션(공식 research preview). 백그라운드 실행, 중간 결과는 스크립트 변수에 보관해 컨텍스트 절약. `/workflows`로 관리·저장 | 수십~수백 서브에이전트가 필요한 탐색·감사·마이그레이션 |
-| **ultracode** | `/effort ultracode` — `xhigh` 추론 + Dynamic Workflow 자동 오케스트레이션 권한(세션 전용) | HIGH 복잡도 **+ 대규모** 작업(도메인 리팩토링, 전면 감사) |
+| **ultracode** | `/effort ultracode` - `xhigh` 추론 + Dynamic Workflow 자동 오케스트레이션 권한(세션 전용) | HIGH 복잡도 **+ 대규모** 작업(도메인 리팩토링, 전면 감사) |
 
 > **기본값 아님**: ultracode는 작업당 여러 워크플로우를 띄워 토큰 소비가 크다. 진짜 대규모 작업에만 opt-in한다.
-> **용어 구별** — `effort`: 추론 깊이 레벨(low~max). `ultracode`: Claude Code 세션 설정(xhigh + 자동 워크플로우). `ultrathink`: 일회성 깊은 추론 프롬프트 키워드(API effort는 바꾸지 않음).
+> **용어 구별** - `effort`: 추론 깊이 레벨(low~max). `ultracode`: Claude Code 세션 설정(xhigh + 자동 워크플로우). `ultrathink`: 일회성 깊은 추론 프롬프트 키워드(API effort는 바꾸지 않음).
 > 아래 Task 병렬 패턴은 이 Dynamic Workflows의 turn-by-turn(컨텍스트 보유) 버전이다.
 
 ---
@@ -72,7 +72,7 @@ Task(subagent_type="explore", model="haiku", prompt="API 패턴 분석");
 
 ## 모델·effort 선택 기준
 
-모델은 **능력**을, effort는 그 능력 안에서 **추론 깊이·비용**을 결정한다(두 축은 직교). 별칭은 항상 최신 세대를 자동 추적한다 — 현재 `haiku`=Haiku 4.5, `sonnet`=Sonnet 4.6, `opus`=Opus 4.8(adaptive thinking, 고정 thinking budget 없음). 그래서 풀ID로 핀하지 않는다.
+모델은 **능력**을, effort는 그 능력 안에서 **추론 깊이·비용**을 결정한다(두 축은 직교). 별칭은 항상 최신 세대를 자동 추적한다 - 현재 `haiku`=Haiku 4.5, `sonnet`=Sonnet 4.6, `opus`=Opus 4.8(adaptive thinking, 고정 thinking budget 없음). 그래서 풀ID로 핀하지 않는다.
 
 | 복잡도     | 모델   | effort               | 사용 케이스                                        |
 | ---------- | ------ | -------------------- | -------------------------------------------------- |
@@ -89,7 +89,7 @@ Task(subagent_type="explore", model="haiku", prompt="API 패턴 분석");
 | 필터/정렬/검색 로직                   | **sonnet** | `medium`   |
 | 아키텍처 변경, 모듈 간 의존성 재설계  | **opus**   | `xhigh`    |
 
-> 불확실하면 **sonnet / `medium`** — haiku 미달보다 sonnet 과잉이 안전하다.
+> 불확실하면 **sonnet / `medium`** - haiku 미달보다 sonnet 과잉이 안전하다.
 > effort는 `/effort <레벨>`, `--effort` 플래그, 또는 에이전트 frontmatter `effort`로 설정한다. `xhigh`는 Opus 4.7/4.8 전용, `max`는 세션 전용.
 
 ---
@@ -132,7 +132,7 @@ Task(subagent_type="explore", model="haiku", prompt="API 패턴 분석");
 | ENV_ERROR         | 경로 오류, 파일 없음         | 경로/환경 재확인 후 재시도|
 | LOGIC_ERROR       | 타입 에러, 빌드/테스트 실패  | 다른 접근법으로 재시도    |
 
-- **2회차**: effort 상향(`low→high`)을 먼저 시도하고, 그래도 실패하면 세대 승급(`haiku→sonnet→opus`) 후 재시도 — 비용 효율 순서
+- **2회차**: effort 상향(`low→high`)을 먼저 시도하고, 그래도 실패하면 세대 승급(`haiku→sonnet→opus`) 후 재시도 - 비용 효율 순서
 - **3회차**: 루프 종료 → 사람에게 보고 (실패 유형, 시도 방법, 에러 메시지)
 - **병렬 부분 실패**: 성공 결과만 활용 + 실패 작업 재시도. 전체 실패 시 순차 실행으로 전환.
 

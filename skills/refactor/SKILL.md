@@ -173,7 +173,7 @@ describe("리팩토링 전 정책 캡처", () => {
 
 **작은 단위로 실행:**
 
-> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
+> **패키지 매니저**: lock 파일 기준 자동 감지 - `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
 
 ```typescript
 // 1단계: 함수 추출

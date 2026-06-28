@@ -53,7 +53,7 @@ ls tailwind.config.* 2>/dev/null || true
 
 **진행 방식 (순서대로 엄격히 지킨다):**
 
-**STEP A. 감지 결과만 보여주고 Y/n을 받는다** — 이 메시지에 다른 질문을 추가하지 않는다:
+**STEP A. 감지 결과만 보여주고 Y/n을 받는다** - 이 메시지에 다른 질문을 추가하지 않는다:
    ```
    📋 감지된 기술 스택:
    - 프레임워크: Next.js (App Router)
@@ -85,7 +85,7 @@ ls tailwind.config.* 2>/dev/null || true
 
 1. Next.js
 2. React (CRA / Vite)
-3. 기타 (Node.js, Python, Go 등 — 프론트엔드 전용 rules 제외)
+3. 기타 (Node.js, Python, Go 등 - 프론트엔드 전용 rules 제외)
 
 > **참고**: Vue는 지원하지 않습니다. Vue 프로젝트는 Q1 = 기타로 선택하세요.
 
@@ -154,7 +154,7 @@ ls tailwind.config.* 2>/dev/null || true
 
 ---
 
-**Q8. Basic Memory** — 세션이 끊겨도 프로젝트 컨텍스트를 기억합니다. 사용하시겠어요?
+**Q8. Basic Memory** - 세션이 끊겨도 프로젝트 컨텍스트를 기억합니다. 사용하시겠어요?
 
 1. 예
 2. 아니오
@@ -195,7 +195,7 @@ Q3(스타일링)·Q6(검증)을 기반으로 **상호배타 optional 룰 선택 
 | `STYLING` | Q3 = Emotion → `emotion` / TailwindCSS → `tailwind` / 그 외 → (빈 문자열) |
 | `ZOD`     | Q6 = Zod → `y` / 그 외 → (빈 문자열)                                   |
 
-설치 스크립트를 실행합니다. 대부분의 rule은 전부 심링크 + `paths` 조건부 로드이지만, **서로 배타적인 스타일 룰(Emotion/Tailwind)과 Zod 룰만은 프로젝트에 맞는 것만 심링크**한다 — 무관한 스타일 룰이 모든 `*.tsx`에 동시에 로드되는 것을 막기 위함이다.
+설치 스크립트를 실행합니다. 대부분의 rule은 전부 심링크 + `paths` 조건부 로드이지만, **서로 배타적인 스타일 룰(Emotion/Tailwind)과 Zod 룰만은 프로젝트에 맞는 것만 심링크**한다 - 무관한 스타일 룰이 모든 `*.tsx`에 동시에 로드되는 것을 막기 위함이다.
 
 ```bash
 #!/bin/bash
@@ -210,10 +210,10 @@ FRONT_HOME="${CLAUDE_FRONT_HOME:-$HOME/.claude-front}"
 REPO_URL="https://github.com/yesroad/claude-front.git"
 
 if [ ! -d "$FRONT_HOME/.git" ]; then
-  echo "첫 설치 — $FRONT_HOME 에 클론합니다..."
+  echo "첫 설치 - $FRONT_HOME 에 클론합니다..."
   git clone --depth 1 "$REPO_URL" "$FRONT_HOME"
 else
-  git -C "$FRONT_HOME" pull --ff-only 2>/dev/null || echo "⚠️  pull 실패(오프라인/충돌) — 기존 상태로 진행합니다."
+  git -C "$FRONT_HOME" pull --ff-only 2>/dev/null || echo "⚠️  pull 실패(오프라인/충돌) - 기존 상태로 진행합니다."
 fi
 
 [ -d "$FRONT_HOME/rules" ] || { echo "❌ 소스가 올바르지 않습니다: $FRONT_HOME"; exit 1; }
@@ -222,7 +222,7 @@ fi
 mkdir -p .claude
 for dir in workflows agents skills commands hooks scripts; do
   [ -e "$FRONT_HOME/$dir" ] || continue
-  rm -rf ".claude/$dir"                      # 기존 심링크/구 복사본 제거(개인용 — 백업 불필요)
+  rm -rf ".claude/$dir"                      # 기존 심링크/구 복사본 제거(개인용 - 백업 불필요)
   ln -s "$FRONT_HOME/$dir" ".claude/$dir"     # 절대경로 심링크
 done
 
@@ -251,7 +251,7 @@ if os.path.exists(settings_path):
 
 hooks = settings.setdefault("hooks", {})
 
-# PreToolUse 훅 (guard-pretool, 위험 Bash 차단) — 이미 있으면 건드리지 않음
+# PreToolUse 훅 (guard-pretool, 위험 Bash 차단) - 이미 있으면 건드리지 않음
 if "PreToolUse" not in hooks:
     hooks["PreToolUse"] = [{
         "matcher": "Bash",
@@ -260,7 +260,7 @@ if "PreToolUse" not in hooks:
                    "timeout": 5}]
     }]
 
-# PostToolUse 훅 (guard-check) — 이미 있으면 건드리지 않음
+# PostToolUse 훅 (guard-check) - 이미 있으면 건드리지 않음
 if "PostToolUse" not in hooks:
     hooks["PostToolUse"] = [{
         "matcher": "Write|Edit",
@@ -269,16 +269,16 @@ if "PostToolUse" not in hooks:
                    "timeout": 10}]
     }]
 
-# Stop 훅 (완료 알림) — 이미 있으면 건드리지 않음
+# Stop 훅 (완료 알림) - 이미 있으면 건드리지 않음
 if "Stop" not in hooks:
     hooks["Stop"] = [{
         "matcher": "",
         "hooks": [{"type": "command",
-                   "command": "NOTIFIER_TITLE='claude-front' NOTIFIER_MESSAGE='응답 완료 — /done으로 검증하세요' bash \"./.claude/hooks/notify.sh\"",
+                   "command": "NOTIFIER_TITLE='claude-front' NOTIFIER_MESSAGE='응답 완료 - /done으로 검증하세요' bash \"./.claude/hooks/notify.sh\"",
                    "timeout": 5}]
     }]
 
-# planMode 기본값 설정 — 이미 설정한 경우 덮어쓰지 않음
+# planMode 기본값 설정 - 이미 설정한 경우 덮어쓰지 않음
 if "planMode" not in settings:
     settings["planMode"] = True
 
@@ -333,7 +333,7 @@ else:
 PYEOF
 
 # .mcp.json: Q7 선택 서버만 추가 (없으면 새로 생성, 있으면 선택 항목만 머지)
-# SELECTED_MCP: Q7 답변 기반으로 Claude가 설정 — 쉼표 구분 서버 키 목록
+# SELECTED_MCP: Q7 답변 기반으로 Claude가 설정 - 쉼표 구분 서버 키 목록
 # 예) SELECTED_MCP="Figma,playwright" 또는 SELECTED_MCP="" (없음)
 # 서버 키 매핑: 1=Figma, 2=supabase, 3=playwright, 4=Atlassian, 5=shadcn
 if [ -n "$SELECTED_MCP" ] && [ -f "$FRONT_HOME/.mcp.json" ]; then
@@ -351,7 +351,7 @@ template_servers = template.get("mcpServers", {})
 # 선택된 서버만 필터
 selected_servers = {k: v for k, v in template_servers.items() if k in selected_keys}
 if not selected_servers:
-    print("📋 선택된 MCP 서버 없음 — .mcp.json 생성 안 함")
+    print("📋 선택된 MCP 서버 없음 - .mcp.json 생성 안 함")
     exit(0)
 
 # 기존 .mcp.json 로드 또는 빈 구조 생성
@@ -374,7 +374,7 @@ with open(".mcp.json", "w") as f:
     f.write("\n")
 
 if added:
-    print(f"📋 .mcp.json 완료 — 추가된 서버: {', '.join(added)}")
+    print(f"📋 .mcp.json 완료 - 추가된 서버: {', '.join(added)}")
 else:
     print("📋 .mcp.json 변경 없음 (선택 서버가 이미 존재)")
 PYEOF
@@ -410,11 +410,11 @@ if "basic-memory" not in existing_servers:
         f.write("\n")
     print("📋 .mcp.json Basic Memory 추가 완료")
 else:
-    print("📋 .mcp.json Basic Memory 이미 존재 — 건드리지 않음")
+    print("📋 .mcp.json Basic Memory 이미 존재 - 건드리지 않음")
 PYEOF
 fi
 
-# manifest.json 기록 (.claude/manifest.json — 심링크 모드 메타)
+# manifest.json 기록 (.claude/manifest.json - 심링크 모드 메타)
 FRONT_HOME="$FRONT_HOME" python3 - <<'PYEOF'
 import json, os
 from datetime import date
@@ -454,7 +454,7 @@ PYEOF
 if [ -f ".mcp.json" ]; then
   if ! grep -qx ".mcp.json" .gitignore 2>/dev/null; then
     echo ".mcp.json" >> .gitignore
-    echo "🔒 .mcp.json을 .gitignore에 추가했습니다 — API 키 평문 커밋을 방지합니다."
+    echo "🔒 .mcp.json을 .gitignore에 추가했습니다 - API 키 평문 커밋을 방지합니다."
   fi
 fi
 
@@ -479,14 +479,14 @@ echo "✅ .claude/ 설치 완료"
 진행:
 
 1. `package.json`의 `dependencies`·`devDependencies`와 대조해 **미설치 패키지만** 추린다(이미 있으면 건너뜀). `package.json`이 없는 비-JS 프로젝트면 이 단계를 스킵.
-2. 패키지 매니저 감지 — `pnpm-lock.yaml`→pnpm, `yarn.lock`→yarn, `bun.lockb`→bun, 그 외 npm.
+2. 패키지 매니저 감지 - `pnpm-lock.yaml`→pnpm, `yarn.lock`→yarn, `bun.lockb`→bun, 그 외 npm.
 3. 미설치 목록을 보여주고 설치 여부를 **한 번** 묻는다:
    ```
    다음 패키지가 없습니다. 설치할까요? (Y/n)
      - @tanstack/react-query @tanstack/react-query-devtools
      - sass
    ```
-4. 동의(Y/엔터) 시 감지된 매니저로 **최신 버전** 설치 — pnpm/yarn/bun은 `add`, npm은 `install`, 버전 핀 없이 `@latest`. **React Query는 devtools를 항상 함께** 설치한다.
+4. 동의(Y/엔터) 시 감지된 매니저로 **최신 버전** 설치 - pnpm/yarn/bun은 `add`, npm은 `install`, 버전 핀 없이 `@latest`. **React Query는 devtools를 항상 함께** 설치한다.
 5. `n`이면 설치 명령만 출력하고 넘어간다.
 
 ---
@@ -527,9 +527,9 @@ echo "✅ .claude/ 설치 완료"
 
 > **rules는 `@참조`하지 않는다.** `.claude/rules/`는 Claude Code가 자동 발견하여 로드한다
 > (`paths` frontmatter 없으면 시작 시 항상, 있으면 일치 파일 작업 시). 모든 rule이 심링크로 존재하며
-> 어떤 rule이 로드되는지는 각 파일의 `paths` frontmatter가 제어한다 — 무관한 rule은 해당 경로를
+> 어떤 rule이 로드되는지는 각 파일의 `paths` frontmatter가 제어한다 - 무관한 rule은 해당 경로를
 > 작업할 때만 로드되므로 컨텍스트 낭비가 없다. directive-generator는 rule을 CLAUDE.md에 `@참조`로
-> 주입하지 않는다 — 자동발견과의 **이중 로드를 막기 위함**이다.
+> 주입하지 않는다 - 자동발견과의 **이중 로드를 막기 위함**이다.
 
 **포함할 스킬 quick_ref (결정표 기반):**
 
@@ -605,31 +605,31 @@ directive-generator가 생성한 CLAUDE.md에 `<quick_ref>` 섹션이 없으면 
 ✅ claude-front 설치 완료
 
 📁 설치된 항목:
-  .claude/rules/        — 코딩 규칙 (소스 심링크 · paths 조건부 로드)
-  .claude/agents/       — 전문화된 서브에이전트
-  .claude/skills/       — 자동 트리거 스킬
-  .claude/commands/     — 슬래시 커맨드
-  .claude/workflows/ — 작업 방식 가이드
-  .claude/hooks/        — 알림 훅
-  .claude/rules/references/ — 라이브러리 레퍼런스 문서 (TypeScript·Zod)
-  CLAUDE.md             — 프로젝트 루트 지시문 (새로 생성)
+  .claude/rules/        - 코딩 규칙 (소스 심링크 · paths 조건부 로드)
+  .claude/agents/       - 전문화된 서브에이전트
+  .claude/skills/       - 자동 트리거 스킬
+  .claude/commands/     - 슬래시 커맨드
+  .claude/workflows/ - 작업 방식 가이드
+  .claude/hooks/        - 알림 훅
+  .claude/rules/references/ - 라이브러리 레퍼런스 문서 (TypeScript·Zod)
+  CLAUDE.md             - 프로젝트 루트 지시문 (새로 생성)
 
 📋 사용 가능한 커맨드:
-  /start          — 작업 시작 (Plan Mode → 분석 → 계획 생성 → 승인 → 구현 + 검증)
-  /done           — 작업 완료 (검증 → 커밋 → PR 생성)
-  /commit         — 커밋 플로우 자동화
-  /test           — 단위 → 통합 → E2E 테스트 순차 실행
-  /setup-notifier — macOS 알림 환경 설정 (최초 1회)
+  /start          - 작업 시작 (Plan Mode → 분석 → 계획 생성 → 승인 → 구현 + 검증)
+  /done           - 작업 완료 (검증 → 커밋 → PR 생성)
+  /commit         - 커밋 플로우 자동화
+  /test           - 단위 → 통합 → E2E 테스트 순차 실행
+  /setup-notifier - macOS 알림 환경 설정 (최초 1회)
 
 💡 자주 쓰는 스킬 (키워드로 자동 트리거):
-  bug-fix               — "버그", "오류", "에러"
-  refactor              — "리팩토링", "구조 개선"
-  component-creator     — "컴포넌트 만들어", "훅 만들어"
-  test-unit             — "단위 테스트", "유닛 테스트"
-  test-e2e              — "e2e 테스트", "playwright"
-  migration-helper      — "업그레이드", "마이그레이션"
-  web-design            — "UI 만들어", "화면 구현"  (Next.js + Tailwind)
-  code-level-review        — "코드 리뷰", "컨벤션 확인"
+  bug-fix               - "버그", "오류", "에러"
+  refactor              - "리팩토링", "구조 개선"
+  component-creator     - "컴포넌트 만들어", "훅 만들어"
+  test-unit             - "단위 테스트", "유닛 테스트"
+  test-e2e              - "e2e 테스트", "playwright"
+  migration-helper      - "업그레이드", "마이그레이션"
+  web-design            - "UI 만들어", "화면 구현"  (Next.js + Tailwind)
+  code-level-review        - "코드 리뷰", "컨벤션 확인"
 ```
 
 > CLAUDE.md가 백업된 경우: `.claude/CLAUDE.back.md`에서 이전 내용을 확인할 수 있습니다.

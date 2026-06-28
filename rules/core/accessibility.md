@@ -5,7 +5,7 @@ paths:
 
 # 접근성(Accessibility) 규칙
 
-> WCAG 2.1 AA 기준 — React/Next.js 코드에 적용되는 공통 접근성 규칙
+> WCAG 2.1 AA 기준 - React/Next.js 코드에 적용되는 공통 접근성 규칙
 
 ---
 
@@ -71,7 +71,7 @@ className="focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-b
 
 ```tsx
 // ✅ 필수: 의미 있는 이미지에 alt
-<img src="/product.jpg" alt="레드 버튼 다운 재킷 — 앞면" />
+<img src="/product.jpg" alt="레드 버튼 다운 재킷 - 앞면" />
 
 // ✅ 필수: 장식용 이미지는 빈 alt
 <img src="/decoration.svg" alt="" aria-hidden="true" />

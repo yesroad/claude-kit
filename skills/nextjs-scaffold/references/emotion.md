@@ -11,7 +11,7 @@
 { "compilerOptions": { "jsxImportSource": "@emotion/react" } }
 ```
 
-**vite.config.ts** (`@emotion/babel-plugin` — 빌드 최적화, 2025 권장):
+**vite.config.ts** (`@emotion/babel-plugin` - 빌드 최적화, 2025 권장):
 ```typescript
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
@@ -39,7 +39,7 @@ components/{Name}/
 └── styled.ts    # 모든 styled 컴포넌트
 ```
 
-styled 코드를 `index.tsx`에 인라인하지 않는다 — UI/스타일 책임 분리.
+styled 코드를 `index.tsx`에 인라인하지 않는다 - UI/스타일 책임 분리.
 
 ---
 
@@ -80,7 +80,7 @@ export const ButtonItem = styled.button<{ $variant: Variant; $size: Size }>`
 `
 ```
 
-### 2. Transient Props — `$-prefix` 필수
+### 2. Transient Props - `$-prefix` 필수
 
 ```typescript
 // components/{Name}/index.tsx
@@ -103,7 +103,7 @@ export function Button({ variant = 'primary', size = 'md', ...rest }: ButtonProp
 ```typescript
 import { css } from '@emotion/react'
 
-// csstype 기반 타입 추론 — 오타 시 TS 오류
+// csstype 기반 타입 추론 - 오타 시 TS 오류
 const cardStyle = css({
   padding: '20px',
   borderRadius: '12px',
@@ -114,7 +114,7 @@ const cardStyle = css({
 
 Template literal도 유효하지만 object style이 TypeScript 자동완성과 타입 검사가 더 정확하다.
 
-### 4. Badge — 단순 색상 variant 예시
+### 4. Badge - 단순 색상 variant 예시
 
 ```typescript
 // components/Badge/styled.ts
@@ -202,7 +202,7 @@ styles/tokens/
       export * from './typography'
 ```
 
-모든 컴포넌트에서 `import { colors, typography } from '@/styles/tokens'` — 값 하드코딩 금지.
+모든 컴포넌트에서 `import { colors, typography } from '@/styles/tokens'` - 값 하드코딩 금지.
 
 > **ThemeProvider**: 단일 테마라면 직접 import가 심플하다.
 > 다크모드·멀티 테마가 필요하면 `ThemeProvider` + `useTheme()` 도입 검토.
@@ -221,8 +221,8 @@ styles/tokens/
 
 ## 새 Emotion 컴포넌트 체크리스트
 
-- [ ] `components/{Name}/styled.ts` — variant/size 딕셔너리 + CSSObject + transient props
-- [ ] `components/{Name}/index.tsx` — prop → `$prop` 변환 후 styled 컴포넌트에 전달
+- [ ] `components/{Name}/styled.ts` - variant/size 딕셔너리 + CSSObject + transient props
+- [ ] `components/{Name}/index.tsx` - prop → `$prop` 변환 후 styled 컴포넌트에 전달
 - [ ] 토큰 import 경로: `@/styles/tokens`
 - [ ] Next.js: 파일 상단 `'use client'` 선언 여부 확인
 

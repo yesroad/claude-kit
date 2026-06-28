@@ -16,10 +16,10 @@ paths:
 
 | 조건                              | Zod 사용 | 대안                         |
 | --------------------------------- | -------- | ---------------------------- |
-| 폼 필드 3개 이상 + 검증 규칙 있음 | ✅       | —                            |
+| 폼 필드 3개 이상 + 검증 규칙 있음 | ✅       | -                            |
 | 폼 필드 1-2개, 단순 required      | ❌       | RHF `register({ required })` |
-| Server Action 입력 검증           | ✅       | —                            |
-| API 응답 런타임 검증              | ✅       | —                            |
+| Server Action 입력 검증           | ✅       | -                            |
+| API 응답 런타임 검증              | ✅       | -                            |
 | 내부 함수 간 타입 보장            | ❌       | TypeScript 타입만으로 충분   |
 
 ---
@@ -52,7 +52,7 @@ src/schemas/order/
 `z.infer`로 스키마에서 타입을 도출하면 단일 진실 공급원이 보장된다.
 
 ```typescript
-// ✅ 스키마에서 타입 도출 — 항상 동기화됨
+// ✅ 스키마에서 타입 도출 - 항상 동기화됨
 import { z } from "zod";
 
 export const createOrderSchema = z.object({
@@ -75,7 +75,7 @@ interface CreateOrderInput {
 const createOrderSchema = z.object({
   productName: z.string(),
   quantity: z.number(),
-  // memo 빠뜨림 — 타입과 불일치하지만 컴파일 에러 없음
+  // memo 빠뜨림 - 타입과 불일치하지만 컴파일 에러 없음
 });
 ```
 
@@ -95,7 +95,7 @@ const form = useForm<CreateOrderInput>({
 ### 3. Server Action 입력 검증 (App Router)
 
 Server Action은 클라이언트에서 직접 호출 가능하므로 입력을 반드시 검증한다.
-클라이언트 폼 검증만으로는 부족하다 — 브라우저 우회가 가능하기 때문이다.
+클라이언트 폼 검증만으로는 부족하다 - 브라우저 우회가 가능하기 때문이다.
 
 ```typescript
 "use server";
@@ -110,18 +110,18 @@ export async function createOrder(formData: FormData) {
 }
 ```
 
-### 4. API 응답 검증 — 시스템 경계에서만
+### 4. API 응답 검증 - 시스템 경계에서만
 
 외부 API 응답처럼 TypeScript가 보장하지 못하는 데이터만 런타임 검증한다.
 내부 함수 간 전달에는 타입만으로 충분하다.
 
 ```typescript
-// ✅ 외부 API 응답 검증 — 신뢰할 수 없는 데이터
+// ✅ 외부 API 응답 검증 - 신뢰할 수 없는 데이터
 const externalSchema = z.object({ id: z.string(), status: z.enum(["active", "inactive"]) });
 const json = await (await fetch("https://external-api.com/data")).json();
 externalSchema.parse(json); // 형태 불일치 시 즉시 에러
 
-// ❌ 과잉: 내부 함수 반환값까지 Zod로 검증 — TypeScript가 이미 보장
+// ❌ 과잉: 내부 함수 반환값까지 Zod로 검증 - TypeScript가 이미 보장
 return z.number().parse(calculateTotal(items));
 ```
 
@@ -158,7 +158,7 @@ export const createOrderSchema = z.object({
   quantity: z.number().min(1),
 });
 
-// 모든 필드를 optional로 — 부분 업데이트
+// 모든 필드를 optional로 - 부분 업데이트
 export const updateOrderSchema = createOrderSchema.partial();
 
 export type CreateOrderInput = z.infer<typeof createOrderSchema>;

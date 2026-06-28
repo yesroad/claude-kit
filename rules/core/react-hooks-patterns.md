@@ -100,7 +100,7 @@ React Compiler(Next.js 15.3.1+)가 활성화된 프로젝트에서는 수동 메
 ### Compiler 활성화 프로젝트
 
 ```typescript
-// ✅ 컴파일러가 자동 최적화 — 수동 useMemo/useCallback 불필요
+// ✅ 컴파일러가 자동 최적화 - 수동 useMemo/useCallback 불필요
 function ProductList({ items, onSelect }) {
   const filtered = items.filter(item => item.active)  // 컴파일러가 메모이제이션
   const handleClick = (id: string) => onSelect(id)    // 컴파일러가 최적화

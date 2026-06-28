@@ -13,10 +13,10 @@
 | **explore**                 | haiku · low   | ✅   | 호기심 많은 탐정     | 코드베이스 탐색, 패턴 분석    |
 | **code-reviewer**           | sonnet · high | ✅   | 건설적인 시니어      | git diff 기반 코드 리뷰, 보안/품질 검증 |
 | **lint-fixer**              | haiku · low   | ✅   | 결벽증 정리왕        | 린트/포맷 오류 수정           |
-| **Plan** (빌트인)           | opus · xhigh  | ❌   | —                    | 아키텍처 설계, 구현 계획      |
+| **Plan** (빌트인)           | opus · xhigh  | ❌   | -                    | 아키텍처 설계, 구현 계획      |
 | **git-operator**            | haiku · low   | ❌   | 꼼꼼한 기록관        | Git 커밋/브랜치/PR 관리       |
 
-> 별칭은 최신 세대 자동 추적(haiku 4.5 / sonnet 4.6 / opus 4.8). effort는 frontmatter에 지정 — 상세 `guide.md`.
+> 별칭은 최신 세대 자동 추적(haiku 4.5 / sonnet 4.6 / opus 4.8). effort는 frontmatter에 지정 - 상세 `guide.md`.
 
 > 비즈니스 로직(날짜 계산, 상태 조건, 수치 계산 등) 포함 시 모델 상향 - `guide.md` 참조
 

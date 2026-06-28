@@ -1,4 +1,4 @@
-# Frontend Fundamentals — 좋은 코드의 4가지 기준
+# Frontend Fundamentals - 좋은 코드의 4가지 기준
 
 > 출처: [Frontend Fundamentals](https://frontend-fundamentals.com)
 >
@@ -23,7 +23,7 @@ function SubmitButton({ role }: { role: 'viewer' | 'admin' }) {
   return role === 'admin' ? <AdminButton /> : <ViewerButton />;
 }
 
-// ✅ 권한별로 완전 분리 — 각 컴포넌트가 하나의 맥락만 다룸
+// ✅ 권한별로 완전 분리 - 각 컴포넌트가 하나의 맥락만 다룸
 function ViewerSubmitButton() { ... }   function AdminSubmitButton() { ... }
 ```
 
@@ -37,7 +37,7 @@ export default function DashboardPage() {
   return <Dashboard />;
 }
 
-// ✅ AuthGuard로 추상화 — 페이지는 핵심 렌더링만 담당
+// ✅ AuthGuard로 추상화 - 페이지는 핵심 렌더링만 담당
 const DashboardPage = () => <AuthGuard><Dashboard /></AuthGuard>;
 ```
 
@@ -80,7 +80,7 @@ await delay(ANIMATION_DELAY_MS);
 
 ### 위에서 아래로 읽히게 하기
 
-**시점 이동 줄이기** — 버튼 비활성화 이유를 알기 위해 3단계를 거슬러 올라가는 구조 지양
+**시점 이동 줄이기** - 버튼 비활성화 이유를 알기 위해 3단계를 거슬러 올라가는 구조 지양
 
 ```typescript
 // ✅ 인라인 객체로 조건을 한눈에
@@ -90,7 +90,7 @@ const canInvite = { viewer: false, admin: true }[role] ?? false;
 **삼항 연산자 단순하게 하기**
 
 ```typescript
-// ❌ 중첩 삼항 — 구조 파악 어려움
+// ❌ 중첩 삼항 - 구조 파악 어려움
 const label = A && B ? "BOTH" : A || B ? (A ? "A" : "B") : "NONE";
 
 // ✅ IIFE + if문으로 순차 기술
@@ -102,7 +102,7 @@ const label = (() => {
 })();
 ```
 
-**왼쪽에서 오른쪽으로 읽히게 하기** — `a >= b && a <= c` 대신 수학 부등식처럼 `b <= a && a <= c` (a를 한 번만 인지).
+**왼쪽에서 오른쪽으로 읽히게 하기** - `a >= b && a <= c` 대신 수학 부등식처럼 `b <= a && a <= c` (a를 한 번만 인지).
 
 ---
 
@@ -113,7 +113,7 @@ const label = (() => {
 ### 이름 겹치지 않게 관리하기
 
 ```typescript
-// ❌ 외부 라이브러리와 같은 이름 — 내부에 토큰 주입 로직이 숨겨져 있어도 구분 불가
+// ❌ 외부 라이브러리와 같은 이름 - 내부에 토큰 주입 로직이 숨겨져 있어도 구분 불가
 import http from './http';
 
 // ✅ 기능을 명시하는 고유한 이름 → 이름만 보고 인증 요청임을 파악 가능
@@ -147,7 +147,7 @@ async function fetchBalance(userId: string) {
   return balance;
 }
 
-// ✅ 함수는 이름 그대로만 동작 — 로깅은 호출부에서 명시적으로
+// ✅ 함수는 이름 그대로만 동작 - 로깅은 호출부에서 명시적으로
 async function fetchBalance(userId: string) {
   return api.get(`/balance/${userId}`);
 }
@@ -165,10 +165,10 @@ logging.log("balance_fetched");
 ### 함께 수정되는 파일을 같은 디렉토리에 두기
 
 ```
-// ❌ 종류별 분류만 — 의존 관계 파악 어렵고 기능 삭제 시 관련 파일이 남겨짐
+// ❌ 종류별 분류만 - 의존 관계 파악 어렵고 기능 삭제 시 관련 파일이 남겨짐
 src/{components,hooks,constants}/  (모든 컴포넌트·훅·상수를 종류별로)
 
-// ✅ 도메인별 하위 디렉토리 — 비정상적인 cross-domain import가 눈에 띔
+// ✅ 도메인별 하위 디렉토리 - 비정상적인 cross-domain import가 눈에 띔
 src/{components,hooks}/  (전체 공유)
 src/domains/{payment,order}/{components,hooks}/  (도메인별)
 ```
@@ -181,7 +181,7 @@ src/domains/{payment,order}/{components,hooks}/  (도메인별)
 애니메이션 변경 시 `delay` 값을 함께 수정하지 않으면 서비스가 조용히 깨진다.
 
 ```typescript
-// ✅ 상수화로 응집 — 상수 변경 시 사용처가 자동으로 따라옴
+// ✅ 상수화로 응집 - 상수 변경 시 사용처가 자동으로 따라옴
 const ANIMATION_DELAY_MS = 300;
 await delay(ANIMATION_DELAY_MS);
 ```
@@ -227,12 +227,12 @@ function useCardIdQueryParam() { ... }   function useStatementIdQueryParam() { .
 Props Drilling은 부모-자식 간 불필요한 결합의 신호. prop 이름이 바뀌면 중간 컴포넌트 전체를 수정해야 한다.
 
 ```tsx
-// ✅ 1순위: 조합(Composition) 패턴 — children으로 직접 구성
+// ✅ 1순위: 조합(Composition) 패턴 - children으로 직접 구성
 // Layout을 통해 userId를 drilling하지 않아도 됨
 function Layout({ children }: { children: React.ReactNode }) { ... }
 <Layout><UserProfile userId={userId} /></Layout>
 
-// ✅ 2순위: Context API — 트리가 깊고 조합으로 해결 안 될 때만 (최후 수단)
+// ✅ 2순위: Context API - 트리가 깊고 조합으로 해결 안 될 때만 (최후 수단)
 const UserContext = createContext<User | null>(null);
 ```
 

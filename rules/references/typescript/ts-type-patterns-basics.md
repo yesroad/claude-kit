@@ -4,7 +4,7 @@ paths:
   - "**/types/**"
 ---
 
-# TypeScript 타입 패턴 — 기초
+# TypeScript 타입 패턴 - 기초
 
 ## 1. 기본 타입 패턴
 
@@ -18,7 +18,7 @@ interface ApiState {
   error?: string;
 }
 
-// ✅ Discriminated Union — 상태가 명확하게 구분됨
+// ✅ Discriminated Union - 상태가 명확하게 구분됨
 type ApiState<T> =
   | { status: 'idle' }
   | { status: 'loading' }

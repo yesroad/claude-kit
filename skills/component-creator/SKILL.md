@@ -194,7 +194,7 @@ export interface {Name}Props { ... }  // interface (스펙에 따라)
 
 ### Phase 5: 검증
 
-> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
+> **패키지 매니저**: lock 파일 기준 자동 감지 - `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
 
 ```bash
 {패키지매니저} tsc --noEmit

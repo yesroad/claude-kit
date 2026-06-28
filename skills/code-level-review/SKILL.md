@@ -32,14 +32,14 @@ user-invocable: true
 사용자가 코드 작성을 요청하면 시니어 기준 패턴을 적용한다.
 
 **시니어 패턴 우선순위:**
-1. 서버 컴포넌트 우선 — `'use client'`는 꼭 필요한 곳에만
-2. `use cache` + `cacheTag` — 서버 컴포넌트 캐싱
-3. `useOptimistic` — 즉각적 UI 피드백
-4. `Result 타입` — `{ ok: true, data } | { ok: false, error }`
-5. `server-only` — 서버 전용 모듈 보호
-6. 인증 + 소유권 이중 검증 — Server Action 내부
-7. `queryOptions` API — React Query v5 타입 안전 패턴
-8. `lib/axios.ts` 인스턴스 — 인터셉터 포함
+1. 서버 컴포넌트 우선 - `'use client'`는 꼭 필요한 곳에만
+2. `use cache` + `cacheTag` - 서버 컴포넌트 캐싱
+3. `useOptimistic` - 즉각적 UI 피드백
+4. `Result 타입` - `{ ok: true, data } | { ok: false, error }`
+5. `server-only` - 서버 전용 모듈 보호
+6. 인증 + 소유권 이중 검증 - Server Action 내부
+7. `queryOptions` API - React Query v5 타입 안전 패턴
+8. `lib/axios.ts` 인스턴스 - 인터셉터 포함
 
 **참조**: `references/code-examples.md` (레벨별 대조 예제)
 
@@ -60,9 +60,9 @@ user-invocable: true
 ### 모드 B: 코드 리뷰 (레벨 진단)
 사용자가 코드를 보여주며 리뷰를 요청하면:
 
-1. **레벨 판별** — 루브릭 기준으로 주니어/미들/시니어 진단
-2. **근거 제시** — 어떤 패턴이 해당 레벨을 나타내는지 설명
-3. **개선 포인트** — 다음 레벨로 올리는 핵심 변경사항 제시
+1. **레벨 판별** - 루브릭 기준으로 주니어/미들/시니어 진단
+2. **근거 제시** - 어떤 패턴이 해당 레벨을 나타내는지 설명
+3. **개선 포인트** - 다음 레벨로 올리는 핵심 변경사항 제시
 
 **출력 형식:**
 ```
@@ -73,7 +73,7 @@ user-invocable: true
 **근거:**
 - ✅ async 서버 컴포넌트 사용 (M-01)
 - ✅ Suspense + 스켈레톤 UI (M-11)
-- ⚠️ use cache 미적용 — 매 요청마다 DB 조회
+- ⚠️ use cache 미적용 - 매 요청마다 DB 조회
 - ⚠️ 병렬 fetch 가능한 곳에 순차 await 사용
 
 **시니어로 올리려면:**

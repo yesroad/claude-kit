@@ -125,12 +125,12 @@ e2e/
 
 **Locator 우선순위** (Testing Library와 동일):
 
-1. `getByRole('button', { name: '로그인' })` — 접근성 role
-2. `getByLabel('이메일')` — label 텍스트
-3. `getByPlaceholder(...)` — placeholder
-4. `getByText(...)` — 텍스트 내용
-5. `getByAltText(...)` — alt 텍스트
-6. `getByTestId(...)` — 최후 수단 (data-testid)
+1. `getByRole('button', { name: '로그인' })` - 접근성 role
+2. `getByLabel('이메일')` - label 텍스트
+3. `getByPlaceholder(...)` - placeholder
+4. `getByText(...)` - 텍스트 내용
+5. `getByAltText(...)` - alt 텍스트
+6. `getByTestId(...)` - 최후 수단 (data-testid)
 
 CSS 선택자는 DOM 구조에 취약하므로 지양.
 
@@ -186,7 +186,7 @@ setup('일반 사용자 인증', async ({ page }) => {
 })
 ```
 
-**Page Object Model (POM)** — 테스트가 3개 이상이고 같은 페이지를 반복 사용할 때:
+**Page Object Model (POM)** - 테스트가 3개 이상이고 같은 페이지를 반복 사용할 때:
 
 ```typescript
 // e2e/pages/LoginPage.ts

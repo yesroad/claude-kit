@@ -100,7 +100,7 @@ export default function Page() {
 동일한 요청 내에서 같은 데이터를 여러 컴포넌트가 필요로 할 때 `React.cache()`로 중복을 제거한다.
 
 ```typescript
-// data/user.ts — cache로 감싸면 동일 요청 내 중복 호출 시 캐시 반환
+// data/user.ts - cache로 감싸면 동일 요청 내 중복 호출 시 캐시 반환
 import { cache } from 'react';
 
 export const getUser = cache(async (userId: string) => {
@@ -108,7 +108,7 @@ export const getUser = cache(async (userId: string) => {
 });
 
 // 여러 컴포넌트가 같은 userId로 getUser()를 호출해도 DB는 1회만 조회된다.
-// (첫 호출만 DB, 이후는 캐시 반환 — props 드릴링 없이 중복 제거)
+// (첫 호출만 DB, 이후는 캐시 반환 - props 드릴링 없이 중복 제거)
 ```
 
 ---
@@ -163,7 +163,7 @@ export default function Page() {
   return (
     <>
       <StaticHeader />  {/* 빌드 시 prerender */}
-      <BlogPosts />     {/* use cache — 정적 shell 포함 */}
+      <BlogPosts />     {/* use cache - 정적 shell 포함 */}
       <Suspense fallback={<Skeleton />}>
         <UserPersonalized />  {/* 요청 시 스트리밍 */}
       </Suspense>
@@ -182,7 +182,7 @@ export default function Page() {
 
 ---
 
-## useEffectEvent — Effect 의존성 버그 해결 (React 19.2+)
+## useEffectEvent - Effect 의존성 버그 해결 (React 19.2+)
 
 Effect 내부에서 항상 최신 값을 참조해야 하지만, 의존성 배열에 포함하면 불필요한 재실행이 발생할 때 사용.
 
@@ -206,7 +206,7 @@ function ChatRoom({ roomId, theme }) {
 
 ---
 
-## `<Activity />` — UI 상태 보존 (React 19.2+)
+## `<Activity />` - UI 상태 보존 (React 19.2+)
 
 탭, 모달 등을 숨길 때 상태(입력값, 스크롤 위치 등)를 보존한다. `hidden` 모드에서 effects는 언마운트되지만 상태는 유지.
 
@@ -229,7 +229,7 @@ function TabLayout({ activeTab }: { activeTab: string }) {
 
 ---
 
-## React Compiler — 점진적 도입 (Next.js 15.3.1+)
+## React Compiler - 점진적 도입 (Next.js 15.3.1+)
 
 수동 메모이제이션(`useMemo`, `useCallback`, `React.memo`)을 빌드 타임에 자동화. 단, 전체 코드베이스에 한 번에 적용하지 않는다.
 
@@ -246,7 +246,7 @@ function ProblematicComponent() { 'use no memo' }  // opt-out (문제 시 즉시
 
 ---
 
-## Next.js 16 비직관적 동작 — 코드 전 확인 필수
+## Next.js 16 비직관적 동작 - 코드 전 확인 필수
 
 > Next.js 16은 LLM 훈련 데이터의 Next.js와 다르다. 아래 항목은 추측으로 작성하지 말고 먼저 확인한다.
 

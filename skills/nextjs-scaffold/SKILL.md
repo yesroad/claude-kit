@@ -15,7 +15,7 @@ description: >
 # nextjs-scaffold
 
 > Next.js 프로젝트에 일관된 폴더 구조와 코드 패턴을 적용하는 스킬.
-> **이 스킬 자체가 패턴의 기준**이다 — CLAUDE.md에 의존하지 말고 이 스킬의 패턴을 따른다.
+> **이 스킬 자체가 패턴의 기준**이다 - CLAUDE.md에 의존하지 말고 이 스킬의 패턴을 따른다.
 > 단, CLAUDE.md에 더 구체적인 프로젝트 패턴이 있다면 그것을 우선 참조한다.
 
 ---
@@ -66,7 +66,7 @@ ls src/views/
 | 쿼리, useQuery, TanStack, queryOptions | `queries/{domain}/` | |
 | view, 뷰, view+hook 분리 | `views/{page}/` | |
 | 전체 도메인, 도메인 추가 | services + queries + view + types 모두 | |
-| 컴포넌트, 훅 단독 생성 | — | `component-creator` 스킬 사용 |
+| 컴포넌트, 훅 단독 생성 | - | `component-creator` 스킬 사용 |
 
 **schemas/ 폴더 구조가 포함되는 경우 → `../../rules/references/zod/zod-v4-project-patterns.md` 먼저 읽기**
 
@@ -108,7 +108,7 @@ src/
 **모노레포 추가 구조:**
 ```
 packages/
-├── services/            # BaseServices (axios wrapper) — 앱에서 상속
+├── services/            # BaseServices (axios wrapper) - 앱에서 상속
 └── ui/                  # shadcn/ui 공통 컴포넌트
 apps/
 └── {app-name}/src/      # 위 src/ 구조와 동일
@@ -118,7 +118,7 @@ apps/
 
 ## 핵심 패턴
 
-### Services — 단일 앱 (axios instance + named export)
+### Services - 단일 앱 (axios instance + named export)
 
 ```typescript
 // src/services/instance.ts
@@ -177,7 +177,7 @@ export const {domain}Service = {
 }
 ```
 
-### Services — 모노레포 (BaseServices 상속)
+### Services - 모노레포 (BaseServices 상속)
 
 ```typescript
 // src/services/api/{domain}.ts
@@ -197,7 +197,7 @@ class {Domain}Services extends Services {
 export default new {Domain}Services() // 싱글턴
 ```
 
-### TanStack Query — queryOptions 팩토리 (v5 공식 권장)
+### TanStack Query - queryOptions 팩토리 (v5 공식 권장)
 
 ```typescript
 // src/queries/types.ts
@@ -235,11 +235,11 @@ export const {domain}Options = {
   }),
 }
 
-// 훅 — 리스트: useSuspenseQuery + <Suspense> 필수
+// 훅 - 리스트: useSuspenseQuery + <Suspense> 필수
 export const use{Domain}List = (params: {ListRequest}) =>
   useSuspenseQuery({domain}Options.list(params))
 
-// 훅 — 상세: useQuery (enabled, select 조건부 가능)
+// 훅 - 상세: useQuery (enabled, select 조건부 가능)
 export const use{Domain}Detail = (id: number) =>
   useQuery({domain}Options.detail(id, { enabled: !!id }))
 ```
@@ -300,7 +300,7 @@ import { use{Domain}List } from '@/queries/{domain}'
 
 export function use{Page}View() {
   const [params, setParams] = useState<{ListRequest}>({})
-  const { data } = use{Domain}List(params) // useSuspenseQuery — 항상 defined
+  const { data } = use{Domain}List(params) // useSuspenseQuery - 항상 defined
 
   const handleSearch = useCallback((value: string) => {
     setParams((prev) => ({ ...prev, search: value }))
@@ -320,7 +320,7 @@ function {Page}Content() {
   const { data, handleSearch } = use{Page}View()
   return (
     <main>
-      {/* UI만 — 비즈니스 로직 없음 */}
+      {/* UI만 - 비즈니스 로직 없음 */}
     </main>
   )
 }
@@ -378,15 +378,15 @@ export default function {Name}(props: {Name}Props) {
 
 ## 새 도메인 추가 체크리스트
 
-- [ ] `types/api/{domain}.ts` — 요청/응답 타입 + `APIResponse<T>`
-- [ ] `services/api/{domain}.ts` — named export 서비스 객체
-- [ ] `services/api/index.ts` — 배럴 업데이트
-- [ ] `queries/types.ts` — `UseQueryOptionsBase` (최초 1회)
-- [ ] `queries/{domain}/index.ts` — `{domain}Options` + hooks (`'use client'` 필수)
-- [ ] `queries/{domain}/mutations.ts` — mutation hooks
-- [ ] `queries/index.ts` — 배럴 업데이트
-- [ ] `views/{page}/use{Page}View.ts` — 로직 훅
-- [ ] `views/{page}/index.tsx` — UI + Suspense boundary
+- [ ] `types/api/{domain}.ts` - 요청/응답 타입 + `APIResponse<T>`
+- [ ] `services/api/{domain}.ts` - named export 서비스 객체
+- [ ] `services/api/index.ts` - 배럴 업데이트
+- [ ] `queries/types.ts` - `UseQueryOptionsBase` (최초 1회)
+- [ ] `queries/{domain}/index.ts` - `{domain}Options` + hooks (`'use client'` 필수)
+- [ ] `queries/{domain}/mutations.ts` - mutation hooks
+- [ ] `queries/index.ts` - 배럴 업데이트
+- [ ] `views/{page}/use{Page}View.ts` - 로직 훅
+- [ ] `views/{page}/index.tsx` - UI + Suspense boundary
 - [ ] App Router: `app/{route}/page.tsx` 에서 뷰 위임
 
 ---

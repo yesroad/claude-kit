@@ -4,9 +4,9 @@ paths:
   - "**/types/**"
 ---
 
-# TypeScript 타입 패턴 — 심화
+# TypeScript 타입 패턴 - 심화
 
-## 2. Brand Types — 실수 방지의 핵심
+## 2. Brand Types - 실수 방지의 핵심
 
 ```typescript
 // ❌ 타입은 통과, 런타임은 폭발
@@ -55,14 +55,14 @@ function applyDiscount(price: Money, discount: Percentage): Money {
   return (price * (1 - discount / 100)) as Money;
 }
 
-applyDiscount(20 as Percentage, 50000 as Money); // ❌ 컴파일 에러 — 순서 실수 방지
+applyDiscount(20 as Percentage, 50000 as Money); // ❌ 컴파일 에러 - 순서 실수 방지
 ```
 
 ---
 
 ## 3. 심화 타입 패턴
 
-### 3.1 Conditional Types — API 응답 자동 타이핑
+### 3.1 Conditional Types - API 응답 자동 타이핑
 
 ```typescript
 type ApiResponse<T extends 'user' | 'order' | 'product'> = {
@@ -82,7 +82,7 @@ const user = await fetchData('user');
 // user.email ← 자동완성 동작. user.total은 에러
 ```
 
-### 3.2 Mapped Types — 한 타입에서 여러 타입 파생
+### 3.2 Mapped Types - 한 타입에서 여러 타입 파생
 
 ```typescript
 interface User {
@@ -110,7 +110,7 @@ type UserFormHandlers = EventHandlers<Pick<User, 'name' | 'email'>>;
 // → onNameChange?: (val: string) => void
 ```
 
-### 3.3 Template Literal Types — 이벤트/경로 타입 안전성
+### 3.3 Template Literal Types - 이벤트/경로 타입 안전성
 
 ```typescript
 // HTTP 메서드 + 경로 조합 (토스에서도 사용)
@@ -137,7 +137,7 @@ type UserEvent = EntityEvent<'user'>;
 // 'user:created' | 'user:updated' | 'user:deleted'
 ```
 
-### 3.4 infer — 타입 안에서 타입 추출
+### 3.4 infer - 타입 안에서 타입 추출
 
 ```typescript
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
@@ -152,7 +152,7 @@ type UseQueryResult<T> = { data: T | undefined; isLoading: boolean; error: Error
 type UserData = ExtractData<UseQueryResult<User>>; // User | undefined
 ```
 
-### 3.5 satisfies 연산자 — 타입 추론 유지하면서 검증
+### 3.5 satisfies 연산자 - 타입 추론 유지하면서 검증
 
 ```typescript
 type Config = {

@@ -58,7 +58,7 @@ export const metadata = {
 
 ## views/{page}/ 패턴
 
-### index.tsx — UI 전담
+### index.tsx - UI 전담
 
 ```typescript
 // views/{page}/index.tsx
@@ -83,7 +83,7 @@ export default function {Page}View() {
 }
 ```
 
-### use{Page}View.ts — 로직 훅
+### use{Page}View.ts - 로직 훅
 
 ```typescript
 // views/{page}/use{Page}View.ts
@@ -122,7 +122,7 @@ export function use{Page}View() {
 ### 병렬 데이터 패칭 (Server Component)
 
 ```typescript
-// views/{page}/index.tsx (Server Component — 'use client' 없음)
+// views/{page}/index.tsx (Server Component - 'use client' 없음)
 import { Suspense } from 'react';
 import ProfileSection from './components/ProfileSection';
 import PostsSection from './components/PostsSection';

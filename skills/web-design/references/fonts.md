@@ -14,19 +14,19 @@
 
 ## 2. 5대 타이포그래피 트렌드
 
-**트렌드 1 — 에디토리얼 세리프의 귀환**
+**트렌드 1 - 에디토리얼 세리프의 귀환**
 잡지·신문에서 볼 법한 두꺼운 세리프 헤드라인이 웹·앱 디자인으로 넘어왔다. 굵은 획과 가는 획의 대비(stroke contrast)가 크고 섬세한 세리프 폰트가 우아함과 고급스러운 인상을 준다. 패션, 뷰티, 저널리즘, 럭셔리, 금융, 인테리어 업종에서 특히 두드러진다.
 
-**트렌드 2 — 타이포그래피가 비주얼이 된다**
+**트렌드 2 - 타이포그래피가 비주얼이 된다**
 이미지 없이 뷰포트를 꽉 채우는 초대형 헤드라인 텍스트만으로 첫인상을 완성하는 방식이 확산됐다. 폰트 자체가 브랜드 비주얼의 역할을 하며, `clamp()`를 활용한 반응형 유체 타이포그래피(Fluid Typography)가 표준 구현 방식으로 자리 잡았다.
 
-**트렌드 3 — 가변 폰트(Variable Font) 확산**
+**트렌드 3 - 가변 폰트(Variable Font) 확산**
 하나의 폰트 파일로 굵기(weight), 너비(width), 기울기(slant)를 연속적으로 조절할 수 있는 가변 폰트가 빠르게 보급됐다. 파일 수와 용량이 줄어 로딩 속도가 개선되고, CSS 트랜지션으로 굵기 애니메이션도 가능해졌다. 구글 폰트의 주요 폰트 대부분이 가변 폰트로 전환되고 있다.
 
-**트렌드 4 — 대비를 활용한 혼합 페어링**
+**트렌드 4 - 대비를 활용한 혼합 페어링**
 같은 계열끼리 매칭하던 기존 방식에서 벗어나, 개성 있는 디스플레이 세리프 헤드라인과 깔끔한 산세리프 본문을 조합하는 대비 페어링이 주류가 됐다. 차이가 클수록 시각적 위계가 명확해지고 기억에 남는 인상을 준다.
 
-**트렌드 5 — 모노스페이스 폰트의 일반화**
+**트렌드 5 - 모노스페이스 폰트의 일반화**
 개발 환경에서만 쓰이던 모노스페이스 폰트가 일반 서비스 UI의 포인트 요소로 쓰이기 시작했다. 가격, 숫자 데이터, 날짜, 코드 스니펫 표기에 활용하여 테크·크리에이티브 감성을 연출한다.
 
 ---
@@ -119,11 +119,11 @@
 | 용도                      | 헤드라인                  | 본문                       | 포인트                      |
 | ------------------------- | ------------------------- | -------------------------- | --------------------------- |
 | 🏢 SaaS / 테크 / 스타트업 | Space Grotesk Bold 700    | Inter Regular 400          | Space Mono (가격·숫자·날짜) |
-| 🛍️ 럭셔리 / 패션 / 뷰티   | Cormorant Bold Italic 700 | DM Sans Light 300          | —                           |
-| 📰 미디어 / 에디토리얼    | Fraunces Black 900        | Source Serif 4 Regular 400 | —                           |
+| 🛍️ 럭셔리 / 패션 / 뷰티   | Cormorant Bold Italic 700 | DM Sans Light 300          | -                           |
+| 📰 미디어 / 에디토리얼    | Fraunces Black 900        | Source Serif 4 Regular 400 | -                           |
 | 🎨 에이전시 / 포트폴리오  | Syne ExtraBold 800        | Chivo Regular 400          | IBM Plex Mono               |
-| ⚡ 브루탈리즘 / 실험적    | Bebas Neue (전체 대문자)  | Inter Regular 400          | —                           |
-| 🌿 웰니스 / 라이프스타일  | Playfair Display Bold 700 | Lora Regular 400           | —                           |
+| ⚡ 브루탈리즘 / 실험적    | Bebas Neue (전체 대문자)  | Inter Regular 400          | -                           |
+| 🌿 웰니스 / 라이프스타일  | Playfair Display Bold 700 | Lora Regular 400           | -                           |
 
 ---
 
@@ -133,10 +133,10 @@
 
 | 조합                                 | 영문 헤드라인             | 한글 헤드라인            | 공통 본문              |
 | ------------------------------------ | ------------------------- | ------------------------ | ---------------------- |
-| A — 현대적·테크 (SaaS, 앱, 스타트업) | Space Grotesk Bold 700    | Pretendard ExtraBold 800 | Pretendard Regular 400 |
-| B — 에디토리얼·미디어                | Fraunces Black 900        | Noto Serif KR Black 900  | Pretendard Regular 400 |
-| C — 럭셔리·패션·뷰티                 | Cormorant Bold Italic 700 | Noto Serif KR Bold 700   | Pretendard Light 300   |
-| D — 에이전시·크리에이티브            | Syne ExtraBold 800        | Black Han Sans           | Pretendard Regular 400 |
+| A - 현대적·테크 (SaaS, 앱, 스타트업) | Space Grotesk Bold 700    | Pretendard ExtraBold 800 | Pretendard Regular 400 |
+| B - 에디토리얼·미디어                | Fraunces Black 900        | Noto Serif KR Black 900  | Pretendard Regular 400 |
+| C - 럭셔리·패션·뷰티                 | Cormorant Bold Italic 700 | Noto Serif KR Bold 700   | Pretendard Light 300   |
+| D - 에이전시·크리에이티브            | Syne ExtraBold 800        | Black Han Sans           | Pretendard Regular 400 |
 
 ---
 
@@ -229,7 +229,7 @@ fontFamily: {
 
 Pretendard는 Google Fonts에 없어서 `next/font/google`로 불러올 수 없다. CDN을 사용하거나 로컬 파일을 `next/font/local`로 등록한다.
 
-**방법 1 — CDN (빠르게 시작할 때)**
+**방법 1 - CDN (빠르게 시작할 때)**
 
 ```ts
 // app/layout.tsx <head>에 추가 또는 next/head 사용
@@ -255,7 +255,7 @@ export default function RootLayout({ children }) {
 }
 ```
 
-**방법 2 — next/font/local (권장: 외부 의존성 없음)**
+**방법 2 - next/font/local (권장: 외부 의존성 없음)**
 
 ```bash
 # public/fonts/ 에 파일 배치
@@ -295,7 +295,7 @@ fontFamily: {
 영문 헤드라인 폰트(예: Fraunces)를 한글과 함께 쓸 때, 한글에 영문 폰트가 적용되지 않도록 반드시 `unicode-range`로 분리하거나 Tailwind에서 폰트 계층을 아래처럼 지정한다.
 
 ```ts
-// tailwind.config.ts — 영문 헤드라인 + 한글 폰트 혼용 조합 예시
+// tailwind.config.ts - 영문 헤드라인 + 한글 폰트 혼용 조합 예시
 fontFamily: {
   // 영문은 Fraunces, 한글은 Noto Serif KR로 fallback
   'display': ['var(--font-fraunces)', 'var(--font-noto-serif-kr)', 'serif'],

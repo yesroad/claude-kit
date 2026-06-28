@@ -51,7 +51,7 @@ const OrderCard = ({ order, onSelect }: OrderCardProps) => { ... };
 
 ---
 
-## HTTP 클라이언트 — Axios 인스턴스 패턴
+## HTTP 클라이언트 - Axios 인스턴스 패턴
 
 프로젝트에서 axios를 사용할 때는 컴포넌트에서 직접 호출하지 않고 인스턴스를 분리한다.
 
@@ -93,7 +93,7 @@ api.interceptors.response.use(
 ### 사용 방법
 
 ```typescript
-// services/api/order.ts — axios 인스턴스 사용
+// services/api/order.ts - axios 인스턴스 사용
 import api from '@/lib/axios'
 
 export const orderService = {
@@ -204,7 +204,7 @@ import { OrderHeader } from './OrderHeader';
 ### 예시 3: 컴포넌트 Props 처리
 
 ```typescript
-// ❌ 나쁜 예: any 사용 — const OrderCard = (props: any) => ...
+// ❌ 나쁜 예: any 사용 - const OrderCard = (props: any) => ...
 
 // ✅ 좋은 예: 명시적 타입 정의 + 기본값 구조분해
 interface OrderCardProps {

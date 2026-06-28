@@ -6,13 +6,25 @@
 
 ## 설치
 
-```
-/plugin marketplace add yesroad/claude-front
-/plugin install claude-front@yesroad
-/setup
-```
+1. **마켓플레이스 추가**
 
-프로젝트마다 `/setup` 한 번. (소스를 `~/.claude-front`에 두고 `.claude/`를 심링크합니다.)
+   ```
+   /plugin marketplace add yesroad/claude-front
+   ```
+
+2. **플러그인 설치** (설치 후 Claude Code 재시작)
+
+   ```
+   /plugin install claude-front@yesroad
+   ```
+
+3. **프로젝트에서 셋업**
+
+   ```
+   /setup
+   ```
+
+이후 새 프로젝트마다 `/setup` 한 번이면 됩니다. (소스를 `~/.claude-front`에 두고 `.claude/`를 심링크합니다.)
 
 > 업데이트: `cd ~/.claude-front && git pull` (세션 시작 시 자동 pull도 됩니다)
 > 선택: `brew install terminal-notifier gh`

@@ -7,7 +7,7 @@ paths:
 
 # TypeScript 에러 처리 패턴
 
-## 1. Result 타입 패턴 — try/catch 탈출
+## 1. Result 타입 패턴 - try/catch 탈출
 
 ### 1.1 직접 구현
 
@@ -77,7 +77,7 @@ type AppError =
   | { type: 'NETWORK'; statusCode: number }
   | { type: 'UNKNOWN'; message: string };
 
-// switch가 exhaustive — 케이스 빠뜨리면 컴파일 에러
+// switch가 exhaustive - 케이스 빠뜨리면 컴파일 에러
 function handleError(error: AppError) {
   switch (error.type) {
     case 'VALIDATION':    return showFieldErrors(error.fields);

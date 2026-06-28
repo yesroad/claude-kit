@@ -39,7 +39,7 @@ claude-front는 프론트엔드 개발을 위한 개인 Claude Code 하네스입
 - **매니페스트**: `.claude-plugin/`만 canonical(루트 `plugin.json`/`marketplace.json` 금지). skills/commands/agents/hooks는 자동발견되므로 배열 명시 불필요.
 - **훅**: 차단이 필요한 검사는 `PreToolUse`(`exit 2`). `PostToolUse`는 도구 실행 후라 차단 불가(경고만, `exit 1`은 비블로킹).
 - **설치**: `/setup`은 소스를 `~/.claude-front`(`CLAUDE_FRONT_HOME`)에 git clone하고 프로젝트 `.claude/`가 이를 **심링크**하게 한다(복사 아님). `git pull` 한 번이면 전 프로젝트 반영, 세션 시작 시 `hooks/auto-pull.sh`(전역 SessionStart)가 throttle pull. rule은 전부 심링크 + `paths` 조건부 로드(prune 없음).
-- **모델**: 별칭(`haiku`/`sonnet`/`opus`)을 쓴다 — 최신 세대를 자동 추적하므로 풀ID 핀 금지. 깊이/비용은 `effort`(frontmatter 또는 `/effort`)로 조절. 단일 진실 공급원은 `workflows/coordination/guide.md`.
+- **모델**: 별칭(`haiku`/`sonnet`/`opus`)을 쓴다 - 최신 세대를 자동 추적하므로 풀ID 핀 금지. 깊이/비용은 `effort`(frontmatter 또는 `/effort`)로 조절. 단일 진실 공급원은 `workflows/coordination/guide.md`.
 - **SKILL.md frontmatter**: `name`·`description`·`user-invocable` 필수, `allowed-tools` 권장, `metadata.version`은 따옴표 문자열(`"1.0.0"`).
 
 </dev_rules>

@@ -1,7 +1,7 @@
 # Pages Router 전용 패턴
 
 > Next.js Pages Router (`pages/` 디렉토리 존재 시 적용)
-> App Router 규칙과 뷰/서비스/쿼리 패턴은 동일 — 라우트 파일 위치만 다름
+> App Router 규칙과 뷰/서비스/쿼리 패턴은 동일 - 라우트 파일 위치만 다름
 
 ---
 
@@ -137,7 +137,7 @@ export function use{Page}View({ initialData }: Options = {}) {
 
 ---
 
-## _app.tsx — QueryProvider 설정
+## _app.tsx - QueryProvider 설정
 
 ```typescript
 // pages/_app.tsx

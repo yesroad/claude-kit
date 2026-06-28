@@ -56,7 +56,7 @@ rg "(defaultValue|initialValue|initialState)" src/ --type ts
 4. 변경   → 테스트가 통과하도록 정책 수정
 ```
 
-**참조**: `@unit-test-conventions.md` — 정책 보호 테스트 작성법
+**참조**: `@unit-test-conventions.md` - 정책 보호 테스트 작성법
 
 ---
 

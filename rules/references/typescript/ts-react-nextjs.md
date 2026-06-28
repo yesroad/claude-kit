@@ -7,7 +7,7 @@ paths:
 
 # TypeScript × React / Next.js 패턴
 
-## 1. 컴포넌트 Props 타입 추출 — ComponentProps
+## 1. 컴포넌트 Props 타입 추출 - ComponentProps
 
 ```typescript
 import { ComponentProps } from 'react';
@@ -26,7 +26,7 @@ function CustomButton({ isLoading, variant, ...buttonProps }: CustomButtonProps)
 
 ---
 
-## 2. ref 처리 — React 19 방식
+## 2. ref 처리 - React 19 방식
 
 ```typescript
 import { useRef, useImperativeHandle } from 'react';
@@ -44,7 +44,7 @@ interface InputProps {
   ref?: React.Ref<InputHandle>; // React 19+: ref를 일반 prop으로
 }
 
-// forwardRef 래퍼 불필요 — 함수 컴포넌트에서 직접 받음
+// forwardRef 래퍼 불필요 - 함수 컴포넌트에서 직접 받음
 function SmartInput({ placeholder, onChange, ref }: InputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 

@@ -27,7 +27,7 @@ components/{Name}/
 { "compilerOptions": { "jsxImportSource": "@emotion/react" } }
 ```
 
-**vite.config.ts** (`@emotion/babel-plugin` — 빌드 최적화, 2025 권장):
+**vite.config.ts** (`@emotion/babel-plugin` - 빌드 최적화, 2025 권장):
 ```typescript
 react({
   jsxImportSource: '@emotion/react',
@@ -73,7 +73,7 @@ export const ButtonItem = styled.button<{ $variant: Variant; $size: Size }>`
 `
 ```
 
-### Transient Props — `$-prefix` 필수
+### Transient Props - `$-prefix` 필수
 
 ```typescript
 // components/{Name}/index.tsx
@@ -93,7 +93,7 @@ export function Button({ variant = 'primary', size = 'md', ...rest }: ButtonProp
 ### Object Style (타입 안전, 권장)
 
 ```typescript
-// csstype 기반 타입 추론 — 오타 시 TS 오류
+// csstype 기반 타입 추론 - 오타 시 TS 오류
 const cardStyle = css({
   borderRadius: '12px',
   boxShadow: '0 1px 4px rgba(0,0,0,0.06)',

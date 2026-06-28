@@ -76,7 +76,7 @@ export default tseslint.config(tseslint.configs.recommended, {
 
 ---
 
-## 4. 타입 안전 API — tRPC
+## 4. 타입 안전 API - tRPC
 
 서버-클라이언트 간 타입을 자동으로 공유합니다.
 
@@ -88,7 +88,7 @@ const appRouter = router({
     .query(({ input }) => getUserById(input.id)),
 });
 
-// 클라이언트 — 타입 자동 추론
+// 클라이언트 - 타입 자동 추론
 const user = await trpc.getUser.query({ id: 1 });
 // user.name ← 자동완성 + 타입 안전
 ```
@@ -157,7 +157,7 @@ test('제네릭 함수 타입 추론 검증', () => {
 });
 ```
 
-### 6.2 tsd — 타입 정의 파일 전용 테스트
+### 6.2 tsd - 타입 정의 파일 전용 테스트
 
 ```typescript
 // src/utils.test-d.ts

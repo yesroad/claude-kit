@@ -5,7 +5,7 @@
 
 ---
 
-## 1. services/instance.ts — axios 인스턴스 + 인터셉터
+## 1. services/instance.ts - axios 인스턴스 + 인터셉터
 
 ```typescript
 // src/services/instance.ts
@@ -50,7 +50,7 @@ export default instance
 
 ---
 
-## 2. services/api/{domain}.ts — named export 서비스 객체
+## 2. services/api/{domain}.ts - named export 서비스 객체
 
 ```typescript
 // src/services/api/{domain}.ts
@@ -74,13 +74,13 @@ export const {domain}Service = {
     instance.delete<APIResponse<void>>(`/{domain}/${id}`),
 }
 
-// src/services/api/index.ts (배럴 — 추가분)
+// src/services/api/index.ts (배럴 - 추가분)
 export * from './{domain}'
 ```
 
 ---
 
-## 3. types/api/{domain}.ts — 도메인 타입
+## 3. types/api/{domain}.ts - 도메인 타입
 
 ```typescript
 // src/types/api/{domain}.ts
@@ -118,7 +118,7 @@ export interface {Type}ListResponse {
 
 ---
 
-## 4. queries/types.ts — UseQueryOptionsBase 공통 타입
+## 4. queries/types.ts - UseQueryOptionsBase 공통 타입
 
 ```typescript
 // src/queries/types.ts
@@ -132,7 +132,7 @@ export type UseQueryOptionsBase<TData, TSelectData = TData> = Omit<
 
 ---
 
-## 5. queries/{domain}/index.ts — queryOptions 팩토리 + hooks
+## 5. queries/{domain}/index.ts - queryOptions 팩토리 + hooks
 
 ```typescript
 // src/queries/{domain}/index.ts
@@ -165,21 +165,21 @@ export const {domain}Options = {
     }),
 }
 
-// 리스트 — useSuspenseQuery (<Suspense> 필수)
+// 리스트 - useSuspenseQuery (<Suspense> 필수)
 export const use{Domain}List = (params: {Type}ListRequest) =>
   useSuspenseQuery({domain}Options.list(params))
 
-// 상세 — useQuery (enabled, select 조건부 가능)
+// 상세 - useQuery (enabled, select 조건부 가능)
 export const use{Domain}Detail = (id: number) =>
   useQuery({domain}Options.detail(id, { enabled: !!id }))
 
-// src/queries/index.ts (배럴 — 추가분)
+// src/queries/index.ts (배럴 - 추가분)
 export * from './{domain}'
 ```
 
 ---
 
-## 6. queries/{domain}/mutations.ts — mutation hooks
+## 6. queries/{domain}/mutations.ts - mutation hooks
 
 ```typescript
 // src/queries/{domain}/mutations.ts
@@ -220,7 +220,7 @@ export function useDelete{Domain}() {
 
 ---
 
-## 7. views/{page}/use{Page}View.ts — 로직 훅
+## 7. views/{page}/use{Page}View.ts - 로직 훅
 
 ```typescript
 // src/views/{page}/use{Page}View.ts
@@ -244,7 +244,7 @@ export function use{Page}View() {
 
 ---
 
-## 8. views/{page}/index.tsx — UI (Suspense 포함)
+## 8. views/{page}/index.tsx - UI (Suspense 포함)
 
 ```typescript
 // src/views/{page}/index.tsx
@@ -258,7 +258,7 @@ function {Page}Content() {
 
   return (
     <main>
-      {/* UI만 — 비즈니스 로직 없음 */}
+      {/* UI만 - 비즈니스 로직 없음 */}
     </main>
   )
 }
@@ -406,6 +406,6 @@ class {Domain}Services extends Services {
 
 export default new {Domain}Services()
 
-// src/services/api/index.ts (배럴 — 추가분)
+// src/services/api/index.ts (배럴 - 추가분)
 export { default as {domain}Services } from './{domain}'
 ```

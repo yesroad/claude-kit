@@ -199,7 +199,7 @@ git diff HEAD~5 -- {관련파일}
 
 선택된 옵션에 따라 수정 (사용자 선택 후 진행):
 
-> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
+> **패키지 매니저**: lock 파일 기준 자동 감지 - `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
 
 ```typescript
 // 수정 전 테스트 확인

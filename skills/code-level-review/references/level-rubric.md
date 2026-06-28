@@ -108,7 +108,7 @@ const res = await fetch('/api/posts')
 if (!session) redirect('/login')
 
 // 시니어: 컨텍스트 + 트레이드오프
-// React.cache()는 요청 스코프 memoization — 요청 간 공유 불가
+// React.cache()는 요청 스코프 memoization - 요청 간 공유 불가
 // 요청 간 공유가 필요하면 Redis 캐시 사용 필요
 export const getUser = cache(async (id: string) => { ... })
 ```

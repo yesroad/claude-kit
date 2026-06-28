@@ -94,7 +94,7 @@ Task(subagent_type="explore", model="haiku", prompt=`
 `)
 ```
 
-**마이그레이션 유형별 참조 파일 — 계획 수립 전 먼저 읽기:**
+**마이그레이션 유형별 참조 파일 - 계획 수립 전 먼저 읽기:**
 - Zod v3 → v4 마이그레이션 → `../../rules/references/zod/zod-v4-ecosystem.md` 읽기
 - TypeScript 버전 업 / tsconfig 변경 → `../../rules/references/typescript/ts-tooling-and-stack.md` 읽기
 
@@ -147,7 +147,7 @@ describe('마이그레이션 전 정책 보호', () => {
 
 테스트가 이미 있으면 현재 통과 여부 먼저 확인:
 
-> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
+> **패키지 매니저**: lock 파일 기준 자동 감지 - `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
 
 ```bash
 {패키지매니저} test

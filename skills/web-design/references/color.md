@@ -2,7 +2,7 @@
 
 ---
 
-## 🟤 팬톤 2025 — 모카 무스 (Mocha Mousse)
+## 🟤 팬톤 2025 - 모카 무스 (Mocha Mousse)
 
 | 이름          | HEX       | RGB           |
 | ------------- | --------- | ------------- |
@@ -98,7 +98,7 @@
 
 ## 🌙 다크모드 구현 (Tailwind + CSS Variables)
 
-### 방법 1 — CSS 변수 + Tailwind `dark:` prefix (권장)
+### 방법 1 - CSS 변수 + Tailwind `dark:` prefix (권장)
 
 ```ts
 // tailwind.config.ts
@@ -165,7 +165,7 @@ export function DarkModeToggle() {
 }
 ```
 
-### 방법 2 — next-themes 활용 (Next.js 권장)
+### 방법 2 - next-themes 활용 (Next.js 권장)
 
 ```bash
 npm install next-themes

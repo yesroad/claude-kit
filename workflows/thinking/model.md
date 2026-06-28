@@ -68,12 +68,12 @@ SCAN → ANALYZE → PLAN → BUILD → CHECK
 복잡도가 높아도 독립 작업은 병렬 실행:
 
 ```typescript
-// HIGH 복잡도에서도 탐색은 병렬 — 탐색은 추론이 거의 불필요하므로 effort 최소
+// HIGH 복잡도에서도 탐색은 병렬 - 탐색은 추론이 거의 불필요하므로 effort 최소
 Task((subagent_type = 'explore'), (model = 'haiku'), (effort = 'low'), (prompt = '현재 구조 분석'));
 Task((subagent_type = 'explore'), (model = 'haiku'), (effort = 'low'), (prompt = '의존성 파악'));
 Task((subagent_type = 'explore'), (model = 'haiku'), (effort = 'low'), (prompt = '테스트 현황'));
 
-// 결과 수집 후 순차적 계획 — 계획 수립은 최고 effort
+// 결과 수집 후 순차적 계획 - 계획 수립은 최고 effort
 Task((subagent_type = 'Plan'), (model = 'opus'), (effort = 'xhigh'), (prompt = '분석 결과 기반 계획'));
 ```
 
@@ -244,7 +244,7 @@ rg "Typography" src/ --type tsx | head -10
 
 ### 필수 검증 명령어 (코드 수정 후)
 
-> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm
+> **패키지 매니저**: lock 파일 기준 자동 감지 - `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm
 
 ```bash
 # 타입 에러 확인 (런타임 에러 사전 방지)

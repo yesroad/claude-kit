@@ -6,7 +6,7 @@ paths:
 # TailwindCSS v4 패턴
 
 > `tailwindcss@^4` 의존성이 있는 프로젝트에만 적용한다.
-> v3 프로젝트에는 적용하지 않는다 — `tailwind.config.js` 기반 설정이 유효하다.
+> v3 프로젝트에는 적용하지 않는다 - `tailwind.config.js` 기반 설정이 유효하다.
 
 ---
 
@@ -37,7 +37,7 @@ paths:
 ```
 
 ```css
-/* ❌ v3 방식 — v4에서는 동작하지 않음 */
+/* ❌ v3 방식 - v4에서는 동작하지 않음 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

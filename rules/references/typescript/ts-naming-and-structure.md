@@ -37,7 +37,7 @@ function get_user_data() {}    // snake_case 금지
 
 ### 1.2 타입 네이밍 규칙
 
-**규칙 1: 복수형 금지 — 항상 단수로**
+**규칙 1: 복수형 금지 - 항상 단수로**
 
 ```typescript
 // ❌ 잘못된 예
@@ -57,7 +57,7 @@ const route = "/user";         // 런타임 값: camelCase
 type Route = "/user" | "/admin"; // 타입 레벨: PascalCase
 ```
 
-**규칙 3: 제네릭 타입 파라미터 — Total TypeScript 스타일 (Matt Pocock)**
+**규칙 3: 제네릭 타입 파라미터 - Total TypeScript 스타일 (Matt Pocock)**
 
 ```typescript
 // 단일 타입 파라미터
@@ -160,7 +160,7 @@ src/
 **원칙 1: 한 곳에서만 쓰는 타입은 해당 파일 안에**
 
 ```typescript
-// UserProfile.tsx — 이 파일에서만 쓰이므로 파일 안에 정의
+// UserProfile.tsx - 이 파일에서만 쓰이므로 파일 안에 정의
 interface UserProfileProps {
   user: { id: number; name: string };
   onEdit: () => void;

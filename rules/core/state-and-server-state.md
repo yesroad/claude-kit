@@ -101,7 +101,7 @@ queryClient.prefetchQuery(orderQueries.detail(orderId))  // 라우터 프리패�
 
 ### useSuspenseQuery
 
-`data`가 항상 defined — undefined 체크 불필요. 상위에서 `ErrorBoundary` + `Suspense` 필수.
+`data`가 항상 defined - undefined 체크 불필요. 상위에서 `ErrorBoundary` + `Suspense` 필수.
 
 ```typescript
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -249,7 +249,7 @@ const { data, isLoading } = useQuery({ queryKey: ['data'], queryFn: fetchData })
 const filteredItems = useMemo(() => items.filter((item) => item.active), [items]);
 ```
 
-### 3. Store 남용 — 관련 없는 상태 몰아넣기
+### 3. Store 남용 - 관련 없는 상태 몰아넣기
 
 `user/posts/theme/cart`를 하나의 store에 몰아넣지 않고 도메인별로 분리한다.
 

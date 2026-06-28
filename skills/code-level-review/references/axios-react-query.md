@@ -6,7 +6,7 @@
 
 ## Axios 레벨별 패턴
 
-### 🟢 주니어 — 컴포넌트 직접 호출
+### 🟢 주니어 - 컴포넌트 직접 호출
 
 ```typescript
 // 인스턴스 없이 컴포넌트에서 직접 호출
@@ -18,7 +18,7 @@ function UserList() {
 }
 ```
 
-### 🔵 미들 — services/instance.ts 분리 + named export 서비스 객체
+### 🔵 미들 - services/instance.ts 분리 + named export 서비스 객체
 
 ```typescript
 // services/instance.ts
@@ -47,7 +47,7 @@ export const userService = {
 }
 ```
 
-### 🔴 시니어 — 인터셉터 + 토큰 갱신 + queryOptions 팩토리
+### 🔴 시니어 - 인터셉터 + 토큰 갱신 + queryOptions 팩토리
 
 ```typescript
 // services/instance.ts
@@ -92,7 +92,7 @@ export default instance
 
 ## React Query 레벨별 패턴
 
-### 🟢 주니어 — useEffect + axios (React Query 미사용)
+### 🟢 주니어 - useEffect + axios (React Query 미사용)
 
 ```typescript
 'use client'
@@ -109,7 +109,7 @@ function UserList() {
 }
 ```
 
-### 🔵 미들 — queryOptions 팩토리 + useQuery
+### 🔵 미들 - queryOptions 팩토리 + useQuery
 
 ```typescript
 // queries/types.ts
@@ -139,16 +139,16 @@ export const userOptions = {
     }),
 }
 
-// 리스트 — <Suspense> 필수
+// 리스트 - <Suspense> 필수
 export const useUserList = (params?: UserListRequest) =>
   useSuspenseQuery(userOptions.list(params))
 
-// 상세 — 조건부 enabled 가능
+// 상세 - 조건부 enabled 가능
 export const useUserDetail = (id: number) =>
   useQuery(userOptions.detail(id, { enabled: !!id }))
 ```
 
-### 🔴 시니어 — queryOptions + Optimistic Update + prefetch
+### 🔴 시니어 - queryOptions + Optimistic Update + prefetch
 
 ```typescript
 // queries/user/mutations.ts

@@ -209,13 +209,13 @@ import VideoCard from "@/components/VideoCard";
 
 - 폴더 내 export가 2개 이상이면 `index.ts` 생성
 - 새 파일 추가 시 해당 폴더의 `index.ts`에도 즉시 추가
-- `index.ts` 내부에서는 로직 작성 금지 — re-export만 허용
+- `index.ts` 내부에서는 로직 작성 금지 - re-export만 허용
 
 ---
 
 ## services / queries 폴더 구조
 
-> **SSOT**: `state-and-server-state.md` — 서비스/쿼리 구조, 디렉토리 규칙, queryKeys 패턴 참조
+> **SSOT**: `state-and-server-state.md` - 서비스/쿼리 구조, 디렉토리 규칙, queryKeys 패턴 참조
 
 ---
 

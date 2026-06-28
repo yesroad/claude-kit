@@ -53,11 +53,11 @@ z.string().refine(v => v.includes("@")).min(5) // 정상 동작
 
 | 권장 사항 | 설명 |
 |-----------|------|
-| 스키마 폴더 분리 | `schemas/` 폴더에 모아서 관리 — 컴포넌트/라우터 파일 안에 직접 정의 금지 |
-| 타입 파생 | `z.infer<>`로 타입 파생 — 별도 interface/type 수동 정의 최소화 |
+| 스키마 폴더 분리 | `schemas/` 폴더에 모아서 관리 - 컴포넌트/라우터 파일 안에 직접 정의 금지 |
+| 타입 파생 | `z.infer<>`로 타입 파생 - 별도 interface/type 수동 정의 최소화 |
 | safeParse 기본 사용 | try-catch 대신 discriminated union으로 에러 처리 |
-| 폼 에러 처리 | `z.flattenError()` — 폼 필드 에러 매핑에 활용 |
-| 환경변수 검증 | 앱 시작 시 즉시 검증 — `env.schema.ts` 패턴 필수 |
+| 폼 에러 처리 | `z.flattenError()` - 폼 필드 에러 매핑에 활용 |
+| 환경변수 검증 | 앱 시작 시 즉시 검증 - `env.schema.ts` 패턴 필수 |
 | 스키마 재사용 | `.pick()`, `.omit()`, `.partial()`, `.extend()`로 파생 스키마 생성 |
 | 번들 크기 최적화 | 번들 크기가 중요한 경우 `zod/mini` 사용 고려 (1.88kb) |
 | JSON Schema 변환 | `.meta()` + `z.toJSONSchema()` 활용 (v4 내장) |

@@ -82,7 +82,7 @@ description: 작업 시작. Plan Mode 진입 → 코드 분석 → 작업 계획
 
 ## Step 3. 작업 환경 준비 + 작업 유형 분류
 
-작업 대상 경로와 관련 파일을 파악한다. 동시에 **작업 유형을 분류해 관련 스킬·룰을 먼저 확인**한다 — 자동 트리거가 약해도 관련 스킬·룰이 누락되지 않게 한다.
+작업 대상 경로와 관련 파일을 파악한다. 동시에 **작업 유형을 분류해 관련 스킬·룰을 먼저 확인**한다 - 자동 트리거가 약해도 관련 스킬·룰이 누락되지 않게 한다.
 
 | 작업 유형          | 활용 스킬                                | 함께 보는 룰(paths로 자동 로드)              |
 | ------------------ | ---------------------------------------- | -------------------------------------------- |
@@ -90,7 +90,7 @@ description: 작업 시작. Plan Mode 진입 → 코드 분석 → 작업 계획
 | React Query·서비스 | nextjs-scaffold                          | state-and-server-state · ts-error-handling   |
 | 라우팅·페이지      | nextjs-scaffold                          | nextjs-app-router                            |
 | 테스트             | test-unit / test-integration / test-e2e  | unit-test-conventions                        |
-| 리뷰·버그·품질     | code-level-review / bug-fix / code-quality | —                                          |
+| 리뷰·버그·품질     | code-level-review / bug-fix / code-quality | -                                          |
 
 > 프론트 작업이면 해당 스킬을 먼저 활성화하고, 관련 룰이 로드됐는지(파일을 열면 `paths`로 로드) 확인한다. `frontend-fundamentals`·`coding-standards`는 항상 로드된다.
 
@@ -192,7 +192,7 @@ Task(
 );
 ```
 
-> **대규모 작업**(다수 파일·도메인 리팩토링·전면 감사)이면 `/effort ultracode`를 고려한다 — `xhigh` 추론 + Dynamic Workflows 자동 오케스트레이션으로 확장된다. Opus는 Max/Team/Enterprise에서 1M context를 자동 활용하므로 대규모 계획도 컨텍스트 한계가 적다. (일반 작업은 `high`/`xhigh`로 유지해 비용을 관리한다.)
+> **대규모 작업**(다수 파일·도메인 리팩토링·전면 감사)이면 `/effort ultracode`를 고려한다 - `xhigh` 추론 + Dynamic Workflows 자동 오케스트레이션으로 확장된다. Opus는 Max/Team/Enterprise에서 1M context를 자동 활용하므로 대규모 계획도 컨텍스트 한계가 적다. (일반 작업은 `high`/`xhigh`로 유지해 비용을 관리한다.)
 
 ---
 

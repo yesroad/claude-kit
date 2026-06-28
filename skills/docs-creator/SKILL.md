@@ -1,6 +1,6 @@
 ---
 name: docs-creator
-description: AI 코딩 도구 문서 작성 — SKILL.md, COMMAND.md, rules/*.md 등 메타문서 저작/수정 시 활성화. 스킬/커맨드 신규 작성, 규칙 추가 포함. 단, CLAUDE.md·AGENTS.md 루트 지시문의 신규 생성/업데이트는 directive-generator를 사용.
+description: AI 코딩 도구 문서 작성 - SKILL.md, COMMAND.md, rules/*.md 등 메타문서 저작/수정 시 활성화. 스킬/커맨드 신규 작성, 규칙 추가 포함. 단, CLAUDE.md·AGENTS.md 루트 지시문의 신규 생성/업데이트는 directive-generator를 사용.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Write, Edit
 metadata:

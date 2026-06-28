@@ -67,7 +67,7 @@ metadata:
 없으면 설정 추가 안내 (node 환경 분리 필요):
 
 ```typescript
-// vitest.config.ts — integration 프로젝트 설정 예시 (없으면 추가 안내)
+// vitest.config.ts - integration 프로젝트 설정 예시 (없으면 추가 안내)
 {
   test: {
     name: 'integration',

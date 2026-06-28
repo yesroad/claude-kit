@@ -3,7 +3,7 @@ name: web-design
 description: 2025-2026 트렌드를 반영한 웹/앱 UI를 Next.js + TailwindCSS + shadcn/ui로 구현하는 전문 디자인 스킬. 페이지, 컴포넌트, 사이트, 랜딩페이지, 대시보드, 앱 화면 등 시각적 UI 관련 작업이라면 반드시 이 스킬을 사용할 것. "만들어줘", "디자인해줘", "구현해줘", "예쁘게", "트렌디하게", "화면 만들어줘" 같은 요청 포함. Next.js, TailwindCSS, shadcn/ui가 언급되거나 웹/앱 UI를 다루는 상황 전반에 적용.
 ---
 
-# Web Design Skill — 2025-2026 트렌드 기반 UI 구현
+# Web Design Skill - 2025-2026 트렌드 기반 UI 구현
 
 당신은 최신 디자인 트렌드를 깊이 이해하고 Next.js + TailwindCSS + shadcn/ui로 실제 동작하는 코드를 만드는 전문가입니다.
 
@@ -121,9 +121,9 @@ Tailwind v4에서는 `@container` 쿼리가 기본 내장됩니다. 컴포넌트
 
 ### 네비게이션 UX 원칙
 
-> **UX 근거**: `references/ux-patterns.md` — "네비게이션 패턴 (IA)" 섹션
+> **UX 근거**: `references/ux-patterns.md` - "네비게이션 패턴 (IA)" 섹션
 
-- **데스크톱에서 햄버거 메뉴 사용 금지** — 탐색 성공률 20%↓, 소요 시간 39%↑ (NN/G 정량 연구)
+- **데스크톱에서 햄버거 메뉴 사용 금지** - 탐색 성공률 20%↓, 소요 시간 39%↑ (NN/G 정량 연구)
 - 모바일 4개 이하 항목 → 탭바/수평 링크로 모두 노출
 - 모바일 5개 이상 → 중요 2~3개 고정 + 햄버거(콤보 네비게이션)
 - 대시보드·문서 사이트 → 사이드바 (계층 3단계 이상)
@@ -162,7 +162,7 @@ Tailwind v4에서는 `@container` 쿼리가 기본 내장됩니다. 컴포넌트
     style="background:#c4724a; color:#fff; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700;"
     >MOCKUP</span
   >
-  <span>{프로젝트명} — UI 목업</span>
+  <span>{프로젝트명} - UI 목업</span>
 </nav>
 ```
 
@@ -237,11 +237,11 @@ docs/{파일명}.html 에 목업을 생성했습니다.
 /* app/globals.css */
 @import "tailwindcss";
 
-/* 다크모드 variant — next-themes의 .dark 클래스 방식 */
+/* 다크모드 variant - next-themes의 .dark 클래스 방식 */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* 어스톤 스타일 예시 — 선택된 스타일에 맞게 교체 */
+  /* 어스톤 스타일 예시 - 선택된 스타일에 맞게 교체 */
   --color-mocha: #9e7b5a;
   --color-mocha-light: #c4a882;
   --color-mocha-dark: #7d5f42;
@@ -343,13 +343,13 @@ docs/{파일명}.html 에 목업을 생성했습니다.
 
 고급 인터랙션은 **Framer Motion**이 필요합니다. package.json에 없으면 Step 5 설치 패키지에 포함하세요.
 
-### CTA & 폼 UX — 전환율에 직결
+### CTA & 폼 UX - 전환율에 직결
 
-> **UX 근거**: `references/ux-patterns.md` — "CTA 최적화", "폼 UX" 섹션
+> **UX 근거**: `references/ux-patterns.md` - "CTA 최적화", "폼 UX" 섹션
 
 **CTA 핵심 원칙:**
-- 가치 제안 먼저, CTA 나중 — 설명 없는 CTA는 신뢰를 깎는다
-- 동일한 시각적 무게의 CTA 2개 이상 금지 — 전환율 하락
+- 가치 제안 먼저, CTA 나중 - 설명 없는 CTA는 신뢰를 깎는다
+- 동일한 시각적 무게의 CTA 2개 이상 금지 - 전환율 하락
 - CTA 카피는 클릭 후 일어날 일을 구체적으로 ("Get Started" ❌ → "무료로 스타일 진단받기" ✅)
 - Trust signal(리뷰, 수상, 미디어 인용)은 CTA 버튼 인근에 배치
 
@@ -360,7 +360,7 @@ docs/{파일명}.html 에 목업을 생성했습니다.
 - 오류 메시지: 색상 단독 금지 → 색상 + 테두리 + 아이콘 조합
 - Multi-step form: 프로그레스 인디케이터 필수
 
-### 접근성 — 타협 불가
+### 접근성 - 타협 불가
 
 > **공통 접근성 규칙**: `@../../rules/core/accessibility.md`
 
@@ -414,8 +414,8 @@ docs/{파일명}.html 에 목업을 생성했습니다.
 코드를 출력하기 전에 다음을 간략히 설명하세요. 사용자가 방향을 확인하고 수정 요청할 수 있는 기회를 줍니다:
 
 ```
-스타일: [선택된 스타일] — [선택 이유 1줄]
-레이아웃: [사용한 패턴] — [이유 1줄]
+스타일: [선택된 스타일] - [선택 이유 1줄]
+레이아웃: [사용한 패턴] - [이유 1줄]
 컬러: [주요 컬러 3~4개]
 인터랙션: [적용 수준 + 주요 효과]
 폰트: [헤드라인 폰트] + [본문 폰트]

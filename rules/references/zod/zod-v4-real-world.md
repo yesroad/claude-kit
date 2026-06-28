@@ -146,7 +146,7 @@ const NumericStringSchema = z.string()
   .transform(Number)
   .pipe(z.int().min(0));
 
-// v4 신규: overwrite() — 타입 변경 없이 값 변환
+// v4 신규: overwrite() - 타입 변경 없이 값 변환
 const TrimmedString = z.string()
   .overwrite(val => val.trim()) // 여전히 string 타입
   .min(1);
