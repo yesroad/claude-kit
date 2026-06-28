@@ -26,7 +26,7 @@
 
 이후 새 프로젝트마다 `/setup` 한 번이면 됩니다. (소스를 `~/.claude-front`에 두고 `.claude/`를 심링크합니다.)
 
-> 업데이트: `cd ~/.claude-front && git pull` (세션 시작 시 자동 pull도 됩니다)
+> 업데이트: `cd ~/.claude-front && git pull` (세션 시작 시 자동 pull)<br/>
 > 선택: `brew install terminal-notifier gh`
 
 ---
